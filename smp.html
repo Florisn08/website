@@ -8,23 +8,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0f1523;
-            --bg-card: rgba(22, 30, 47, 0.85);
-            --bg-input: #111827;
+            --bg-dark: #0b0f19;
+            --bg-card: rgba(20, 27, 44, 0.85);
+            --bg-input: #121826;
             --accent-orange: #f97316;
             --accent-purple: #9146ff;
             --accent-green: #22c55e;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.08);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
 
         body {
             background-color: var(--bg-dark);
@@ -34,72 +29,31 @@
             flex-direction: column;
         }
 
-        /* Header Banner Style */
-        .stats-header-banner {
-            background: linear-gradient(180deg, rgba(145, 70, 255, 0.15) 0%, transparent 100%);
-            padding: 2.5rem 8% 1.5rem;
-            text-align: left;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .stats-title {
-            font-size: 3rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 1.5rem;
-            font-family: monospace; /* Minecraft style vibe */
-        }
-
-        /* Navbar */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 8%;
-            background: rgba(15, 21, 35, 0.95);
+            padding: 1.2rem 8%;
+            background: rgba(11, 15, 25, 0.95);
             border-bottom: 1px solid var(--border-color);
         }
 
-        .logo {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: #fff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn-back {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
+        .logo { font-size: 1.3rem; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .btn-back { color: var(--text-muted); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; }
         .btn-back:hover { color: #fff; }
 
-        /* Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 8% 4rem;
-            width: 100%;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2.5rem 8% 4rem; width: 100%; }
 
-        /* Controls Bar (Filter Dropdown + Search Box) */
+        .stats-title { font-size: 2.8rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 1.5rem; font-family: monospace; }
+
         .controls-bar {
-            background: rgba(22, 30, 47, 0.6);
+            background: rgba(20, 27, 44, 0.6);
             border: 1px solid var(--border-color);
             padding: 0.8rem;
             border-radius: 12px;
             display: flex;
             gap: 12px;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             flex-wrap: wrap;
         }
 
@@ -114,32 +68,13 @@
             transition: border-color 0.2s;
         }
 
-        select {
-            cursor: pointer;
-            min-width: 180px;
-        }
+        select { cursor: pointer; min-width: 180px; }
+        input { flex: 1; min-width: 220px; }
+        input:focus, select:focus { border-color: var(--accent-purple); }
 
-        input {
-            flex: 1;
-            min-width: 220px;
-        }
+        .last-updated { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.8rem; }
 
-        input:focus, select:focus {
-            border-color: var(--accent-purple);
-        }
-
-        .last-updated {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Player Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 1.2rem;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.2rem; }
 
         .player-card {
             background: var(--bg-card);
@@ -151,87 +86,34 @@
             transition: transform 0.2s, border-color 0.2s;
         }
 
-        .player-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(145, 70, 255, 0.4);
-        }
+        .player-card:hover { transform: translateY(-3px); border-color: rgba(145, 70, 255, 0.4); }
 
         .rank-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(251, 191, 36, 0.2);
-            color: #fbbf24;
-            font-weight: 800;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.78rem;
+            position: absolute; top: 10px; left: 10px;
+            background: rgba(251, 191, 36, 0.2); color: #fbbf24;
+            font-weight: 800; width: 26px; height: 26px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 0.78rem;
             border: 1px solid rgba(251, 191, 36, 0.4);
         }
 
-        .player-avatar {
-            width: 64px;
-            height: 64px;
-            border-radius: 10px;
-            margin: 0.4rem 0 0.6rem;
-            image-rendering: pixelated; /* Echte Minecraft Pixel-look */
-        }
+        .player-avatar { width: 64px; height: 64px; border-radius: 10px; margin: 0.4rem 0 0.6rem; image-rendering: pixelated; }
+        .player-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .stat-value { color: var(--accent-orange); font-weight: 800; font-size: 0.95rem; }
+        .loading-text { text-align: center; grid-column: 1 / -1; padding: 3rem; color: var(--text-muted); }
 
-        .player-name {
-            font-weight: 700;
-            font-size: 0.95rem;
-            margin-bottom: 0.2rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .stat-value {
-            color: var(--accent-orange);
-            font-weight: 800;
-            font-size: 0.95rem;
-        }
-
-        .loading-text {
-            text-align: center;
-            grid-column: 1 / -1;
-            padding: 3rem;
-            color: var(--text-muted);
-        }
-
-        footer {
-            margin-top: auto;
-            text-align: center;
-            padding: 2rem;
-            background: rgba(9, 13, 22, 0.95);
-            border-top: 1px solid var(--border-color);
-            color: var(--text-muted);
-            font-size: 0.88rem;
-        }
+        footer { margin-top: auto; text-align: center; padding: 2rem; background: rgba(11, 15, 25, 0.95); border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.88rem; }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="index.html" class="logo">
-            <i class="fa-solid fa-cubes" style="color: var(--accent-green);"></i>
-            Floris <span>SMP</span>
-        </a>
-        <a href="index.html" class="btn-back">
-            <i class="fa-solid fa-arrow-left"></i> Terug naar Home
-        </a>
+        <a href="index.html" class="logo"><i class="fa-solid fa-cubes" style="color: var(--accent-green);"></i> Floris <span>SMP</span></a>
+        <a href="index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Terug naar Home</a>
     </nav>
 
-    <div class="stats-header-banner">
-        <h1 class="stats-title">Statistieken</h1>
-    </div>
-
     <div class="container">
-        <!-- Controls Bar -->
+        <h1 class="stats-title">Statistieken</h1>
+
         <div class="controls-bar">
             <select id="stat-filter" onchange="renderPlayers()">
                 <option value="playtime">Speeltijd</option>
@@ -246,44 +128,34 @@
             <input type="text" id="search-input" placeholder="Zoek een speler..." oninput="renderPlayers()">
         </div>
 
-        <div class="last-updated" id="update-timestamp">
-            Laatst bijgewerkt: <span id="current-date">--</span>
-        </div>
+        <div class="last-updated">Laatst bijgewerkt: <span id="current-date">--</span></div>
 
-        <!-- Grid -->
         <div class="stats-grid" id="players-list">
-            <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> Live gegevens ophalen van server...</div>
+            <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> Gegevens inlezen...</div>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2026 Floris_N Community. Alle rechten voorbehouden.</p>
-    </footer>
+    <footer><p>&copy; 2026 Floris_N Community. Alle rechten voorbehouden.</p></footer>
 
     <script>
-        // Vul hier jouw Plan Analytics API endpoint in
-        const PLAN_API_URL = "http://node1.herculhosting.nl:30124/v1/players";
-
         let serverPlayersData = [];
 
-        // Datum tonen
         document.getElementById('current-date').innerText = new Date().toLocaleString('nl-NL');
 
-        // Haalt de data live op van de Plan Analytics plugin op je server
         async function loadServerData() {
             try {
-                const res = await fetch(PLAN_API_URL);
-                if (!res.ok) throw new Error("API Fout");
+                // Haalt het automatisch gegenereerde players.json bestand op uit de map
+                const res = await fetch('./cached_json/players.json');
+                if (!res.ok) throw new Error("Kon JSON-bestand niet laden");
                 const data = await res.json();
                 
-                // Omzetten naar het juiste formaat
                 serverPlayersData = Object.values(data).map(p => ({
                     name: p.name || p.username,
                     playtime: p.playtime_formatted || "0u 0m",
                     raw_playtime: p.playtime || 0,
                     damage: p.damage_taken || 0,
                     mobs: p.mob_kills || 0,
-                    distance: (p.distance_traveled ? (p.distance_traveled / 1000).toFixed(1) + " km" : "0 km"),
+                    distance: p.distance_traveled ? (p.distance_traveled / 1000).toFixed(1) + " km" : "0 km",
                     jumps: p.jump_count || 0,
                     sneak: p.sneak_time_formatted || "0m",
                     fish: p.fish_caught || 0,
@@ -292,9 +164,8 @@
 
                 renderPlayers();
             } catch (err) {
-                console.log("Fallback naar live weergave", err);
-                // Mocht de API tijdelijk geen response geven (CORS/HTTP), dan toont hij de structuur netjes
-                renderPlayers();
+                console.error("Fout bij inlezen data:", err);
+                document.getElementById('players-list').innerHTML = `<div class="loading-text">Wachten op eerste synchronisatie vanuit de server...</div>`;
             }
         }
 
@@ -304,9 +175,7 @@
             const listContainer = document.getElementById('players-list');
 
             listContainer.innerHTML = '';
-
-            // Filteren op naam
-            let filtered = serverPlayersData.filter(p => p.name.toLowerCase().includes(searchVal));
+            let filtered = serverPlayersData.filter(p => p.name && p.name.toLowerCase().includes(searchVal));
 
             if (filtered.length === 0) {
                 listContainer.innerHTML = `<div class="loading-text">Geen spelers gevonden voor "${searchVal}"</div>`;
@@ -316,8 +185,6 @@
             filtered.forEach((player, index) => {
                 const card = document.createElement('div');
                 card.className = 'player-card';
-
-                // Haalt de echte Minecraft head van de speler op via mc-heads API
                 card.innerHTML = `
                     <div class="rank-badge">${index + 1}</div>
                     <img class="player-avatar" src="https://mc-heads.net/avatar/${player.name}/64" alt="${player.name}">
