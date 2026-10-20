@@ -81,7 +81,7 @@
 
         .page-header {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
         }
 
         .page-header h1 {
@@ -96,6 +96,114 @@
             font-size: 1.1rem;
         }
 
+        /* Controls Bar (Filter & Search) */
+        .controls-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1rem 1.2rem;
+            border-radius: 16px;
+            display: flex;
+            gap: 15px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        select, input {
+            background: rgba(9, 13, 22, 0.9);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 0.85rem 1.2rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.25s;
+        }
+
+        select {
+            cursor: pointer;
+            min-width: 200px;
+        }
+
+        input {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent-purple);
+        }
+
+        /* Player Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 3rem;
+        }
+
+        .player-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.4rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .player-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(145, 70, 255, 0.4);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .rank-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fbbf24;
+            font-weight: 800;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.82rem;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        .player-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 14px;
+            margin: 0.5rem 0 0.8rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .player-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 0.3rem;
+            word-break: break-all;
+        }
+
+        .stat-value {
+            color: #f97316;
+            font-weight: 800;
+            font-size: 0.95rem;
+        }
+
+        .status-msg {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            grid-column: 1 / -1;
+        }
+
         /* Plan Dashboard Embed Box */
         .analytics-frame {
             background: var(--bg-card);
@@ -103,43 +211,14 @@
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            min-height: 700px;
-            position: relative;
+            min-height: 750px;
+            margin-top: 2rem;
         }
 
         .analytics-frame iframe {
             width: 100%;
             height: 750px;
             border: none;
-        }
-
-        /* External Link Fallback Box */
-        .external-plan-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .btn-plan {
-            background: var(--accent-green);
-            color: #000;
-            text-decoration: none;
-            padding: 0.8rem 1.8rem;
-            border-radius: 12px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 1rem;
-            transition: all 0.25s;
-        }
-
-        .btn-plan:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px var(--accent-green-glow);
         }
 
         footer {
@@ -171,18 +250,25 @@
             <p>Bekijk de speeltijd, prestaties en activiteit van alle spelers op de Floris Community SMP!</p>
         </div>
 
-        <!-- Plan Dashboard Embed -->
-        <div class="analytics-frame">
-            <!-- Vul hieronder de exacte webadres/poort van jouw Plan Analytics in -->
-            <iframe src="http://node1.herculhosting.nl:8804" title="Plan Player Analytics"></iframe>
+        <!-- Dynamic Filter Bar -->
+        <div class="controls-bar">
+            <select id="stat-filter" onchange="renderPlayers()">
+                <option value="playtime">Speeltijd</option>
+                <option value="mob_kills">Mobs gedood</option>
+                <option value="player_kills">Speler kills</option>
+                <option value="deaths">Aantal keer dood</option>
+            </select>
+            <input type="text" id="search-input" placeholder="Zoek een speler op naam..." oninput="renderPlayers()">
         </div>
 
-        <div class="external-plan-box">
-            <h3>Opent de statistieken-pagina niet goed?</h3>
-            <p>Klik op de onderstaande knop om het Player Analytics dashboard rechtstreeks in een nieuw tabblad te openen:</p>
-            <a href="http://node1.herculhosting.nl:8804" target="_blank" class="btn-plan">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Volledige Statistieken
-            </a>
+        <!-- Live Player Cards Container -->
+        <div class="stats-grid" id="players-list">
+            <div class="status-msg"><i class="fa-solid fa-spinner fa-spin"></i> Spelerstatistieken ophalen van server...</div>
+        </div>
+
+        <!-- Embedded Full Plan Webserver -->
+        <div class="analytics-frame">
+            <iframe src="http://node1.herculhosting.nl:8804" title="Plan Player Analytics"></iframe>
         </div>
     </div>
 
@@ -190,5 +276,79 @@
         <p>&copy; 2026 Floris_N Community. Alle rechten voorbehouden.</p>
     </footer>
 
+    <script>
+        const PLAN_API_URL = "http://node1.herculhosting.nl:8804/v1/players";
+        let livePlayersData = [];
+
+        // Haalt automatisch alle spelers en data op uit je Plan plugin
+        async function fetchServerStats() {
+            try {
+                const response = await fetch(PLAN_API_URL);
+                if (!response.ok) throw new Error("Netwerk respons fout");
+                
+                const data = await response.json();
+                
+                // Formatteer de data van Plan automatisch
+                livePlayersData = Object.values(data).map(player => ({
+                    name: player.name || "Onbekend",
+                    playtime: formatTime(player.playtime || 0),
+                    mob_kills: player.mob_kills || 0,
+                    player_kills: player.player_kills || 0,
+                    deaths: player.deaths || 0
+                }));
+
+                renderPlayers();
+            } catch (error) {
+                console.log("Kon geen data direct laden van Plan API, terugval naar standaard weergave.", error);
+                document.getElementById('players-list').innerHTML = `
+                    <div class="status-msg">
+                        Gebruik de onderstaande Plan Analytics-module om alle uitgebreide spelersstatistieken en filters in te zien.
+                    </div>
+                `;
+            }
+        }
+
+        function formatTime(ms) {
+            const hours = Math.floor(ms / (1000 * 60 * 60));
+            const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+            return `${hours}u ${minutes}m`;
+        }
+
+        function renderPlayers() {
+            const filterType = document.getElementById('stat-filter').value;
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
+            const listContainer = document.getElementById('players-list');
+
+            if (livePlayersData.length === 0) return;
+
+            listContainer.innerHTML = '';
+
+            // Filter op naam en sorteer automatisch op de geselecteerde statistiek
+            const filtered = livePlayersData
+                .filter(p => p.name.toLowerCase().includes(searchVal))
+                .sort((a, b) => (b[filterType] || 0) - (a[filterType] || 0));
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = `<div class="status-msg">Geen spelers gevonden met "${searchVal}"</div>`;
+                return;
+            }
+
+            filtered.forEach((player, index) => {
+                const card = document.createElement('div');
+                card.className = 'player-card';
+                
+                // MC-Heads vult automatisch de nieuwste Minecraft skin head van de speler in!
+                card.innerHTML = `
+                    <div class="rank-badge">${index + 1}</div>
+                    <img class="player-avatar" src="https://mc-heads.net/avatar/${player.name}/72" alt="${player.name}">
+                    <div class="player-name">${player.name}</div>
+                    <div class="stat-value">${player[filterType]}</div>
+                `;
+                listContainer.appendChild(card);
+            });
+        }
+
+        fetchServerStats();
+    </script>
 </body>
 </html>
