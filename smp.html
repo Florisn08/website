@@ -198,9 +198,9 @@
 
         .status-msg {
             text-align: center;
-            padding: 3rem;
+            padding: 2.5rem;
             color: var(--text-muted);
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             grid-column: 1 / -1;
         }
 
@@ -211,14 +211,42 @@
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            min-height: 750px;
+            min-height: 800px;
             margin-top: 2rem;
         }
 
         .analytics-frame iframe {
             width: 100%;
-            height: 750px;
+            height: 800px;
             border: none;
+        }
+
+        .external-plan-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .btn-plan {
+            background: var(--accent-green);
+            color: #000;
+            text-decoration: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 12px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 1rem;
+            transition: all 0.25s;
+        }
+
+        .btn-plan:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--accent-green-glow);
         }
 
         footer {
@@ -250,25 +278,17 @@
             <p>Bekijk de speeltijd, prestaties en activiteit van alle spelers op de Floris Community SMP!</p>
         </div>
 
-        <!-- Dynamic Filter Bar -->
-        <div class="controls-bar">
-            <select id="stat-filter" onchange="renderPlayers()">
-                <option value="playtime">Speeltijd</option>
-                <option value="mob_kills">Mobs gedood</option>
-                <option value="player_kills">Speler kills</option>
-                <option value="deaths">Aantal keer dood</option>
-            </select>
-            <input type="text" id="search-input" placeholder="Zoek een speler op naam..." oninput="renderPlayers()">
-        </div>
-
-        <!-- Live Player Cards Container -->
-        <div class="stats-grid" id="players-list">
-            <div class="status-msg"><i class="fa-solid fa-spinner fa-spin"></i> Spelerstatistieken ophalen van server...</div>
-        </div>
-
-        <!-- Embedded Full Plan Webserver -->
+        <!-- Embedded Full Plan Webserver Dashboard -->
         <div class="analytics-frame">
-            <iframe src="http://node1.herculhosting.nl:8804" title="Plan Player Analytics"></iframe>
+            <iframe src="http://node1.herculhosting.nl:30124/server/6293d39b-d23a-40bc-996e-6114a5798112/overview" title="Plan Player Analytics"></iframe>
+        </div>
+
+        <div class="external-plan-box">
+            3<h3>Opent het Plan Dashboard niet in het vak hierboven?</h3>
+            <p>Vanwege beveiligingsinstellingen van sommige browsers (HTTP/HTTPS) kun je het dashboard ook direct in een nieuw tabblad openen:</p>
+            <a href="http://node1.herculhosting.nl:30124/server/6293d39b-d23a-40bc-996e-6114a5798112/overview" target="_blank" class="btn-plan">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Volledige Statistieken
+            </a>
         </div>
     </div>
 
@@ -276,79 +296,5 @@
         <p>&copy; 2026 Floris_N Community. Alle rechten voorbehouden.</p>
     </footer>
 
-    <script>
-        const PLAN_API_URL = "http://node1.herculhosting.nl:8804/v1/players";
-        let livePlayersData = [];
-
-        // Haalt automatisch alle spelers en data op uit je Plan plugin
-        async function fetchServerStats() {
-            try {
-                const response = await fetch(PLAN_API_URL);
-                if (!response.ok) throw new Error("Netwerk respons fout");
-                
-                const data = await response.json();
-                
-                // Formatteer de data van Plan automatisch
-                livePlayersData = Object.values(data).map(player => ({
-                    name: player.name || "Onbekend",
-                    playtime: formatTime(player.playtime || 0),
-                    mob_kills: player.mob_kills || 0,
-                    player_kills: player.player_kills || 0,
-                    deaths: player.deaths || 0
-                }));
-
-                renderPlayers();
-            } catch (error) {
-                console.log("Kon geen data direct laden van Plan API, terugval naar standaard weergave.", error);
-                document.getElementById('players-list').innerHTML = `
-                    <div class="status-msg">
-                        Gebruik de onderstaande Plan Analytics-module om alle uitgebreide spelersstatistieken en filters in te zien.
-                    </div>
-                `;
-            }
-        }
-
-        function formatTime(ms) {
-            const hours = Math.floor(ms / (1000 * 60 * 60));
-            const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-            return `${hours}u ${minutes}m`;
-        }
-
-        function renderPlayers() {
-            const filterType = document.getElementById('stat-filter').value;
-            const searchVal = document.getElementById('search-input').value.toLowerCase();
-            const listContainer = document.getElementById('players-list');
-
-            if (livePlayersData.length === 0) return;
-
-            listContainer.innerHTML = '';
-
-            // Filter op naam en sorteer automatisch op de geselecteerde statistiek
-            const filtered = livePlayersData
-                .filter(p => p.name.toLowerCase().includes(searchVal))
-                .sort((a, b) => (b[filterType] || 0) - (a[filterType] || 0));
-
-            if (filtered.length === 0) {
-                listContainer.innerHTML = `<div class="status-msg">Geen spelers gevonden met "${searchVal}"</div>`;
-                return;
-            }
-
-            filtered.forEach((player, index) => {
-                const card = document.createElement('div');
-                card.className = 'player-card';
-                
-                // MC-Heads vult automatisch de nieuwste Minecraft skin head van de speler in!
-                card.innerHTML = `
-                    <div class="rank-badge">${index + 1}</div>
-                    <img class="player-avatar" src="https://mc-heads.net/avatar/${player.name}/72" alt="${player.name}">
-                    <div class="player-name">${player.name}</div>
-                    <div class="stat-value">${player[filterType]}</div>
-                `;
-                listContainer.appendChild(card);
-            });
-        }
-
-        fetchServerStats();
-    </script>
 </body>
 </html>
