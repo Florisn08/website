@@ -294,6 +294,45 @@
             border: none;
         }
 
+        /* Grid & Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 16px;
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-hover);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-green);
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
         /* FAQ Section Accordion */
         .faq-list {
             display: flex;
@@ -375,13 +414,13 @@
 
     <!-- Navbar -->
     <nav>
-        <a href="#" class="logo">
+        <a href="index.html" class="logo">
             <div class="logo-icon"><i class="fa-brands fa-twitch"></i></div>
             Floris<span>_N</span>
         </a>
         <ul class="nav-links">
             <li><a href="#stream">Live Stream</a></li>
-            <li><a href="#mc-info">Minecraft SMP</a></li>
+            <li><a href="smp.html">Minecraft SMP</a></li>
             <li><a href="#faq">Veelgestelde Vragen</a></li>
         </ul>
     </nav>
@@ -437,6 +476,32 @@
             </div>
         </div>
 
+        <!-- Minecraft SMP Section -->
+        <div class="section-header" id="mc-info">
+            <h2><i class="fa-solid fa-cubes" style="color: var(--accent-green);"></i> Minecraft Community SMP</h2>
+            <p>Speel mee met kijkers en bekijk live al je in-game statistieken</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-users"></i></div>
+                <h3>Gezellige Survival</h3>
+                <p>Een unieke SMP server waar bouwen, avontuur en samenwerken met de stream-community centraal staan.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-headset"></i></div>
+                <h3>Simple Voice Chat</h3>
+                <p>Proximity voice-chat geïntegreerd. Praat direct in-game met spelers die om je heen staan.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <h3>Speler Statistieken</h3>
+                <p>Houd je speeltijd, kills, deaths en ranglijsten live bij op ons uitgebreide speler-dashboard.</p>
+                <br>
+                <a href="smp.html" style="color: var(--accent-green); font-weight: 700; text-decoration: none;">Bekijk Statistieken &rarr;</a>
+            </div>
+        </div>
+
         <!-- FAQ Section -->
         <div class="section-header" id="faq">
             <h2><i class="fa-solid fa-circle-question" style="color: var(--accent-purple);"></i> Veelgestelde Vragen</h2>
@@ -480,7 +545,7 @@
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer">
-                    Je kunt je in-game speeltijd, statistieken en prestaties inzien via onze Plan analytics integratie.
+                    Je kunt je in-game speeltijd, statistieken en prestaties inzien op de <a href="smp.html" style="color: var(--accent-purple);">Minecraft SMP Statistieken pagina</a>.
                 </div>
             </div>
         </div>
