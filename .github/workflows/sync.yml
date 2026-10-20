@@ -1,0 +1,42 @@
+name: Sync Minecraft Stats
+
+on:
+  schedule:
+    - cron: '*/10 * * * *' # Draait elke 10 minuten
+  workflow_dispatch: # Hiermee kun je hem ook handmatig testen via GitHub
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download stats via SFTP
+        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        with:
+          host: ${{ secrets.SFTP_HOST }}
+          user: ${{ secrets.SFTP_USER }}
+          pass: ${{ secrets.SFTP_PASSWORD }}
+          connect_timeout: 30s
+          first_ssh: |
+            mkdir -p /tmp/mc_stats
+          scp: |
+            ./plugins/Plan/cached_json/PLAYERS_V2_* /tmp/mc_stats/
+          last_ssh: |
+            echo "Bestanden succesvol opgehaald"
+
+      - name: Process and Copy to cached_json
+        run: |
+          mkdir -p cached_json
+          # Verwijdert oude bestanden en kopieert de nieuwste naar players.json
+          rm -f cached_json/*
+          cp /tmp/mc_stats/PLAYERS_V2_* cached_json/players.json || true
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "Minecraft Server Sync"
+          git config --global user.email "server@florisn.nl"
+          git add cached_json/players.json
+          git diff --cached --quiet || git commit -m "Automatische update van speler statistieken [skip ci]"
+          git push
