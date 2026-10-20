@@ -1,1 +1,194 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft SMP | Speler Statistieken - Floris_N</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #090d16;
+            --bg-card: rgba(18, 26, 43, 0.7);
+            --accent-green: #22c55e;
+            --accent-green-glow: rgba(34, 197, 94, 0.35);
+            --accent-purple: #9146ff;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 8%;
+            background: rgba(9, 13, 22, 0.85);
+            backdrop-filter: blur(16px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo span { color: var(--accent-green); }
+
+        .btn-back {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+
+        .btn-back:hover { color: #fff; }
+
+        /* Container & Header */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 8%;
+            width: 100%;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Plan Dashboard Embed Box */
+        .analytics-frame {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            min-height: 700px;
+            position: relative;
+        }
+
+        .analytics-frame iframe {
+            width: 100%;
+            height: 750px;
+            border: none;
+        }
+
+        /* External Link Fallback Box */
+        .external-plan-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .btn-plan {
+            background: var(--accent-green);
+            color: #000;
+            text-decoration: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 12px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 1rem;
+            transition: all 0.25s;
+        }
+
+        .btn-plan:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--accent-green-glow);
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 2rem;
+            background: rgba(9, 13, 22, 0.95);
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-cubes" style="color: var(--accent-green);"></i>
+            Floris <span>SMP Stats</span>
+        </a>
+        <a href="index.html" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Terug naar Home
+        </a>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fa-solid fa-chart-line" style="color: var(--accent-green);"></i> Speler Statistieken</h1>
+            <p>Bekijk de speeltijd, prestaties en activiteit van alle spelers op de Floris Community SMP!</p>
+        </div>
+
+        <!-- Plan Dashboard Embed -->
+        <div class="analytics-frame">
+            <!-- Vul hieronder de exacte webadres/poort van jouw Plan Analytics in -->
+            <iframe src="http://node1.herculhosting.nl:8804" title="Plan Player Analytics"></iframe>
+        </div>
+
+        <div class="external-plan-box">
+            <h3>Opent de statistieken-pagina niet goed?</h3>
+            <p>Klik op de onderstaande knop om het Player Analytics dashboard rechtstreeks in een nieuw tabblad te openen:</p>
+            <a href="http://node1.herculhosting.nl:8804" target="_blank" class="btn-plan">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Volledige Statistieken
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Floris_N Community. Alle rechten voorbehouden.</p>
+    </footer>
+
+</body>
+</html>
