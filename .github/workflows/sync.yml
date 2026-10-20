@@ -15,14 +15,17 @@ jobs:
       - name: Install sshpass
         run: sudo apt-get update && sudo apt-get install -y sshpass
 
-      - name: Download stats via SFTP
+      - name: Test SFTP Connection & Download
         env:
           SFTP_HOST: ${{ secrets.SFTP_HOST }}
           SFTP_USER: ${{ secrets.SFTP_USER }}
           SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
         run: |
           mkdir -p /tmp/mc_stats
-          sshpass -p "$SFTP_PASSWORD" scp -o StrictHostKeyChecking=no -P 2053 -r "$SFTP_USER@$SFTP_HOST:plugins/Plan/cached_json/PLAYERS_V2_*" /tmp/mc_stats/
+          echo "Start verbinden met $SFTP_HOST op poort 2053 als gebruiker $SFTP_USER..."
+          
+          # Voer scp uit met verbose mode (-v) zodat we de exacte foutmelding in de logs zien
+          sshpass -p "$SFTP_PASSWORD" scp -v -o StrictHostKeyChecking=no -P 2053 "$SFTP_USER@$SFTP_HOST:plugins/Plan/cached_json/PLAYERS_V2_*" /tmp/mc_stats/
 
       - name: Process and Copy to cached_json
         run: |
