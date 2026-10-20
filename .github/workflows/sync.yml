@@ -22,16 +22,12 @@ jobs:
           SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
         run: |
           mkdir -p /tmp/mc_stats
-          # Haalt de poort uit de host (indien van toepassing, anders standaard poort 2022 of 21)
-          # We gebruiken hier sshpass met scp om de PLAYERS_V2 bestanden op te halen
-          sshpass -p "$SFTP_PASSWORD" scp -o StrictHostKeyChecking=no -P 2022 -r "$SFTP_USER@$SFTP_HOST:plugins/Plan/cached_json/PLAYERS_V2_*" /tmp/mc_stats/ || \
-          sshpass -p "$SFTP_PASSWORD" scp -o StrictHostKeyChecking=no -P 21 -r "$SFTP_USER@$SFTP_HOST:plugins/Plan/cached_json/PLAYERS_V2_*" /tmp/mc_stats/
+          sshpass -p "$SFTP_PASSWORD" scp -o StrictHostKeyChecking=no -P 2053 -r "$SFTP_USER@$SFTP_HOST:plugins/Plan/cached_json/PLAYERS_V2_*" /tmp/mc_stats/
 
       - name: Process and Copy to cached_json
         run: |
           mkdir -p cached_json
           rm -f cached_json/*
-          # Pakt het meest recente bestand en hernoemt het naar players.json
           LATEST_FILE=$(ls -t /tmp/mc_stats/PLAYERS_V2_* 2>/dev/null | head -n 1)
           if [ -n "$LATEST_FILE" ]; then
             cp "$LATEST_FILE" cached_json/players.json
