@@ -3,7 +3,7 @@ name: Sync Minecraft Stats
 on:
   schedule:
     - cron: '*/10 * * * *' # Draait elke 10 minuten
-  workflow_dispatch: # Hiermee kun je hem ook handmatig testen via GitHub
+  workflow_dispatch: # Handmatige knop om te testen
 
 jobs:
   sync:
@@ -12,26 +12,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
       - name: Download stats via SFTP
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-        with:
-          host: ${{ secrets.SFTP_HOST }}
-          user: ${{ secrets.SFTP_USER }}
-          pass: ${{ secrets.SFTP_PASSWORD }}
-          connect_timeout: 30s
-          first_ssh: |
-            mkdir -p /tmp/mc_stats
-          scp: |
-            ./plugins/Plan/cached_json/PLAYERS_V2_* /tmp/mc_stats/
-          last_ssh: |
-            echo "Bestanden succesvol opgehaald"
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          mkdir -p /tmp/mc_stats
+          # Haalt de poort uit de host (indien van toepassing, anders standaard poort 2022 of 21)
+          # We gebruiken hier sshpass met scp om de PLAYERS_V2 bestanden op te halen
+          sshpass -p "$SFTP_PASSWORD" scp -o StrictHostKeyChecking=no -P 2022 -r "$SFTP_USER@$SFTP_HOST:plugins/Plan/cached_json/PLAYERS_V2_*" /tmp/mc_stats/ || \
+          sshpass -p "$SFTP_PASSWORD" scp -o StrictHostKeyChecking=no -P 21 -r "$SFTP_USER@$SFTP_HOST:plugins/Plan/cached_json/PLAYERS_V2_*" /tmp/mc_stats/
 
       - name: Process and Copy to cached_json
         run: |
           mkdir -p cached_json
-          # Verwijdert oude bestanden en kopieert de nieuwste naar players.json
           rm -f cached_json/*
-          cp /tmp/mc_stats/PLAYERS_V2_* cached_json/players.json || true
+          # Pakt het meest recente bestand en hernoemt het naar players.json
+          LATEST_FILE=$(ls -t /tmp/mc_stats/PLAYERS_V2_* 2>/dev/null | head -n 1)
+          if [ -n "$LATEST_FILE" ]; then
+            cp "$LATEST_FILE" cached_json/players.json
+            echo "Bestand succesvol verwerkt!"
+          else
+            echo "Waarschuwing: Geen spelersbestand gevonden!"
+          fi
 
       - name: Commit and Push changes
         run: |
