@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Floris SMP | Statistieken</title>
+    <title>Minecraft SMP | Speler Statistieken - Floris_N</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #090d16;
-            --bg-card: #121a2b;
+            --bg-card: rgba(18, 26, 43, 0.7);
             --accent-green: #22c55e;
+            --accent-green-glow: rgba(34, 197, 94, 0.35);
             --accent-purple: #9146ff;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
@@ -28,6 +29,8 @@
             background-color: var(--bg-dark);
             color: var(--text-main);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Navbar */
@@ -38,194 +41,154 @@
             padding: 1.2rem 8%;
             background: rgba(9, 13, 22, 0.85);
             backdrop-filter: blur(16px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             border-bottom: 1px solid var(--border-color);
         }
 
         .logo {
             font-size: 1.4rem;
             font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             color: #fff;
             text-decoration: none;
         }
+
+        .logo span { color: var(--accent-green); }
 
         .btn-back {
             color: var(--text-muted);
             text-decoration: none;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
         }
 
-        /* Content Container */
+        .btn-back:hover { color: #fff; }
+
+        /* Container & Header */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 3rem 8%;
+            width: 100%;
         }
 
-        h1 {
-            font-size: 3rem;
+        .page-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
             font-weight: 800;
-            margin-bottom: 1.5rem;
-            text-align: center;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
         }
 
-        /* Filter Controls */
-        .controls-bar {
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Plan Dashboard Embed Box */
+        .analytics-frame {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            padding: 1rem;
-            border-radius: 14px;
-            display: flex;
-            gap: 15px;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        select, input {
-            background: #090d16;
-            border: 1px solid var(--border-color);
-            color: #fff;
-            padding: 0.8rem 1.2rem;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            outline: none;
-        }
-
-        select {
-            cursor: pointer;
-            min-width: 180px;
-        }
-
-        input {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--accent-purple);
-        }
-
-        /* Grid met Spelerskaarten */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1.2rem;
-        }
-
-        .player-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 1.2rem;
-            text-align: center;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            min-height: 700px;
             position: relative;
-            transition: transform 0.2s, border-color 0.2s;
         }
 
-        .player-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(145, 70, 255, 0.4);
+        .analytics-frame iframe {
+            width: 100%;
+            height: 750px;
+            border: none;
         }
 
-        .rank-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(255,255,255,0.1);
-            color: #fbbf24;
-            font-weight: 800;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
+        /* External Link Fallback Box */
+        .external-plan-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
         }
 
-        .player-avatar {
-            width: 64px;
-            height: 64px;
+        .btn-plan {
+            background: var(--accent-green);
+            color: #000;
+            text-decoration: none;
+            padding: 0.8rem 1.8rem;
             border-radius: 12px;
-            margin: 0.5rem 0;
-        }
-
-        .player-name {
             font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
-            word-break: break-all;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 1rem;
+            transition: all 0.25s;
         }
 
-        .stat-value {
-            color: #f97316;
-            font-weight: 800;
-            font-size: 0.95rem;
+        .btn-plan:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--accent-green-glow);
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 2rem;
+            background: rgba(9, 13, 22, 0.95);
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="index.html" class="logo">Floris <span>SMP</span></a>
-        <a href="index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Terug</a>
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-cubes" style="color: var(--accent-green);"></i>
+            Floris <span>SMP Stats</span>
+        </a>
+        <a href="index.html" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Terug naar Home
+        </a>
     </nav>
 
     <div class="container">
-        <h1>Statistieken</h1>
-
-        <!-- Zoekbalk & Filters -->
-        <div class="controls-bar">
-            <select id="stat-filter" onchange="renderPlayers()">
-                <option value="playtime">Speeltijd</option>
-                <option value="damage">Schade ontvangen</option>
-                <option value="mobs">Mobs gedood</option>
-                <option value="distance">Afstand (km)</option>
-                <option value="jumps">Sprongen</option>
-                <option value="kills">Speler kills</option>
-            </select>
-            <input type="text" id="search-input" placeholder="Zoek een speler..." oninput="renderPlayers()">
+        <div class="page-header">
+            <h1><i class="fa-solid fa-chart-line" style="color: var(--accent-green);"></i> Speler Statistieken</h1>
+            <p>Bekijk de speeltijd, prestaties en activiteit van alle spelers op de Floris Community SMP!</p>
         </div>
 
-        <!-- Grid waar spelers in laden -->
-        <div class="stats-grid" id="players-list"></div>
+        <!-- Plan Dashboard Embed -->
+        <div class="analytics-frame">
+            <!-- Vul hieronder de exacte webadres/poort van jouw Plan Analytics in -->
+            <iframe src="http://node1.herculhosting.nl:8804" title="Plan Player Analytics"></iframe>
+        </div>
+
+        <div class="external-plan-box">
+            <h3>Opent de statistieken-pagina niet goed?</h3>
+            <p>Klik op de onderstaande knop om het Player Analytics dashboard rechtstreeks in een nieuw tabblad te openen:</p>
+            <a href="http://node1.herculhosting.nl:8804" target="_blank" class="btn-plan">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Volledige Statistieken
+            </a>
+        </div>
     </div>
 
-    <script>
-        // Voorbeeld data (dit kun je later koppelen aan een API/database)
-        const playersData = [
-            { name: "d_elite37", playtime: "24u 13m", damage: "12,450", mobs: "1,240", distance: "142 km", jumps: "18,420", kills: 12 },
-            { name: "dannyvanderveen", playtime: "23u 34m", damage: "8,900", mobs: "980", distance: "110 km", jumps: "14,200", kills: 8 },
-            { name: "ginachuu", playtime: "22u 48m", damage: "5,400", mobs: "650", distance: "95 km", jumps: "11,100", kills: 3 },
-            { name: "nixnie", playtime: "9u 33m", damage: "2,100", mobs: "310", distance: "42 km", jumps: "4,500", kills: 1 },
-            { name: "lvckylvc_", playtime: "7u 54m", damage: "1,800", mobs: "220", distance: "35 km", jumps: "3,800", kills: 0 },
-            { name: "SAND3RTJE", playtime: "7u 11m", damage: "3,200", mobs: "410", distance: "48 km", jumps: "5,200", kills: 4 }
-        ];
+    <footer>
+        <p>&copy; 2026 Floris_N Community. Alle rechten voorbehouden.</p>
+    </footer>
 
-        function renderPlayers() {
-            const filterType = document.getElementById('stat-filter').value;
-            const searchVal = document.getElementById('search-input').value.toLowerCase();
-            const listContainer = document.getElementById('players-list');
-            
-            listContainer.innerHTML = '';
-
-            const filtered = playersData.filter(p => p.name.toLowerCase().includes(searchVal));
-
-            filtered.forEach((player, index) => {
-                const card = document.createElement('div');
-                card.className = 'player-card';
-                
-                // MC-Heads API haalt automatisch de Minecraft skin van de speler op!
-                card.innerHTML = `
-                    <div class="rank-badge">${index + 1}</div>
-                    <img class="player-avatar" src="https://mc-heads.net/avatar/${player.name}/64" alt="${player.name}">
-                    <div class="player-name">${player.name}</div>
-                    <div class="stat-value">${player[filterType]}</div>
-                `;
-                listContainer.appendChild(card);
-            });
-        }
-
-        renderPlayers();
-    </script>
 </body>
 </html>
