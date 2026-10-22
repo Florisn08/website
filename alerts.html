@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Floris_N | Stream Alerts</title>
+    <title>Floris_N | Stream Alerts & Effects</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,11 +13,12 @@
         :root {
             --bg-dark: #07090e;
             --bg-card: rgba(15, 22, 36, 0.7);
-            --bg-card-hover: rgba(24, 35, 58, 0.85);
+            --bg-card-hover: rgba(24, 35, 58, 0.88);
             --accent-purple: #9146ff;
             --accent-purple-glow: rgba(145, 70, 255, 0.35);
             --accent-green: #22c55e;
             --accent-green-glow: rgba(34, 197, 94, 0.25);
+            --accent-amber: #f59e0b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: rgba(255, 255, 255, 0.08);
@@ -40,19 +41,25 @@
             position: relative;
         }
 
-        /* Ambient Glow Background */
+        /* Dynamische Bewegende Glow Background */
         body::before {
             content: '';
             position: fixed;
-            top: -100px;
+            top: -120px;
             left: 50%;
             transform: translateX(-50%);
-            width: 800px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(145, 70, 255, 0.15) 0%, rgba(34, 197, 94, 0.05) 65%, transparent 80%);
-            filter: blur(120px);
+            width: 900px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(145, 70, 255, 0.18) 0%, rgba(34, 197, 94, 0.06) 60%, transparent 80%);
+            filter: blur(130px);
             z-index: -1;
             pointer-events: none;
+            animation: bgPulse 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgPulse {
+            0% { transform: translateX(-50%) scale(1); opacity: 0.8; }
+            100% { transform: translateX(-48%) scale(1.15); opacity: 1; }
         }
 
         /* Intro Loader */
@@ -112,8 +119,8 @@
 
         nav {
             width: 100%;
-            max-width: 1050px;
-            background: rgba(13, 18, 30, 0.75);
+            max-width: 1100px;
+            background: rgba(13, 18, 30, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
@@ -153,7 +160,7 @@
 
         .nav-center {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             background: rgba(255, 255, 255, 0.03);
             padding: 4px;
             border-radius: 50px;
@@ -229,14 +236,14 @@
         .hero p {
             font-size: 1.05rem;
             color: var(--text-muted);
-            max-width: 620px;
+            max-width: 650px;
             line-height: 1.6;
         }
 
-        /* Tip CTA Button */
+        /* Donatie Knop met Shimmer */
         .btn-donate {
             position: relative;
-            padding: 0.9rem 2rem;
+            padding: 0.9rem 2.2rem;
             border-radius: 14px;
             font-weight: 800;
             font-size: 1rem;
@@ -246,13 +253,24 @@
             gap: 12px;
             cursor: pointer;
             border: none;
-            background: linear-gradient(135deg, var(--accent-purple), #7c2d12);
             background: var(--accent-purple);
             color: #fff;
             box-shadow: 0 8px 25px var(--accent-purple-glow);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             overflow: hidden;
         }
+
+        .btn-donate::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -60%;
+            width: 50%; height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(30deg);
+            transition: all 0.6s ease;
+        }
+
+        .btn-donate:hover::after { left: 130%; }
 
         .btn-donate:hover {
             transform: translateY(-3px) scale(1.02);
@@ -261,34 +279,66 @@
 
         /* Disclaimer Banner */
         .disclaimer-card {
-            background: rgba(145, 70, 255, 0.05);
-            border: 1px solid rgba(145, 70, 255, 0.2);
+            background: rgba(239, 68, 68, 0.06);
+            border: 1px solid rgba(239, 68, 68, 0.25);
             border-radius: 16px;
-            padding: 1.2rem 1.6rem;
+            padding: 1.3rem 1.8rem;
             max-width: 850px;
-            margin: 1.5rem auto 3rem;
+            margin: 1rem auto 2.5rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.2rem;
             backdrop-filter: blur(10px);
+            text-align: left;
         }
 
         .disclaimer-icon {
-            font-size: 1.5rem;
-            color: var(--accent-purple);
+            font-size: 1.8rem;
+            color: #ef4444;
             flex-shrink: 0;
         }
 
         .disclaimer-text {
             font-size: 0.9rem;
-            color: var(--text-muted);
+            color: #f8fafc;
             line-height: 1.5;
-            text-align: left;
+        }
+
+        /* Sub Perks Banner */
+        .sub-perks-card {
+            background: rgba(145, 70, 255, 0.08);
+            border: 1px solid rgba(145, 70, 255, 0.25);
+            border-radius: 16px;
+            padding: 1.4rem;
+            max-width: 850px;
+            margin: 0 auto 3rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .perk-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .perk-item i {
+            font-size: 1.4rem;
+            color: var(--accent-purple);
+        }
+
+        .perk-item span {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
         }
 
         /* Container & Filter Bar */
         .container {
-            max-width: 1050px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 1.5rem 5rem;
         }
@@ -339,20 +389,20 @@
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 20px;
-            padding: 1.6rem;
+            padding: 1.5rem;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.9rem;
             position: relative;
             overflow: hidden;
         }
 
         .alert-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(145, 70, 255, 0.35);
+            transform: translateY(-5px);
+            border-color: rgba(145, 70, 255, 0.4);
             background: var(--bg-card-hover);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         }
 
         .alert-header {
@@ -371,20 +421,10 @@
             font-size: 1.2rem;
         }
 
-        .type-donate .alert-icon-box {
-            background: rgba(34, 197, 94, 0.12);
-            color: var(--accent-green);
-        }
-
-        .type-sub .alert-icon-box {
-            background: rgba(145, 70, 255, 0.12);
-            color: var(--accent-purple);
-        }
-
-        .type-bits .alert-icon-box {
-            background: rgba(245, 158, 11, 0.12);
-            color: #f59e0b;
-        }
+        .type-donate .alert-icon-box { background: rgba(34, 197, 94, 0.12); color: var(--accent-green); }
+        .type-sub .alert-icon-box { background: rgba(145, 70, 255, 0.12); color: var(--accent-purple); }
+        .type-bits .alert-icon-box { background: rgba(245, 158, 11, 0.12); color: var(--accent-amber); }
+        .type-follow .alert-icon-box { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
 
         .alert-badge {
             font-size: 0.75rem;
@@ -395,34 +435,47 @@
             text-transform: uppercase;
         }
 
-        .type-donate .alert-badge {
-            background: rgba(34, 197, 94, 0.15);
-            color: #4ade80;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-        }
-
-        .type-sub .alert-badge {
-            background: rgba(145, 70, 255, 0.15);
-            color: #d8b4fe;
-            border: 1px solid rgba(145, 70, 255, 0.3);
-        }
-
-        .type-bits .alert-badge {
-            background: rgba(245, 158, 11, 0.15);
-            color: #fcd34d;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
+        .type-donate .alert-badge { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .type-sub .alert-badge { background: rgba(145, 70, 255, 0.15); color: #d8b4fe; border: 1px solid rgba(145, 70, 255, 0.3); }
+        .type-bits .alert-badge { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .type-follow .alert-badge { background: rgba(59, 130, 246, 0.15); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
 
         .alert-title {
-            font-size: 1.2rem;
-            font-weight: 700;
+            font-size: 1.15rem;
+            font-weight: 800;
             letter-spacing: -0.3px;
         }
 
-        .alert-desc {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            line-height: 1.5;
+        .sound-tag {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0.5rem 0.8rem;
+            border-radius: 10px;
+            font-size: 0.83rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .sound-tag i {
+            color: var(--accent-purple);
+            font-size: 0.85rem;
+        }
+
+        .printer-tag {
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            padding: 0.35rem 0.7rem;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            width: fit-content;
         }
 
         .alert-footer {
@@ -434,11 +487,6 @@
             justify-content: space-between;
             font-size: 0.8rem;
             color: var(--text-muted);
-        }
-
-        .alert-footer span i {
-            margin-right: 5px;
-            color: var(--accent-purple);
         }
 
         footer {
@@ -454,7 +502,6 @@
             .hero h1 { font-size: 2.3rem; }
             .nav-center { display: none; }
             .disclaimer-card { flex-direction: column; text-align: center; }
-            .disclaimer-text { text-align: center; }
         }
     </style>
 </head>
@@ -490,7 +537,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <h1 data-i18n="hero_title">Stream Alerts & Effecten</h1>
-        <p data-i18n="hero_desc">Bekijk hier welk unieke geluid en animatie op de livestream verschijnt bij donaties, subs of bits!</p>
+        <p data-i18n="hero_desc">Bekijk hier welk unieke geluid en animatie op de livestream verschijnt bij donaties, subs, bits of volgers!</p>
 
         <!-- Donatie Knop -->
         <a href="https://streamelements.com/floris_n/tip" target="_blank" class="btn-donate">
@@ -498,18 +545,37 @@
             <span data-i18n="btn_tip">Doe een Donatie</span>
         </a>
 
-        <!-- Disclaimer -->
+        <!-- Disclaimer Banner -->
         <div class="disclaimer-card">
-            <i class="fa-solid fa-circle-info disclaimer-icon"></i>
+            <i class="fa-solid fa-triangle-exclamation disclaimer-icon"></i>
             <div class="disclaimer-text" data-i18n="disclaimer_text">
-                <strong>Disclaimer:</strong> Doneren of abonneren is nooit verplicht! Kijken en meechatten in de stream is al meer dan genoeg support. Dit overzicht is puur voor de fun om te laten zien welke alerts je activeert!
+                <strong>Belangrijke Disclaimer:</strong> Doneren of abonneren is nooit verplicht! Kijken en meechatten is al fantastische support. Let op: <u>Donaties zijn definitief en niet retourneerbaar (refunds zijn niet mogelijk)</u>.
+            </div>
+        </div>
+
+        <!-- Sub Perks Box -->
+        <div class="sub-perks-card">
+            <div class="perk-item">
+                <i class="fa-solid fa-rectangle-ad"></i>
+                <span data-i18n="perk1">Geen Reclames</span>
+            </div>
+            <div class="perk-item">
+                <i class="fa-solid fa-face-smile"></i>
+                <span data-i18n="perk2">Exclusieve Emotes</span>
+            </div>
+            <div class="perk-item">
+                <i class="fa-solid fa-print"></i>
+                <span data-i18n="perk3">Bonnetje uit de Printer</span>
+            </div>
+            <div class="perk-item">
+                <i class="fa-brands fa-discord"></i>
+                <span data-i18n="perk4">Discord Sub Rol</span>
             </div>
         </div>
     </section>
 
-    <!-- Content & Filter Area -->
+    <!-- Container & Filter -->
     <div class="container">
-        <!-- Filter Knoppen -->
         <div class="filter-wrapper">
             <button class="filter-btn active" onclick="filterAlerts('all')">
                 <i class="fa-solid fa-border-all"></i> <span data-i18n="filter_all">Alles</span>
@@ -523,116 +589,352 @@
             <button class="filter-btn" onclick="filterAlerts('bits')">
                 <i class="fa-solid fa-gem"></i> <span data-i18n="filter_bits">Bits</span>
             </button>
+            <button class="filter-btn" onclick="filterAlerts('follow')">
+                <i class="fa-solid fa-user-plus"></i> <span data-i18n="filter_follow">Follows</span>
+            </button>
         </div>
 
         <!-- Alerts Grid -->
-        <div class="alerts-grid" id="alerts-grid">
+        <div class="alerts-grid">
 
-            <!-- DONATE ALERTS -->
+            <!-- DONATIES -->
             <div class="alert-card type-donate" data-category="donate">
                 <div class="alert-header">
-                    <div class="alert-icon-box"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-                    <span class="alert-badge">€1.00 - €4.99</span>
+                    <div class="alert-icon-box"><i class="fa-solid fa-euro-sign"></i></div>
+                    <span class="alert-badge">€1 - €10</span>
                 </div>
-                <div class="alert-title" data-i18n="alert1_title">Kleine Support</div>
-                <div class="alert-desc" data-i18n="alert1_desc">Standaard alert geluid met jouw bericht voorgelezen op de livestream.</div>
-                <div class="alert-footer">
-                    <span><i class="fa-solid fa-volume-high"></i> Custom TTS</span>
-                    <span data-i18n="type_donate">Donatie</span>
-                </div>
+                <div class="alert-title">Donatie Alert</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> LIFE IS A HIGHWAY REMIX</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-volume-high"></i> TTS Spraak</span><span>Donatie</span></div>
             </div>
 
             <div class="alert-card type-donate" data-category="donate">
                 <div class="alert-header">
-                    <div class="alert-icon-box"><i class="fa-solid fa-fire"></i></div>
-                    <span class="alert-badge">€5.00 - €19.99</span>
+                    <div class="alert-icon-box"><i class="fa-solid fa-car-side"></i></div>
+                    <span class="alert-badge">Exact €3,33</span>
                 </div>
-                <div class="alert-title" data-i18n="alert2_title">Medium Donatie</div>
-                <div class="alert-desc" data-i18n="alert2_desc">Spoorweg & confetti animatie met hardere Soundbyte op de stream!</div>
-                <div class="alert-footer">
-                    <span><i class="fa-solid fa-wand-magic-sparkles"></i> Visual Effects</span>
-                    <span data-i18n="type_donate">Donatie</span>
-                </div>
+                <div class="alert-title">Max Verstappen Special</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> 33 MAX VERSTAPPEN</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-bolt"></i> Special Sound</span><span>Donatie</span></div>
             </div>
 
             <div class="alert-card type-donate" data-category="donate">
                 <div class="alert-header">
-                    <div class="alert-icon-box"><i class="fa-solid fa-crown"></i></div>
-                    <span class="alert-badge">€20.00+</span>
+                    <div class="alert-icon-box"><i class="fa-solid fa-cannabis"></i></div>
+                    <span class="alert-badge">Exact €4,20</span>
                 </div>
-                <div class="alert-title" data-i18n="alert3_title">Grote Donatie (BOSS)</div>
-                <div class="alert-desc" data-i18n="alert3_desc">Volledige scherm-overname, speciale Boss-music & luid effect in de livestream!</div>
-                <div class="alert-footer">
-                    <span><i class="fa-solid fa-bolt"></i> Screen takeover</span>
-                    <span data-i18n="type_donate">Donatie</span>
-                </div>
+                <div class="alert-title">Chill Sound</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> YOUNG, WILD AND FREE</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-cannabis"></i> 420 Vibez</span><span>Donatie</span></div>
             </div>
 
-            <!-- SUBS ALERTS -->
+            <div class="alert-card type-donate" data-category="donate">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-ghost"></i></div>
+                    <span class="alert-badge">Exact €6,66</span>
+                </div>
+                <div class="alert-title">Jumpscare Donatie</div>
+                <div class="sound-tag"><i class="fa-solid fa-skull"></i> JUMPSCARE AUDIO</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-skull"></i> Stream Scare</span><span>Donatie</span></div>
+            </div>
+
+            <div class="alert-card type-donate" data-category="donate">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-bottle-droplet"></i></div>
+                    <span class="alert-badge">Exact €10,00</span>
+                </div>
+                <div class="alert-title">Ketjap Manis Special</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> KETJAP MANIS</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-fire"></i> Custom Sound</span><span>Donatie</span></div>
+            </div>
+
+            <div class="alert-card type-donate" data-category="donate">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-beer-mug-empty"></i></div>
+                    <span class="alert-badge">Exact €10,01</span>
+                </div>
+                <div class="alert-title">Bier Edit</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> ROYALISTIQ BIER EDIT</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-beer-mug-empty"></i> Party Edit</span><span>Donatie</span></div>
+            </div>
+
+            <div class="alert-card type-donate" data-category="donate">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-bolt"></i></div>
+                    <span class="alert-badge">Exact €20,00</span>
+                </div>
+                <div class="alert-title">Energie Alert</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> Wees Zuinig Op Je Energie</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-bolt"></i> Harder Effect</span><span>Donatie</span></div>
+            </div>
+
+            <div class="alert-card type-donate" data-category="donate">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-flag-checkered"></i></div>
+                    <span class="alert-badge">Exact €33,00</span>
+                </div>
+                <div class="alert-title">Max Hardstyle</div>
+                <div class="sound-tag"><i class="fa-solid fa-compact-disc"></i> 33 MAX VERSTAPPEN HARDSTYLE</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-compact-disc"></i> Hardstyle</span><span>Donatie</span></div>
+            </div>
+
+            <div class="alert-card type-donate" data-category="donate">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-bullhorn"></i></div>
+                    <span class="alert-badge">Exact €50,00</span>
+                </div>
+                <div class="alert-title">Tjarda Kale Toeter</div>
+                <div class="sound-tag"><i class="fa-solid fa-bullhorn"></i> Hoi ik ben Tjarda - Kale Toeter</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-crown"></i> High Support</span><span>Donatie</span></div>
+            </div>
+
+            <div class="alert-card type-donate" data-category="donate">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-dragon"></i></div>
+                    <span class="alert-badge">Exact €100,00</span>
+                </div>
+                <div class="alert-title">Mutilator Overkill</div>
+                <div class="sound-tag"><i class="fa-solid fa-drum"></i> Mutilator - Violated</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-dragon"></i> Ultimate Boss</span><span>Donatie</span></div>
+            </div>
+
+            <!-- SUBS -->
             <div class="alert-card type-sub" data-category="sub">
                 <div class="alert-header">
                     <div class="alert-icon-box"><i class="fa-solid fa-star"></i></div>
-                    <span class="alert-badge">1 Tier 1 Sub</span>
+                    <span class="alert-badge">Sub / Resub</span>
                 </div>
-                <div class="alert-title" data-i18n="alert4_title">Nieuwe Sub</div>
-                <div class="alert-desc" data-i18n="alert4_desc">Welkom bij de club! Welkomst-geluidje + emote explosie in de chat.</div>
-                <div class="alert-footer">
-                    <span><i class="fa-solid fa-icons"></i> Chat Emote Wave</span>
-                    <span data-i18n="type_sub">Subscription</span>
-                </div>
+                <div class="alert-title">Sub / Resub Alert</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> Anita max win drake</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-star"></i> Subscriber Perks</span><span>Sub</span></div>
             </div>
 
             <div class="alert-card type-sub" data-category="sub">
                 <div class="alert-header">
                     <div class="alert-icon-box"><i class="fa-solid fa-gift"></i></div>
-                    <span class="alert-badge">5 Gifted Subs</span>
+                    <span class="alert-badge">1 t/m 4 Subs</span>
                 </div>
-                <div class="alert-title" data-i18n="alert5_title">5 Sub Cadeaus</div>
-                <div class="alert-desc" data-i18n="alert5_desc">Speciaal gefeliciteerd-geluidje & willekeurige kijkers krijgen gratis sub!</div>
-                <div class="alert-footer">
-                    <span><i class="fa-solid fa-users"></i> Community Gift</span>
-                    <span data-i18n="type_sub">Subscription</span>
-                </div>
+                <div class="alert-title">Gifted Subs Tier 1</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> On Met La Patate</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gift"></i> Community Gift</span><span>Sub</span></div>
             </div>
 
             <div class="alert-card type-sub" data-category="sub">
                 <div class="alert-header">
-                    <div class="alert-icon-box"><i class="fa-solid fa-gem"></i></div>
-                    <span class="alert-badge">10+ Gifted Subs</span>
+                    <div class="alert-icon-box"><i class="fa-solid fa-layer-group"></i></div>
+                    <span class="alert-badge">5 Subs</span>
                 </div>
-                <div class="alert-title" data-i18n="alert6_title">Sub Bomb Overkill</div>
-                <div class="alert-desc" data-i18n="alert6_desc">Legendarische feest-animatie, disco-verlichting op het scherm!</div>
-                <div class="alert-footer">
-                    <span><i class="fa-solid fa-champagne-glasses"></i> Party Mode</span>
-                    <span data-i18n="type_sub">Subscription</span>
-                </div>
+                <div class="alert-title">Spongebob Remix</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> SPONGEBOB X ROYALISTIQ</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gift"></i> 5 Subs Gift</span><span>Sub</span></div>
             </div>
 
-            <!-- BITS ALERTS -->
+            <div class="alert-card type-sub" data-category="sub">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-tree"></i></div>
+                    <span class="alert-badge">10 Subs</span>
+                </div>
+                <div class="alert-title">Enchanted Forest</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> The Enchanted Forest</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gift"></i> 10 Subs Gift</span><span>Sub</span></div>
+            </div>
+
+            <div class="alert-card type-sub" data-category="sub">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-compact-disc"></i></div>
+                    <span class="alert-badge">20 Subs</span>
+                </div>
+                <div class="alert-title">Hardstyle Avond</div>
+                <div class="sound-tag"><i class="fa-solid fa-compact-disc"></i> Als Het Avond Is (HARDSTYLE REMIX)</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gift"></i> 20 Subs Gift</span><span>Sub</span></div>
+            </div>
+
+            <div class="alert-card type-sub" data-category="sub">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-dog"></i></div>
+                    <span class="alert-badge">50 Subs</span>
+                </div>
+                <div class="alert-title">Major Doggo</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> Major Conspiracy - DOGGO</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gift"></i> 50 Subs Gift</span><span>Sub</span></div>
+            </div>
+
+            <div class="alert-card type-sub" data-category="sub">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-skull"></i></div>
+                    <span class="alert-badge">100 Subs</span>
+                </div>
+                <div class="alert-title">Renegades Grave</div>
+                <div class="sound-tag"><i class="fa-solid fa-skull"></i> Renegades Till The Grave</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-crown"></i> 100 Subs Gift</span><span>Sub</span></div>
+            </div>
+
+            <!-- BITS -->
             <div class="alert-card type-bits" data-category="bits">
                 <div class="alert-header">
                     <div class="alert-icon-box"><i class="fa-solid fa-gem"></i></div>
-                    <span class="alert-badge">100 - 499 Bits</span>
+                    <span class="alert-badge">1 t/m 99 Bits</span>
                 </div>
-                <div class="alert-title" data-i18n="alert7_title">Bits Cheer</div>
-                <div class="alert-desc" data-i18n="alert7_desc">Leuk geluidseffect en jouw Cheer berichtje direct op het scherm.</div>
-                <div class="alert-footer">
-                    <span><i class="fa-solid fa-message"></i> On-screen Message</span>
-                    <span data-i18n="type_bits">Bits</span>
-                </div>
+                <div class="alert-title">Mijn Verf</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> AHH MIJN VERF</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gem"></i> Bits Cheer</span><span>Bits</span></div>
             </div>
 
             <div class="alert-card type-bits" data-category="bits">
                 <div class="alert-header">
-                    <div class="alert-icon-box"><i class="fa-solid fa-explosion"></i></div>
+                    <div class="alert-icon-box"><i class="fa-solid fa-gem"></i></div>
+                    <span class="alert-badge">50 Bits</span>
+                </div>
+                <div class="alert-title">Noot Noot Remix</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> NOOT NOOT REMIX</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gem"></i> Bits Cheer</span><span>Bits</span></div>
+            </div>
+
+            <div class="alert-card type-bits" data-category="bits">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-gem"></i></div>
+                    <span class="alert-badge">67 Bits</span>
+                </div>
+                <div class="alert-title">Merry Rizzmas</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> 67 on a merry rizzmas</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gem"></i> Bits Cheer</span><span>Bits</span></div>
+            </div>
+
+            <div class="alert-card type-bits" data-category="bits">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-gem"></i></div>
+                    <span class="alert-badge">69 Bits</span>
+                </div>
+                <div class="alert-title">Boodschappenlijstje</div>
+                <div class="sound-tag"><i class="fa-solid fa-basket-shopping"></i> BOODSCHAPPENLIJSTJE</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gem"></i> Bits Cheer</span><span>Bits</span></div>
+            </div>
+
+            <div class="alert-card type-bits" data-category="bits">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-gem"></i></div>
+                    <span class="alert-badge">100 Bits</span>
+                </div>
+                <div class="alert-title">Fristi Fles</div>
+                <div class="sound-tag"><i class="fa-solid fa-bottle-water"></i> NO STRESS FRISTI FLES</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gem"></i> Bits Cheer</span><span>Bits</span></div>
+            </div>
+
+            <div class="alert-card type-bits" data-category="bits">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-gem"></i></div>
+                    <span class="alert-badge">111 Bits</span>
+                </div>
+                <div class="alert-title">I Surrender Remix</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> I Surrender (Remix) · Lange Frans</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gem"></i> Bits Cheer</span><span>Bits</span></div>
+            </div>
+
+            <div class="alert-card type-bits" data-category="bits">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-gem"></i></div>
+                    <span class="alert-badge">150 Bits</span>
+                </div>
+                <div class="alert-title">Kabouterdans Drill</div>
+                <div class="sound-tag"><i class="fa-solid fa-compact-disc"></i> Kabouterdans (Drill Remix)</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gem"></i> Bits Cheer</span><span>Bits</span></div>
+            </div>
+
+            <div class="alert-card type-bits" data-category="bits">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-gem"></i></div>
+                    <span class="alert-badge">200 Bits</span>
+                </div>
+                <div class="alert-title">Gamemeneer Remix</div>
+                <div class="sound-tag"><i class="fa-solid fa-music"></i> Gamemeneer x 4 zomers lang</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gem"></i> Bits Cheer</span><span>Bits</span></div>
+            </div>
+
+            <div class="alert-card type-bits" data-category="bits">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-gem"></i></div>
+                    <span class="alert-badge">250 Bits</span>
+                </div>
+                <div class="alert-title">Geert AI Superheld</div>
+                <div class="sound-tag"><i class="fa-solid fa-robot"></i> GEERT AI X MIJN SUPERHELD</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gem"></i> Bits Cheer</span><span>Bits</span></div>
+            </div>
+
+            <div class="alert-card type-bits" data-category="bits">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-gem"></i></div>
                     <span class="alert-badge">500+ Bits</span>
                 </div>
-                <div class="alert-title" data-i18n="alert8_title">Mega Cheer</div>
-                <div class="alert-desc" data-i18n="alert8_desc">Knal-geluid met geanimeerde bit-regen over de livestream video!</div>
-                <div class="alert-footer">
-                    <span><i class="fa-solid fa-cloud-showers-heavy"></i> Bit Shower</span>
-                    <span data-i18n="type_bits">Bits</span>
+                <div class="alert-title">Freaky Bob Meme</div>
+                <div class="sound-tag"><i class="fa-solid fa-face-laugh-squint"></i> Freaky ah bob meme</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gem"></i> Bits Cheer</span><span>Bits</span></div>
+            </div>
+
+            <div class="alert-card type-bits" data-category="bits">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-gem"></i></div>
+                    <span class="alert-badge">1000+ Bits</span>
                 </div>
+                <div class="alert-title">Porno Plaat</div>
+                <div class="sound-tag"><i class="fa-solid fa-record-vinyl"></i> Porno Plaat</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gem"></i> Bits Cheer</span><span>Bits</span></div>
+            </div>
+
+            <div class="alert-card type-bits" data-category="bits">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-gem"></i></div>
+                    <span class="alert-badge">5000+ Bits</span>
+                </div>
+                <div class="alert-title">Vastgelijmd Remix</div>
+                <div class="sound-tag"><i class="fa-solid fa-compact-disc"></i> Vastgelijmd REMIX</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gem"></i> Bits Cheer</span><span>Bits</span></div>
+            </div>
+
+            <div class="alert-card type-bits" data-category="bits">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-gem"></i></div>
+                    <span class="alert-badge">10000+ Bits</span>
+                </div>
+                <div class="alert-title">No Fighting Overkill</div>
+                <div class="sound-tag"><i class="fa-solid fa-skull"></i> NO FUCKING FIGHTING</div>
+                <div class="printer-tag"><i class="fa-solid fa-print"></i> Printer Bonnetjes Alert</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-gem"></i> Mega Bits Cheer</span><span>Bits</span></div>
+            </div>
+
+            <!-- FOLLOW -->
+            <div class="alert-card type-follow" data-category="follow">
+                <div class="alert-header">
+                    <div class="alert-icon-box"><i class="fa-solid fa-user-plus"></i></div>
+                    <span class="alert-badge">Nieuwe Follower</span>
+                </div>
+                <div class="alert-title">Enzo Knol Meme</div>
+                <div class="sound-tag"><i class="fa-solid fa-video"></i> ENZO KNOL - WTF MEME</div>
+                <div class="alert-footer"><span><i class="fa-solid fa-heart"></i> Welkom Follower</span><span>Follow</span></div>
             </div>
 
         </div>
@@ -644,7 +946,6 @@
     </footer>
 
     <script>
-        // Taalvertalingen
         let currentLang = 'nl';
 
         const i18n = {
@@ -653,64 +954,36 @@
                 nav_mc: "Minecraft SMP",
                 nav_alerts: "Stream Alerts",
                 hero_title: "Stream Alerts & Effecten",
-                hero_desc: "Bekijk hier welk unieke geluid en animatie op de livestream verschijnt bij donaties, subs of bits!",
+                hero_desc: "Bekijk hier welk unieke geluid en animatie op de livestream verschijnt bij donaties, subs, bits of volgers!",
                 btn_tip: "Doe een Donatie",
-                disclaimer_text: "<strong>Disclaimer:</strong> Doneren of abonneren is nooit verplicht! Kijken en meechatten in de stream is al meer dan genoeg support. Dit overzicht is puur voor de fun om te laten zien welke alerts je activeert!",
+                disclaimer_text: "<strong>Belangrijke Disclaimer:</strong> Doneren of abonneren is nooit verplicht! Kijken en meechatten is al fantastische support. Let op: <u>Donaties zijn definitief en niet retourneerbaar (refunds zijn niet mogelijk)</u>.",
+                perk1: "Geen Reclames",
+                perk2: "Exclusieve Emotes",
+                perk3: "Bonnetje uit de Printer",
+                perk4: "Discord Sub Rol",
                 filter_all: "Alles",
                 filter_donate: "Donaties",
                 filter_subs: "Subscriptions",
                 filter_bits: "Bits",
-                type_donate: "Donatie",
-                type_sub: "Subscription",
-                type_bits: "Bits",
-                alert1_title: "Kleine Support",
-                alert1_desc: "Standaard alert geluid met jouw bericht voorgelezen op de livestream.",
-                alert2_title: "Medium Donatie",
-                alert2_desc: "Spoorweg & confetti animatie met hardere Soundbyte op de stream!",
-                alert3_title: "Grote Donatie (BOSS)",
-                alert3_desc: "Volledige scherm-overname, speciale Boss-music & luid effect in de livestream!",
-                alert4_title: "Nieuwe Sub",
-                alert4_desc: "Welkom bij de club! Welkomst-geluidje + emote explosie in de chat.",
-                alert5_title: "5 Sub Cadeaus",
-                alert5_desc: "Speciaal gefeliciteerd-geluidje & willekeurige kijkers krijgen gratis sub!",
-                alert6_title: "Sub Bomb Overkill",
-                alert6_desc: "Legendarische feest-animatie, disco-verlichting op het scherm!",
-                alert7_title: "Bits Cheer",
-                alert7_desc: "Leuk geluidseffect en jouw Cheer berichtje direct op het scherm.",
-                alert8_title: "Mega Cheer",
-                alert8_desc: "Knal-geluid met geanimeerde bit-regen over de livestream video!"
+                filter_follow: "Follows"
             },
             en: {
                 nav_home: "Home",
                 nav_mc: "Minecraft SMP",
                 nav_alerts: "Stream Alerts",
                 hero_title: "Stream Alerts & Effects",
-                hero_desc: "Check out which unique sound and animation appears on stream when donating, subbing, or cheering bits!",
+                hero_desc: "Check out which unique sound and animation appears on stream when donating, subbing, cheering bits, or following!",
                 btn_tip: "Make a Donation",
-                disclaimer_text: "<strong>Disclaimer:</strong> Donating or subscribing is never required! Watching and chatting in the stream is more than enough support. This overview is just for fun to show which alerts you trigger!",
+                disclaimer_text: "<strong>Important Disclaimer:</strong> Donating or subscribing is never required! Watching and chatting is already great support. Note: <u>Donations are final and non-refundable</u>.",
+                perk1: "Ad-Free Viewing",
+                perk2: "Exclusive Emotes",
+                perk3: "Receipt Printer Alert",
+                perk4: "Discord Sub Role",
                 filter_all: "All",
                 filter_donate: "Donations",
                 filter_subs: "Subscriptions",
                 filter_bits: "Bits",
-                type_donate: "Donation",
-                type_sub: "Subscription",
-                type_bits: "Bits",
-                alert1_title: "Small Support",
-                alert1_desc: "Standard alert sound with your message read out loud via TTS on stream.",
-                alert2_title: "Medium Donation",
-                alert2_desc: "Special confetti animation with a louder soundbyte on stream!",
-                alert3_title: "Huge Donation (BOSS)",
-                alert3_desc: "Full screen takeover, epic Boss music & loud effect on the livestream!",
-                alert4_title: "New Sub",
-                alert4_desc: "Welcome to the club! Welcome soundbyte + emote explosion in chat.",
-                alert5_title: "5 Gifted Subs",
-                alert5_desc: "Special congratulations soundbyte & random viewers get a free sub!",
-                alert6_title: "Sub Bomb Overkill",
-                alert6_desc: "Legendary party animation with disco lighting across the entire screen!",
-                alert7_title: "Bits Cheer",
-                alert7_desc: "Fun sound effect and your Cheer message displayed directly on screen.",
-                alert8_title: "Mega Cheer",
-                alert8_desc: "Big explosion sound with animated bit shower across the livestream video!"
+                filter_follow: "Follows"
             }
         };
 
@@ -727,7 +1000,6 @@
             });
         }
 
-        // Filtering functionaliteit
         function filterAlerts(category) {
             const buttons = document.querySelectorAll('.filter-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
@@ -743,7 +1015,6 @@
             });
         }
 
-        // Loader hide
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
