@@ -11,14 +11,15 @@
     
     <style>
         :root {
-            --bg-dark: #06080d;
+            --bg-dark: #05070c;
             --bg-card: rgba(13, 19, 32, 0.65);
-            --bg-card-hover: rgba(22, 32, 54, 0.85);
+            --bg-card-hover: rgba(22, 32, 54, 0.88);
             --accent-purple: #9146ff;
-            --accent-purple-glow: rgba(145, 70, 255, 0.4);
+            --accent-purple-glow: rgba(145, 70, 255, 0.45);
             --accent-green: #22c55e;
-            --accent-green-glow: rgba(34, 197, 94, 0.3);
+            --accent-green-glow: rgba(34, 197, 94, 0.35);
             --accent-cyan: #06b6d4;
+            --accent-cyan-glow: rgba(6, 182, 212, 0.35);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: rgba(255, 255, 255, 0.08);
@@ -41,36 +42,56 @@
             position: relative;
         }
 
-        /* Ambient Glowing Background Orbs */
-        .ambient-orb-1 {
+        /* DYNAMISCHE ACHTERGROND MET AMBIENT ORBS EN GRID PATROON */
+        body::after {
+            content: '';
             position: fixed;
-            top: -150px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 1000px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(145, 70, 255, 0.16) 0%, rgba(34, 197, 94, 0.05) 60%, transparent 80%);
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .ambient-orb {
+            position: fixed;
+            border-radius: 50%;
             filter: blur(140px);
             z-index: -1;
             pointer-events: none;
-            animation: orbFloat 14s ease-in-out infinite alternate;
+            opacity: 0.85;
+            animation: floatOrb 12s ease-in-out infinite alternate;
         }
 
-        .ambient-orb-2 {
-            position: fixed;
-            bottom: -100px;
+        .orb-1 {
+            top: -150px;
+            left: 30%;
+            width: 700px;
+            height: 500px;
+            background: radial-gradient(circle, var(--accent-purple-glow) 0%, transparent 70%);
+        }
+
+        .orb-2 {
+            bottom: 10%;
             right: -100px;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, transparent 70%);
-            filter: blur(120px);
-            z-index: -1;
-            pointer-events: none;
+            background: radial-gradient(circle, var(--accent-cyan-glow) 0%, transparent 70%);
+            animation-delay: -4s;
         }
 
-        @keyframes orbFloat {
-            0% { transform: translateX(-50%) translateY(0) scale(1); }
-            100% { transform: translateX(-47%) translateY(30px) scale(1.12); }
+        .orb-3 {
+            top: 40%;
+            left: -150px;
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, var(--accent-green-glow) 0%, transparent 70%);
+            animation-delay: -8s;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translateY(0) scale(1) rotate(0deg); }
+            100% { transform: translateY(40px) scale(1.15) rotate(15deg); }
         }
 
         /* Intro Loader */
@@ -137,9 +158,7 @@
             100% { transform: translateY(-100%); }
         }
 
-        /* ============================================
-           SMART HIDING FLOATING NAVBAR
-           ============================================ */
+        /* SMART HIDING FLOATING NAVBAR */
         .nav-wrapper {
             position: sticky;
             top: 1.2rem;
@@ -157,84 +176,103 @@
         nav {
             width: 100%;
             max-width: 1150px;
-            background: rgba(10, 15, 26, 0.82);
+            background: rgba(10, 14, 24, 0.82);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--border-color);
             border-radius: 100px;
-            padding: 0.65rem 1.4rem;
+            padding: 0.6rem 1.4rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
-        /* HET NIEUWE ULTRA-STRAKKE LOGO */
+        /* EXCLUSIEF HOLOGRAFISCH BRAND LOGO */
         .brand-logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             text-decoration: none;
             cursor: pointer;
         }
 
-        .brand-badge {
+        .brand-avatar-box {
             position: relative;
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #a855f7, #6366f1);
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            padding: 2px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            box-shadow: 0 0 20px var(--accent-purple-glow);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .brand-avatar-inner {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fff;
-            font-size: 1.15rem;
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
-            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 1.2rem;
+            overflow: hidden;
         }
 
-        .brand-badge::after {
-            content: '';
-            position: absolute;
-            bottom: -2px; right: -2px;
-            width: 10px; height: 10px;
-            background: var(--accent-green);
-            border: 2px solid var(--bg-dark);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent-green);
-        }
-
-        .brand-logo:hover .brand-badge {
-            transform: scale(1.08) rotate(-6deg);
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.7);
-        }
-
-        .brand-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1;
-        }
-
-        .brand-name {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: -0.5px;
-        }
-
-        .brand-name span {
-            background: linear-gradient(90deg, #c084fc, #60a5fa);
+        .brand-avatar-inner i {
+            background: linear-gradient(135deg, #a855f7, #38bdf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .brand-tag {
-            font-size: 0.65rem;
+        .brand-live-pulse {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 11px;
+            height: 11px;
+            background: var(--accent-green);
+            border: 2.5px solid var(--bg-dark);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.6; }
+        }
+
+        .brand-logo:hover .brand-avatar-box {
+            transform: scale(1.08) rotate(-5deg);
+            box-shadow: 0 0 28px var(--accent-cyan-glow);
+        }
+
+        .brand-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .brand-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.6px;
+        }
+
+        .brand-title span {
+            color: var(--accent-purple);
+        }
+
+        .brand-subtitle {
+            font-size: 0.68rem;
             font-weight: 700;
             color: var(--text-muted);
             letter-spacing: 1px;
             text-transform: uppercase;
-            margin-top: 2px;
         }
 
         .nav-center {
@@ -358,11 +396,6 @@
             box-shadow: 0 0 10px var(--accent-purple);
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.85); }
-        }
-
         .action-group {
             display: flex;
             gap: 14px;
@@ -459,7 +492,7 @@
             grid-template-columns: 1fr 320px;
             gap: 12px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-            margin-bottom: 4rem;
+            margin-bottom: 3.5rem;
             transition: border-color 0.3s ease;
         }
 
@@ -473,54 +506,41 @@
             border: none;
         }
 
-        /* EXTRA FEATURE: COMMUNITY GOAL BAR */
-        .goal-container {
+        /* STREAMELEMENTS GOAL OVERLAY EMBED CONTAINER */
+        .se-goal-wrapper {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 20px;
-            padding: 1.8rem;
+            padding: 1.2rem 1.8rem;
             margin-bottom: 4rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            backdrop-filter: blur(16px);
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            backdrop-filter: blur(16px);
-        }
-
-        .goal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .goal-title {
-            font-size: 1.1rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
             gap: 10px;
         }
 
-        .goal-count {
-            font-size: 1rem;
+        .se-goal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             font-weight: 800;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        .se-goal-header span i {
             color: var(--accent-purple);
+            margin-right: 8px;
         }
 
-        .goal-bar {
+        .se-goal-iframe {
             width: 100%;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50px;
+            height: 90px;
+            border: none;
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .goal-fill {
-            width: 65%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
-            border-radius: 50px;
-            box-shadow: 0 0 15px var(--accent-purple-glow);
+            background: transparent;
         }
 
         /* Bento Grid Layout */
@@ -604,7 +624,7 @@
 
         .card-link:hover { gap: 10px; }
 
-        /* EXTRA FEATURE: SOCIAL QUICK GRID */
+        /* SOCIALS GRID */
         .socials-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -802,9 +822,83 @@
             color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
         }
 
+        /* VERBETERDE EN UITGEBREIDE FOOTER (AFTITELING) */
         footer {
-            text-align: center; padding: 2.5rem; background: rgba(8, 11, 17, 0.95);
-            border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.88rem; margin-top: 4rem;
+            background: rgba(5, 7, 12, 0.98);
+            border-top: 1px solid var(--border-color);
+            padding: 3.5rem 1.5rem 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 0.6rem;
+        }
+
+        .footer-brand h3 span { color: var(--accent-purple); }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-width: 380px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.92rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.88rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--accent-purple); }
+
+        .footer-bottom {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding-top: 1.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
         }
 
         @media (max-width: 900px) {
@@ -814,14 +908,16 @@
             .card-large { grid-column: span 1; flex-direction: column; align-items: flex-start; gap: 1rem; }
             .hero h1 { font-size: 2.3rem; }
             .nav-center { display: none; }
+            .footer-content { grid-template-columns: 1fr; gap: 2rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Ambient Glowing Orbs -->
-    <div class="ambient-orb-1"></div>
-    <div class="ambient-orb-2"></div>
+    <!-- Ambient Glowing Background Orbs -->
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
 
     <!-- Intro Loader -->
     <div class="loader" id="loader">
@@ -835,12 +931,17 @@
     <!-- Smart Hiding Floating Navbar -->
     <div class="nav-wrapper" id="nav-wrapper">
         <nav>
-            <!-- NIEUWE ULTRA-STRAKKE BRAND LOGO -->
+            <!-- EXCLUSIEF BRAND LOGO -->
             <a onclick="switchCategory('stream')" class="brand-logo">
-                <div class="brand-badge"><i class="fa-brands fa-twitch"></i></div>
-                <div class="brand-text">
-                    <span class="brand-name">Floris<span>_N</span></span>
-                    <span class="brand-tag">Official Hub</span>
+                <div class="brand-avatar-box">
+                    <div class="brand-avatar-inner">
+                        <i class="fa-brands fa-twitch"></i>
+                    </div>
+                    <div class="brand-live-pulse"></div>
+                </div>
+                <div class="brand-text-wrapper">
+                    <span class="brand-title">Floris<span>_N</span></span>
+                    <span class="brand-subtitle">Official Hub</span>
                 </div>
             </a>
             
@@ -854,7 +955,7 @@
                 <button class="nav-link-btn" id="nav-faq" onclick="switchCategory('faq')">
                     <span data-i18n="nav_faq">Veelgestelde Vragen</span>
                 </button>
-                <!-- STREAM ALERTS LINK (MET ALTIJD BEHOUDEN ICOON) -->
+                <!-- STREAM ALERTS LINK (MET PERMANENT BEHOUDEN ICOON) -->
                 <a href="alerts.html" class="nav-link-btn">
                     <i class="fa-solid fa-bell" style="color: var(--accent-purple); font-size: 0.8rem;"></i>
                     <span data-i18n="nav_alerts">Stream Alerts</span>
@@ -920,15 +1021,13 @@
             </div>
         </div>
 
-        <!-- EXTRA FEATURE: COMMUNITY SUB GOAL -->
-        <div class="goal-container reveal">
-            <div class="goal-header">
-                <span class="goal-title"><i class="fa-solid fa-trophy" style="color: var(--accent-purple);"></i> <span data-i18n="goal_title">Community Sub Doel</span></span>
-                <span class="goal-count">65 / 100 Subs</span>
+        <!-- STREAMELEMENTS AUTOMATISCHE LIVE SUB GOAL EMBED -->
+        <div class="se-goal-wrapper reveal">
+            <div class="se-goal-header">
+                <span><i class="fa-solid fa-trophy"></i> <span data-i18n="goal_title">Live Stream Sub Goal</span></span>
+                <span style="font-size: 0.8rem; color: var(--accent-green);"><i class="fa-solid fa-circle" style="font-size:0.6rem;"></i> Live Sync</span>
             </div>
-            <div class="goal-bar">
-                <div class="goal-fill"></div>
-            </div>
+            <iframe class="se-goal-iframe" src="https://streamelements.com/overlay/69611270b73f9c3ca9abe7a2/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
         </div>
 
         <!-- Minecraft SMP Section -->
@@ -960,7 +1059,7 @@
             </div>
         </div>
 
-        <!-- EXTRA FEATURE: SOCIAL QUICK GRID -->
+        <!-- SOCIALS GRID -->
         <div class="section-header reveal">
             <h2><i class="fa-solid fa-share-nodes" style="color: var(--accent-cyan);"></i> <span data-i18n="head_socials">Officiële Socials</span></h2>
             <p data-i18n="socials_sub">Blijf op de hoogte via al onze kanalen!</p>
@@ -1031,9 +1130,39 @@
 
     </div>
 
-    <!-- Footer -->
+    <!-- UITGEBREIDE & STRAKKE FOOTER (AFTITELING) -->
     <footer>
-        <p>&copy; 2026 Floris_N Community. Alle rechten voorbehouden.</p>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>Floris<span>_N</span> Hub</h3>
+                <p data-i18n="footer_desc">De officiële ontmoetingsplek voor de Floris_N livestream, de gezellige Minecraft SMP community en al onze custom projecten.</p>
+            </div>
+            <div class="footer-col">
+                <h4 data-i18n="footer_nav">Navigatie</h4>
+                <ul class="footer-links">
+                    <li><a onclick="switchCategory('stream')" data-i18n="nav_stream">Live Stream</a></li>
+                    <li><a onclick="switchCategory('mc-info')" data-i18n="nav_mc">Minecraft SMP</a></li>
+                    <li><a href="alerts.html" data-i18n="nav_alerts">Stream Alerts</a></li>
+                    <li><a onclick="switchCategory('faq')" data-i18n="nav_faq">Veelgestelde Vragen</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 data-i18n="footer_community">Community</h4>
+                <ul class="footer-links">
+                    <li><a href="https://twitch.tv/Floris_N" target="_blank">Twitch Kanaal</a></li>
+                    <li><a href="https://discord.gg/Floris" target="_blank">Discord Server</a></li>
+                    <li><a href="https://streamelements.com/floris_n/tip" target="_blank">Doneren (Tip)</a></li>
+                    <li><a href="https://solo.to/floris_n" target="_blank">Solo.to Links</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 Floris_N. Alle rechten voorbehouden.</div>
+            <div class="footer-status">
+                <span style="width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; box-shadow: 0 0 8px var(--accent-green);"></span>
+                <span>Server & Systems Online</span>
+            </div>
+        </div>
     </footer>
 
     <!-- Chat Prompt Banner -->
@@ -1090,7 +1219,7 @@
                 head_faq: "Veelgestelde Vragen",
                 head_socials: "Officiële Socials",
                 socials_sub: "Blijf op de hoogte via al onze kanalen!",
-                goal_title: "Community Sub Doel",
+                goal_title: "Live Stream Sub Goal",
                 hero_desc: "De centrale plek voor de livestream, de hechte SMP-community en al je in-game statistieken.",
                 btn_channel: "Bekijk Kanaal",
                 btn_copy_ip: "Kopieer IP: play.florisn.nl",
@@ -1113,6 +1242,9 @@
                 faq3_a: "Download en installeer de Simple Voice Chat mod in je Minecraft client om in-game direct te praten met spelers die dichtbij je staan.",
                 faq4_q: "Waar vind ik alle Socials & Discord?",
                 faq4_a: "Alle officiële links en de Discord-community vind je via onze verzamelpagina op <a href='https://solo.to/floris_n' target='_blank' style='color: var(--accent-purple); font-weight:600;'>solo.to/floris_n</a>!",
+                footer_desc: "De officiële ontmoetingsplek voor de Floris_N livestream, de gezellige Minecraft SMP community en al onze custom projecten.",
+                footer_nav: "Navigatie",
+                footer_community: "Community",
                 chat_prompt: "Vragen? Stel ze direct aan de assistent!",
                 chat_placeholder: "Typ je vraag...",
                 chat_status: "Online — reageert direct",
@@ -1129,7 +1261,7 @@
                 head_faq: "Frequently Asked Questions",
                 head_socials: "Official Socials",
                 socials_sub: "Stay updated through all our channels!",
-                goal_title: "Community Sub Goal",
+                goal_title: "Live Stream Sub Goal",
                 hero_desc: "The central hub for the livestream, the tight-knit SMP community, and all your in-game statistics.",
                 btn_channel: "Watch Channel",
                 btn_copy_ip: "Copy IP: play.florisn.nl",
@@ -1152,6 +1284,9 @@
                 faq3_a: "Download and install the Simple Voice Chat mod in your Minecraft client to speak directly in-game with nearby players.",
                 faq4_q: "Where can I find all Socials & Discord?",
                 faq4_a: "All official links and the Discord community can be found via our page at <a href='https://solo.to/floris_n' target='_blank' style='color: var(--accent-purple); font-weight:600;'>solo.to/floris_n</a>!",
+                footer_desc: "The official hub for the Floris_N livestream, the cozy Minecraft SMP community, and all our custom projects.",
+                footer_nav: "Navigation",
+                footer_community: "Community",
                 chat_prompt: "Questions? Ask our assistant right here!",
                 chat_placeholder: "Type your question...",
                 chat_status: "Online — replies instantly",
@@ -1181,7 +1316,7 @@
             }
         }
 
-        // SMART HIDING NAVBAR
+        // SMART HIDING NAVBAR LOGICA
         let lastScrollTop = 0;
         const navWrapper = document.getElementById('nav-wrapper');
 
