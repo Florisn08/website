@@ -11,13 +11,15 @@
     
     <style>
         :root {
-            --bg-dark: #07090e;
-            --bg-card: rgba(15, 22, 36, 0.7);
-            --bg-card-hover: rgba(24, 35, 58, 0.88);
+            --bg-dark: #05070c;
+            --bg-card: rgba(13, 19, 32, 0.65);
+            --bg-card-hover: rgba(22, 32, 54, 0.88);
             --accent-purple: #9146ff;
-            --accent-purple-glow: rgba(145, 70, 255, 0.35);
+            --accent-purple-glow: rgba(145, 70, 255, 0.45);
             --accent-green: #22c55e;
-            --accent-green-glow: rgba(34, 197, 94, 0.25);
+            --accent-green-glow: rgba(34, 197, 94, 0.35);
+            --accent-cyan: #06b6d4;
+            --accent-cyan-glow: rgba(6, 182, 212, 0.35);
             --accent-amber: #f59e0b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
@@ -41,25 +43,56 @@
             position: relative;
         }
 
-        /* Dynamische Bewegende Glow Background */
-        body::before {
+        /* DYNAMISCHE ACHTERGROND MET AMBIENT ORBS EN GRID PATROON */
+        body::after {
             content: '';
             position: fixed;
-            top: -120px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 900px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(145, 70, 255, 0.18) 0%, rgba(34, 197, 94, 0.06) 60%, transparent 80%);
-            filter: blur(130px);
-            z-index: -1;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+            z-index: -2;
             pointer-events: none;
-            animation: bgPulse 10s ease-in-out infinite alternate;
         }
 
-        @keyframes bgPulse {
-            0% { transform: translateX(-50%) scale(1); opacity: 0.8; }
-            100% { transform: translateX(-48%) scale(1.15); opacity: 1; }
+        .ambient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(140px);
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.85;
+            animation: floatOrb 12s ease-in-out infinite alternate;
+        }
+
+        .orb-1 {
+            top: -150px;
+            left: 30%;
+            width: 700px;
+            height: 500px;
+            background: radial-gradient(circle, var(--accent-purple-glow) 0%, transparent 70%);
+        }
+
+        .orb-2 {
+            bottom: 10%;
+            right: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-cyan-glow) 0%, transparent 70%);
+            animation-delay: -4s;
+        }
+
+        .orb-3 {
+            top: 40%;
+            left: -150px;
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, var(--accent-green-glow) 0%, transparent 70%);
+            animation-delay: -8s;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translateY(0) scale(1) rotate(0deg); }
+            100% { transform: translateY(40px) scale(1.15) rotate(15deg); }
         }
 
         /* Intro Loader */
@@ -107,7 +140,7 @@
             to { width: 100%; }
         }
 
-        /* Floating Navbar */
+        /* SMART HIDING FLOATING NAVBAR */
         .nav-wrapper {
             position: sticky;
             top: 1.2rem;
@@ -115,48 +148,61 @@
             display: flex;
             justify-content: center;
             padding: 0 1.5rem;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-wrapper.nav-hidden {
+            transform: translateY(-120%);
         }
 
         nav {
             width: 100%;
-            max-width: 1100px;
-            background: rgba(13, 18, 30, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            max-width: 1150px;
+            background: rgba(10, 14, 24, 0.82);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--border-color);
             border-radius: 100px;
-            padding: 0.75rem 1.6rem;
+            padding: 0.6rem 1.4rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 800;
+        /* LOGO ZONDER ICOON, ALLEEN TEKST */
+        .brand-logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: #fff;
+            gap: 14px;
             text-decoration: none;
-            letter-spacing: -0.5px;
             cursor: pointer;
         }
 
-        .logo-icon {
-            width: 34px;
-            height: 34px;
-            background: var(--accent-purple);
-            border-radius: 10px;
+        .brand-text-wrapper {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            box-shadow: 0 0 18px var(--accent-purple-glow);
+            flex-direction: column;
+            line-height: 1.1;
         }
 
-        .logo span { color: var(--accent-purple); }
+        .brand-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.6px;
+        }
+
+        .brand-title span {
+            color: var(--accent-purple);
+        }
+
+        .brand-subtitle {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
 
         .nav-center {
             display: flex;
@@ -173,11 +219,14 @@
             color: var(--text-muted);
             padding: 0.5rem 1.1rem;
             border-radius: 50px;
-            font-size: 0.85rem;
+            font-size: 0.84rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.25s ease;
             text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .nav-link-btn:hover { color: #fff; }
@@ -214,70 +263,81 @@
             box-shadow: 0 0 12px var(--accent-purple-glow);
         }
 
-        /* Hero Section */
+        /* HERO SECTION */
         .hero {
-            padding: 4.5rem 8% 2.5rem;
+            padding: 5rem 8% 3rem;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1.2rem;
+            gap: 1.4rem;
         }
 
         .hero h1 {
-            font-size: 3.2rem;
+            font-size: 3.5rem;
             font-weight: 800;
-            letter-spacing: -1.2px;
-            background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+            letter-spacing: -1.5px;
+            line-height: 1.15;
+            background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero p {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             color: var(--text-muted);
-            max-width: 650px;
+            max-width: 620px;
             line-height: 1.6;
         }
 
-        /* Donatie Knop met Shimmer */
-        .btn-donate {
+        .action-group {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .btn {
             position: relative;
-            padding: 0.9rem 2.2rem;
+            padding: 0.85rem 1.8rem;
             border-radius: 14px;
             font-weight: 800;
-            font-size: 1rem;
+            font-size: 0.92rem;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             cursor: pointer;
             border: none;
-            background: var(--accent-purple);
-            color: #fff;
-            box-shadow: 0 8px 25px var(--accent-purple-glow);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .btn-donate::after {
+        .btn::after {
             content: '';
             position: absolute;
             top: -50%; left: -60%;
             width: 50%; height: 200%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
             transform: rotate(30deg);
             transition: all 0.6s ease;
         }
 
-        .btn-donate:hover::after { left: 130%; }
+        .btn:hover::after { left: 130%; }
 
-        .btn-donate:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 12px 35px rgba(145, 70, 255, 0.5);
+        .btn-twitch {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 6px 20px var(--accent-purple-glow);
         }
 
-        /* Disclaimer Banner */
+        .btn-twitch:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(145, 70, 255, 0.5);
+        }
+
+        /* DISCLAIMER */
         .disclaimer-card {
             background: rgba(239, 68, 68, 0.06);
             border: 1px solid rgba(239, 68, 68, 0.25);
@@ -304,7 +364,7 @@
             line-height: 1.5;
         }
 
-        /* Sub Perks Banner */
+        /* SUB PERKS */
         .sub-perks-card {
             background: rgba(145, 70, 255, 0.08);
             border: 1px solid rgba(145, 70, 255, 0.25);
@@ -336,7 +396,7 @@
             color: var(--text-main);
         }
 
-        /* Container & Filter Bar */
+        /* CONTAINER & FILTER */
         .container {
             max-width: 1100px;
             margin: 0 auto;
@@ -378,7 +438,7 @@
             box-shadow: 0 4px 20px var(--accent-purple-glow);
         }
 
-        /* Alerts Grid Layout */
+        /* ALERTS GRID */
         .alerts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -489,23 +549,134 @@
             color: var(--text-muted);
         }
 
-        footer {
-            text-align: center;
-            padding: 2.5rem;
-            background: rgba(8, 11, 17, 0.95);
-            border-top: 1px solid var(--border-color);
-            color: var(--text-muted);
-            font-size: 0.88rem;
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @media (max-width: 768px) {
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* FOOTER */
+        footer {
+            background: rgba(5, 7, 12, 0.98);
+            border-top: 1px solid var(--border-color);
+            padding: 3.5rem 1.5rem 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 0.6rem;
+        }
+
+        .footer-brand h3 span { color: var(--accent-purple); }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-width: 380px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.92rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.88rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--accent-purple); }
+
+        .footer-bottom {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding-top: 1.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        /* MOBIEL: ZELFDE ALS INDEX */
+        @media (max-width: 900px) {
             .hero h1 { font-size: 2.3rem; }
-            .nav-center { display: none; }
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+                padding: 0.6rem 0.8rem;
+                border-radius: 20px;
+            }
+            .nav-center {
+                display: flex;
+                width: 100%;
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding: 4px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .nav-center::-webkit-scrollbar { display: none; }
+            .nav-link-btn {
+                white-space: nowrap;
+                font-size: 0.78rem;
+                padding: 0.4rem 0.8rem;
+            }
+            .brand-logo {
+                width: 100%;
+                justify-content: center;
+            }
+            .lang-switcher { margin-left: auto; }
+            .footer-content { grid-template-columns: 1fr; gap: 2rem; }
             .disclaimer-card { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
+
+    <!-- Ambient Glowing Background Orbs -->
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
 
     <!-- Intro Loader -->
     <div class="loader" id="loader">
@@ -513,12 +684,15 @@
         <div class="loader-bar"><div class="loader-bar-fill"></div></div>
     </div>
 
-    <!-- Floating Navbar -->
-    <div class="nav-wrapper">
+    <!-- Smart Hiding Floating Navbar -->
+    <div class="nav-wrapper" id="nav-wrapper">
         <nav>
-            <a href="index.html" class="logo">
-                <div class="logo-icon"><i class="fa-brands fa-twitch"></i></div>
-                Floris<span>_N</span>
+            <!-- LOGO ZONDER ICOON -->
+            <a href="index.html" class="brand-logo">
+                <div class="brand-text-wrapper">
+                    <span class="brand-title">Floris<span>_N</span></span>
+                    <span class="brand-subtitle">Official Hub</span>
+                </div>
             </a>
             
             <div class="nav-center">
@@ -527,6 +701,7 @@
                 <a href="alerts.html" class="nav-link-btn active" data-i18n="nav_alerts">Stream Alerts</a>
             </div>
 
+            <!-- Language Switcher -->
             <div class="lang-switcher">
                 <button class="lang-btn active" id="btn-lang-nl" onclick="setLanguage('nl')">NL</button>
                 <button class="lang-btn" id="btn-lang-en" onclick="setLanguage('en')">EN</button>
@@ -539,14 +714,15 @@
         <h1 data-i18n="hero_title">Stream Alerts & Effecten</h1>
         <p data-i18n="hero_desc">Bekijk hier welk unieke geluid en animatie op de livestream verschijnt bij donaties, subs, bits of volgers!</p>
 
-        <!-- Donatie Knop -->
-        <a href="https://streamelements.com/floris_n/tip" target="_blank" class="btn-donate">
-            <i class="fa-solid fa-heart"></i>
-            <span data-i18n="btn_tip">Doe een Donatie</span>
-        </a>
+        <div class="action-group">
+            <a href="https://streamelements.com/floris_n/tip" target="_blank" class="btn btn-twitch">
+                <i class="fa-solid fa-heart"></i>
+                <span data-i18n="btn_tip">Doe een Donatie</span>
+            </a>
+        </div>
 
         <!-- Disclaimer Banner -->
-        <div class="disclaimer-card">
+        <div class="disclaimer-card reveal">
             <i class="fa-solid fa-triangle-exclamation disclaimer-icon"></i>
             <div class="disclaimer-text" data-i18n="disclaimer_text">
                 <strong>Belangrijke Disclaimer:</strong> Doneren of abonneren is nooit verplicht! Kijken en meechatten is al fantastische support. Let op: <u>Donaties zijn definitief en niet retourneerbaar (refunds zijn niet mogelijk)</u>.
@@ -554,7 +730,7 @@
         </div>
 
         <!-- Sub Perks Box -->
-        <div class="sub-perks-card">
+        <div class="sub-perks-card reveal">
             <div class="perk-item">
                 <i class="fa-solid fa-rectangle-ad"></i>
                 <span data-i18n="perk1">Geen Reclames</span>
@@ -576,26 +752,26 @@
 
     <!-- Container & Filter -->
     <div class="container">
-        <div class="filter-wrapper">
-            <button class="filter-btn active" onclick="filterAlerts('all')">
+        <div class="filter-wrapper reveal">
+            <button class="filter-btn active" onclick="filterAlerts('all', event)">
                 <i class="fa-solid fa-border-all"></i> <span data-i18n="filter_all">Alles</span>
             </button>
-            <button class="filter-btn" onclick="filterAlerts('donate')">
+            <button class="filter-btn" onclick="filterAlerts('donate', event)">
                 <i class="fa-solid fa-euro-sign"></i> <span data-i18n="filter_donate">Donaties</span>
             </button>
-            <button class="filter-btn" onclick="filterAlerts('sub')">
+            <button class="filter-btn" onclick="filterAlerts('sub', event)">
                 <i class="fa-solid fa-star"></i> <span data-i18n="filter_subs">Subscriptions</span>
             </button>
-            <button class="filter-btn" onclick="filterAlerts('bits')">
+            <button class="filter-btn" onclick="filterAlerts('bits', event)">
                 <i class="fa-solid fa-gem"></i> <span data-i18n="filter_bits">Bits</span>
             </button>
-            <button class="filter-btn" onclick="filterAlerts('follow')">
+            <button class="filter-btn" onclick="filterAlerts('follow', event)">
                 <i class="fa-solid fa-user-plus"></i> <span data-i18n="filter_follow">Follows</span>
             </button>
         </div>
 
         <!-- Alerts Grid -->
-        <div class="alerts-grid">
+        <div class="alerts-grid reveal">
 
             <!-- DONATIES -->
             <div class="alert-card type-donate" data-category="donate">
@@ -942,7 +1118,36 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Floris_N Community. Alle rechten voorbehouden.</p>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>Floris<span>_N</span> Hub</h3>
+                <p data-i18n="footer_desc">De officiële ontmoetingsplek voor de Floris_N livestream, de gezellige Minecraft SMP community en al onze custom projecten.</p>
+            </div>
+            <div class="footer-col">
+                <h4 data-i18n="footer_nav">Navigatie</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+                    <li><a href="smp.html" data-i18n="nav_mc">Minecraft SMP</a></li>
+                    <li><a href="alerts.html" data-i18n="nav_alerts">Stream Alerts</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 data-i18n="footer_community">Community</h4>
+                <ul class="footer-links">
+                    <li><a href="https://twitch.tv/Floris_N" target="_blank">Twitch Kanaal</a></li>
+                    <li><a href="https://discord.gg/Floris" target="_blank">Discord Server</a></li>
+                    <li><a href="https://streamelements.com/floris_n/tip" target="_blank">Doneren (Tip)</a></li>
+                    <li><a href="https://solo.to/floris_n" target="_blank">Solo.to Links</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 Floris_N. Alle rechten voorbehouden.</div>
+            <div class="footer-status">
+                <span style="width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; box-shadow: 0 0 8px var(--accent-green);"></span>
+                <span>Server & Systems Online</span>
+            </div>
+        </div>
     </footer>
 
     <script>
@@ -965,7 +1170,10 @@
                 filter_donate: "Donaties",
                 filter_subs: "Subscriptions",
                 filter_bits: "Bits",
-                filter_follow: "Follows"
+                filter_follow: "Follows",
+                footer_desc: "De officiële ontmoetingsplek voor de Floris_N livestream, de gezellige Minecraft SMP community en al onze custom projecten.",
+                footer_nav: "Navigatie",
+                footer_community: "Community"
             },
             en: {
                 nav_home: "Home",
@@ -983,7 +1191,10 @@
                 filter_donate: "Donations",
                 filter_subs: "Subscriptions",
                 filter_bits: "Bits",
-                filter_follow: "Follows"
+                filter_follow: "Follows",
+                footer_desc: "The official hub for the Floris_N livestream, the cozy Minecraft SMP community, and all our custom projects.",
+                footer_nav: "Navigation",
+                footer_community: "Community"
             }
         };
 
@@ -1000,10 +1211,12 @@
             });
         }
 
-        function filterAlerts(category) {
+        function filterAlerts(category, evt) {
             const buttons = document.querySelectorAll('.filter-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add('active');
+            }
 
             const cards = document.querySelectorAll('.alert-card');
             cards.forEach(card => {
@@ -1015,10 +1228,36 @@
             });
         }
 
+        // SMART HIDING NAVBAR
+        let lastScrollTop = 0;
+        const navWrapper = document.getElementById('nav-wrapper');
+
+        window.addEventListener('scroll', () => {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                navWrapper.classList.add('nav-hidden');
+            } else {
+                navWrapper.classList.remove('nav-hidden');
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+        });
+
+        // REVEAL ANIMATIES
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
-            }, 1000);
+            }, 1200);
         });
     </script>
 </body>
