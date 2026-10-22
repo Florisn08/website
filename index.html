@@ -11,13 +11,14 @@
     
     <style>
         :root {
-            --bg-dark: #07090e;
-            --bg-card: rgba(15, 22, 36, 0.7);
-            --bg-card-hover: rgba(24, 35, 58, 0.85);
+            --bg-dark: #06080d;
+            --bg-card: rgba(13, 19, 32, 0.65);
+            --bg-card-hover: rgba(22, 32, 54, 0.85);
             --accent-purple: #9146ff;
-            --accent-purple-glow: rgba(145, 70, 255, 0.35);
+            --accent-purple-glow: rgba(145, 70, 255, 0.4);
             --accent-green: #22c55e;
-            --accent-green-glow: rgba(34, 197, 94, 0.25);
+            --accent-green-glow: rgba(34, 197, 94, 0.3);
+            --accent-cyan: #06b6d4;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: rgba(255, 255, 255, 0.08);
@@ -40,28 +41,39 @@
             position: relative;
         }
 
-        /* Dynamische Bewegende Achtergrond Glow */
-        body::before {
-            content: '';
+        /* Ambient Glowing Background Orbs */
+        .ambient-orb-1 {
             position: fixed;
-            top: -120px;
+            top: -150px;
             left: 50%;
             transform: translateX(-50%);
-            width: 900px;
+            width: 1000px;
             height: 600px;
-            background: radial-gradient(circle, rgba(145, 70, 255, 0.18) 0%, rgba(34, 197, 94, 0.06) 60%, transparent 80%);
-            filter: blur(130px);
+            background: radial-gradient(circle, rgba(145, 70, 255, 0.16) 0%, rgba(34, 197, 94, 0.05) 60%, transparent 80%);
+            filter: blur(140px);
             z-index: -1;
             pointer-events: none;
-            animation: backgroundPulse 12s ease-in-out infinite alternate;
+            animation: orbFloat 14s ease-in-out infinite alternate;
         }
 
-        @keyframes backgroundPulse {
-            0% { transform: translateX(-50%) scale(1); opacity: 0.8; }
-            100% { transform: translateX(-45%) scale(1.15); opacity: 1; }
+        .ambient-orb-2 {
+            position: fixed;
+            bottom: -100px;
+            right: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, transparent 70%);
+            filter: blur(120px);
+            z-index: -1;
+            pointer-events: none;
         }
 
-        /* Intro Loader & Transformatie */
+        @keyframes orbFloat {
+            0% { transform: translateX(-50%) translateY(0) scale(1); }
+            100% { transform: translateX(-47%) translateY(30px) scale(1.12); }
+        }
+
+        /* Intro Loader */
         .loader {
             position: fixed;
             inset: 0;
@@ -82,15 +94,8 @@
             font-weight: 800;
             letter-spacing: -1px;
             color: var(--text-main);
-            animation: loaderReveal 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
         }
         .loader-logo span { color: var(--accent-purple); }
-
-        @keyframes loaderReveal {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
 
         .loader-bar {
             width: 180px;
@@ -98,8 +103,6 @@
             background: rgba(255, 255, 255, 0.08);
             border-radius: 4px;
             overflow: hidden;
-            opacity: 0;
-            animation: loaderReveal 0.5s 0.4s forwards;
         }
 
         .loader-bar-fill {
@@ -107,7 +110,7 @@
             height: 100%;
             background: linear-gradient(90deg, var(--accent-purple), var(--accent-green));
             box-shadow: 0 0 15px var(--accent-purple);
-            animation: loaderFill 1.1s 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: loaderFill 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes loaderFill {
@@ -135,7 +138,7 @@
         }
 
         /* ============================================
-           SMART HIDING NAVBAR (Scroll up/down)
+           SMART HIDING FLOATING NAVBAR
            ============================================ */
         .nav-wrapper {
             position: sticky;
@@ -154,45 +157,85 @@
         nav {
             width: 100%;
             max-width: 1150px;
-            background: rgba(13, 18, 30, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(10, 15, 26, 0.82);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--border-color);
             border-radius: 100px;
-            padding: 0.75rem 1.6rem;
+            padding: 0.65rem 1.4rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 800;
+        /* HET NIEUWE ULTRA-STRAKKE LOGO */
+        .brand-logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: #fff;
+            gap: 12px;
             text-decoration: none;
-            letter-spacing: -0.5px;
             cursor: pointer;
         }
 
-        .logo-icon {
-            width: 34px;
-            height: 34px;
-            background: var(--accent-purple);
-            border-radius: 10px;
+        .brand-badge {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fff;
-            box-shadow: 0 0 18px var(--accent-purple-glow);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 1.15rem;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .logo:hover .logo-icon { transform: scale(1.1) rotate(-5deg); }
-        .logo span { color: var(--accent-purple); }
+        .brand-badge::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; right: -2px;
+            width: 10px; height: 10px;
+            background: var(--accent-green);
+            border: 2px solid var(--bg-dark);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+
+        .brand-logo:hover .brand-badge {
+            transform: scale(1.08) rotate(-6deg);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.7);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .brand-name {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-name span {
+            background: linear-gradient(90deg, #c084fc, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
 
         .nav-center {
             display: flex;
@@ -207,7 +250,7 @@
             background: transparent;
             border: none;
             color: var(--text-muted);
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 1.1rem;
             border-radius: 50px;
             font-size: 0.84rem;
             font-weight: 700;
@@ -216,7 +259,7 @@
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .nav-link-btn:hover { color: #fff; }
@@ -226,7 +269,6 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        /* Language Switcher Button */
         .lang-switcher {
             display: flex;
             gap: 2px;
@@ -254,9 +296,7 @@
             box-shadow: 0 0 12px var(--accent-purple-glow);
         }
 
-        /* ============================================
-           HERO SECTION
-           ============================================ */
+        /* HERO SECTION */
         .hero {
             padding: 5rem 8% 3rem;
             text-align: center;
@@ -267,19 +307,19 @@
         }
 
         .hero h1 {
-            font-size: 3.4rem;
+            font-size: 3.5rem;
             font-weight: 800;
-            letter-spacing: -1.2px;
+            letter-spacing: -1.5px;
             line-height: 1.15;
-            background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+            background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero p {
-            font-size: 1.08rem;
+            font-size: 1.1rem;
             color: var(--text-muted);
-            max-width: 600px;
+            max-width: 620px;
             line-height: 1.6;
         }
 
@@ -293,7 +333,7 @@
         .badge {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            padding: 0.45rem 1.1rem;
+            padding: 0.5rem 1.2rem;
             border-radius: 100px;
             font-size: 0.82rem;
             font-weight: 600;
@@ -323,7 +363,6 @@
             50% { opacity: 0.4; transform: scale(0.85); }
         }
 
-        /* Buttons met Shimmer Effect */
         .action-group {
             display: flex;
             gap: 14px;
@@ -334,9 +373,9 @@
 
         .btn {
             position: relative;
-            padding: 0.85rem 1.7rem;
-            border-radius: 12px;
-            font-weight: 700;
+            padding: 0.85rem 1.8rem;
+            border-radius: 14px;
+            font-weight: 800;
             font-size: 0.92rem;
             text-decoration: none;
             display: inline-flex;
@@ -384,11 +423,9 @@
             box-shadow: 0 8px 25px rgba(34, 197, 94, 0.2);
         }
 
-        /* ============================================
-           MAIN LAYOUT & BENTO GRID
-           ============================================ */
+        /* MAIN CONTAINER & BENTO GRID */
         .container {
-            max-width: 1050px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 2rem 1.5rem 4rem;
         }
@@ -405,7 +442,6 @@
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            transition: color 0.3s;
         }
 
         .section-header p {
@@ -423,7 +459,7 @@
             grid-template-columns: 1fr 320px;
             gap: 12px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-            margin-bottom: 5rem;
+            margin-bottom: 4rem;
             transition: border-color 0.3s ease;
         }
 
@@ -437,12 +473,62 @@
             border: none;
         }
 
+        /* EXTRA FEATURE: COMMUNITY GOAL BAR */
+        .goal-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.8rem;
+            margin-bottom: 4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            backdrop-filter: blur(16px);
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .goal-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .goal-count {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--accent-purple);
+        }
+
+        .goal-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .goal-fill {
+            width: 65%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+            border-radius: 50px;
+            box-shadow: 0 0 15px var(--accent-purple-glow);
+        }
+
         /* Bento Grid Layout */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1.25rem;
-            margin-bottom: 5rem;
+            margin-bottom: 4rem;
         }
 
         .card {
@@ -470,8 +556,8 @@
         }
 
         .card-icon {
-            width: 46px;
-            height: 46px;
+            width: 48px;
+            height: 48px;
             background: rgba(34, 197, 94, 0.1);
             border-radius: 12px;
             display: flex;
@@ -492,7 +578,7 @@
 
         .card h3 {
             font-size: 1.25rem;
-            font-weight: 700;
+            font-weight: 800;
             margin-bottom: 0.5rem;
             letter-spacing: -0.3px;
         }
@@ -517,6 +603,41 @@
         }
 
         .card-link:hover { gap: 10px; }
+
+        /* EXTRA FEATURE: SOCIAL QUICK GRID */
+        .socials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 5rem;
+        }
+
+        .social-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.2rem 1.5rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-card i {
+            font-size: 1.4rem;
+            color: var(--accent-purple);
+        }
+
+        .social-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-purple);
+            background: var(--bg-card-hover);
+            box-shadow: 0 10px 25px rgba(145, 70, 255, 0.2);
+        }
 
         /* FAQ Accordion */
         .faq-list {
@@ -579,7 +700,6 @@
 
         .faq-item.active .faq-question i { transform: rotate(180deg); }
 
-        /* Scroll reveal animaties */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -588,55 +708,24 @@
 
         .reveal.visible { opacity: 1; transform: translateY(0); }
 
-        /* ============================================
-           CHATBOT & NOTIFICATION PROMPT
-           ============================================ */
+        /* CHATBOT & NOTIFICATION PROMPT */
         .chat-prompt {
             position: fixed;
-            bottom: 6.2rem;
-            right: 2rem;
+            bottom: 6.2rem; right: 2rem;
             background: rgba(15, 22, 36, 0.95);
             border: 1px solid var(--accent-purple);
             box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px var(--accent-purple-glow);
             padding: 0.75rem 1.1rem;
             border-radius: 12px;
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: #fff;
-            z-index: 9995;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 0.82rem; font-weight: 600; color: #fff;
+            z-index: 9995; display: flex; align-items: center; gap: 10px;
             backdrop-filter: blur(12px);
-            opacity: 0;
-            transform: translateY(10px) scale(0.95);
+            opacity: 0; transform: translateY(10px) scale(0.95);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
         }
 
-        .chat-prompt.visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-
-        .chat-prompt::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            right: 22px;
-            width: 10px; height: 10px;
-            background: rgba(15, 22, 36, 0.95);
-            border-right: 1px solid var(--accent-purple);
-            border-bottom: 1px solid var(--accent-purple);
-            transform: rotate(45deg);
-        }
-
-        .chat-prompt-close {
-            background: none; border: none;
-            color: var(--text-muted); cursor: pointer;
-            font-size: 0.9rem; margin-left: 4px;
-        }
+        .chat-prompt.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
 
         .chat-toggle-btn {
             position: fixed; bottom: 2rem; right: 2rem; width: 56px; height: 56px;
@@ -646,7 +735,7 @@
             z-index: 9997; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .chat-toggle-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 15px 35px rgba(145, 70, 255, 0.6); }
+        .chat-toggle-btn:hover { transform: translateY(-3px) scale(1.05); }
         .chat-toggle-btn svg { width: 22px; height: 22px; }
         .chat-toggle-btn .chat-icon-close { display: none; }
         .chat-toggle-btn.open .chat-icon-chat { display: none; }
@@ -656,9 +745,9 @@
             position: fixed; bottom: 5.5rem; right: 2rem; width: 360px;
             max-width: calc(100% - 3rem); height: 500px; max-height: calc(100vh - 7rem);
             background: var(--bg-card); border: 1px solid var(--border-color);
-            backdrop-filter: blur(20px);
-            border-radius: 18px; z-index: 9996; display: flex; flex-direction: column;
-            overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px); border-radius: 18px; z-index: 9996;
+            display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
             opacity: 0; visibility: hidden; transform: translateY(15px) scale(0.96);
             transform-origin: bottom right; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -666,16 +755,13 @@
         .chat-window.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
 
         .chat-header {
-            padding: 1.1rem 1.3rem;
-            background: rgba(15, 22, 36, 0.95);
-            border-bottom: 1px solid var(--border-color);
-            display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0;
+            padding: 1.1rem 1.3rem; background: rgba(15, 22, 36, 0.95);
+            border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 0.8rem;
         }
 
         .chat-avatar {
             width: 38px; height: 38px; border-radius: 50%; background: var(--accent-purple); color: #fff;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;
             box-shadow: 0 0 15px var(--accent-purple-glow);
         }
 
@@ -687,82 +773,38 @@
         .chat-close-btn {
             background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);
             color: var(--text-main); width: 30px; height: 30px; border-radius: 50%;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-size: 1rem; transition: all 0.2s; flex-shrink: 0;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem;
         }
 
-        .chat-close-btn:hover { background: var(--accent-purple); border-color: var(--accent-purple); }
-
-        .chat-messages {
-            flex: 1; overflow-y: auto; padding: 1.1rem;
-            display: flex; flex-direction: column; gap: 0.8rem;
-        }
-
-        .chat-messages::-webkit-scrollbar { width: 4px; }
-        .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
-
-        .chat-message {
-            max-width: 88%; padding: 0.7rem 0.9rem; border-radius: 12px;
-            font-size: 0.85rem; line-height: 1.45; word-wrap: break-word;
-        }
-
+        .chat-messages { flex: 1; overflow-y: auto; padding: 1.1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+        .chat-message { max-width: 88%; padding: 0.7rem 0.9rem; border-radius: 12px; font-size: 0.85rem; line-height: 1.45; }
         .chat-message.bot { background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 3px; }
         .chat-message.user { background: var(--accent-purple); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; font-weight: 500; }
 
-        .chat-typing {
-            align-self: flex-start; background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border-color); padding: 0.8rem 1rem;
-            border-radius: 12px; border-bottom-left-radius: 3px;
-            display: flex; gap: 4px; align-items: center;
-        }
-
-        .chat-typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); animation: typingBounce 1.4s infinite; }
-        .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
-        .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
-
-        .chat-quick-replies { padding: 0 1.1rem 0.7rem 1.1rem; display: flex; flex-wrap: wrap; gap: 0.4rem; flex-shrink: 0; }
+        .chat-quick-replies { padding: 0 1.1rem 0.7rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
         .quick-reply-btn {
             background: rgba(145, 70, 255, 0.1); border: 1px solid rgba(145, 70, 255, 0.3);
-            color: #d8b4fe; padding: 0.4rem 0.8rem; border-radius: 20px;
-            font-size: 0.72rem; cursor: pointer; transition: all 0.2s; font-weight: 600;
+            color: #d8b4fe; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.72rem; cursor: pointer; font-weight: 600;
         }
-
-        .quick-reply-btn:hover { background: var(--accent-purple); color: #fff; }
 
         .chat-input-area {
             padding: 0.8rem 1.1rem; border-top: 1px solid var(--border-color);
-            background: rgba(8, 11, 17, 0.5); display: flex; gap: 0.5rem;
-            align-items: center; flex-shrink: 0;
+            background: rgba(8, 11, 17, 0.5); display: flex; gap: 0.5rem; align-items: center;
         }
 
         .chat-input {
             flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color);
-            padding: 0.7rem 0.9rem; color: var(--text-main); border-radius: 20px;
-            font-size: 0.82rem; outline: none; transition: border-color 0.2s;
+            padding: 0.7rem 0.9rem; color: var(--text-main); border-radius: 20px; font-size: 0.82rem; outline: none;
         }
-
-        .chat-input:focus { border-color: var(--accent-purple); }
-        .chat-input::placeholder { color: var(--text-muted); }
 
         .chat-send-btn {
             width: 38px; height: 38px; border-radius: 50%; background: var(--accent-purple);
-            color: #fff; border: none; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: transform 0.2s; flex-shrink: 0;
+            color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
         }
 
-        .chat-send-btn:hover { transform: scale(1.05); }
-        .chat-send-btn svg { width: 15px; height: 15px; }
-
         footer {
-            text-align: center;
-            padding: 2.5rem;
-            background: rgba(8, 11, 17, 0.95);
-            border-top: 1px solid var(--border-color);
-            color: var(--text-muted);
-            font-size: 0.88rem;
-            margin-top: 5rem;
+            text-align: center; padding: 2.5rem; background: rgba(8, 11, 17, 0.95);
+            border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.88rem; margin-top: 4rem;
         }
 
         @media (max-width: 900px) {
@@ -777,6 +819,10 @@
 </head>
 <body>
 
+    <!-- Ambient Glowing Orbs -->
+    <div class="ambient-orb-1"></div>
+    <div class="ambient-orb-2"></div>
+
     <!-- Intro Loader -->
     <div class="loader" id="loader">
         <div class="loader-logo">Floris<span>_N</span></div>
@@ -789,16 +835,30 @@
     <!-- Smart Hiding Floating Navbar -->
     <div class="nav-wrapper" id="nav-wrapper">
         <nav>
-            <a onclick="switchCategory('stream')" class="logo">
-                <div class="logo-icon"><i class="fa-brands fa-twitch"></i></div>
-                Floris<span>_N</span>
+            <!-- NIEUWE ULTRA-STRAKKE BRAND LOGO -->
+            <a onclick="switchCategory('stream')" class="brand-logo">
+                <div class="brand-badge"><i class="fa-brands fa-twitch"></i></div>
+                <div class="brand-text">
+                    <span class="brand-name">Floris<span>_N</span></span>
+                    <span class="brand-tag">Official Hub</span>
+                </div>
             </a>
             
             <div class="nav-center">
-                <button class="nav-link-btn active" id="nav-stream" onclick="switchCategory('stream')" data-i18n="nav_stream">Live Stream</button>
-                <button class="nav-link-btn" id="nav-mc" onclick="switchCategory('mc-info')" data-i18n="nav_mc">Minecraft SMP</button>
-                <button class="nav-link-btn" id="nav-faq" onclick="switchCategory('faq')" data-i18n="nav_faq">Veelgestelde Vragen</button>
-                <a href="alerts.html" class="nav-link-btn" data-i18n="nav_alerts"><i class="fa-solid fa-bell" style="font-size:0.75rem; color:var(--accent-purple);"></i> Stream Alerts</a>
+                <button class="nav-link-btn active" id="nav-stream" onclick="switchCategory('stream')">
+                    <span data-i18n="nav_stream">Live Stream</span>
+                </button>
+                <button class="nav-link-btn" id="nav-mc" onclick="switchCategory('mc-info')">
+                    <span data-i18n="nav_mc">Minecraft SMP</span>
+                </button>
+                <button class="nav-link-btn" id="nav-faq" onclick="switchCategory('faq')">
+                    <span data-i18n="nav_faq">Veelgestelde Vragen</span>
+                </button>
+                <!-- STREAM ALERTS LINK (MET ALTIJD BEHOUDEN ICOON) -->
+                <a href="alerts.html" class="nav-link-btn">
+                    <i class="fa-solid fa-bell" style="color: var(--accent-purple); font-size: 0.8rem;"></i>
+                    <span data-i18n="nav_alerts">Stream Alerts</span>
+                </a>
             </div>
 
             <!-- Language Switcher -->
@@ -860,6 +920,17 @@
             </div>
         </div>
 
+        <!-- EXTRA FEATURE: COMMUNITY SUB GOAL -->
+        <div class="goal-container reveal">
+            <div class="goal-header">
+                <span class="goal-title"><i class="fa-solid fa-trophy" style="color: var(--accent-purple);"></i> <span data-i18n="goal_title">Community Sub Doel</span></span>
+                <span class="goal-count">65 / 100 Subs</span>
+            </div>
+            <div class="goal-bar">
+                <div class="goal-fill"></div>
+            </div>
+        </div>
+
         <!-- Minecraft SMP Section -->
         <div class="section-header reveal" id="mc-info">
             <h2><i class="fa-solid fa-cubes" style="color: var(--accent-green);"></i> <span data-i18n="head_smp">Minecraft Community SMP</span></h2>
@@ -887,6 +958,27 @@
                 <p data-i18n="card3_desc">Houd je speeltijd, kills, deaths en ranglijsten live bij op ons uitgebreide speler-dashboard.</p>
                 <a onclick="switchCategory('stats-page')" class="card-link"><span data-i18n="card3_link">Bekijk Statistieken</span> <i class="fa-solid fa-arrow-right"></i></a>
             </div>
+        </div>
+
+        <!-- EXTRA FEATURE: SOCIAL QUICK GRID -->
+        <div class="section-header reveal">
+            <h2><i class="fa-solid fa-share-nodes" style="color: var(--accent-cyan);"></i> <span data-i18n="head_socials">Officiële Socials</span></h2>
+            <p data-i18n="socials_sub">Blijf op de hoogte via al onze kanalen!</p>
+        </div>
+
+        <div class="socials-grid reveal">
+            <a href="https://solo.to/floris_n" target="_blank" class="social-card">
+                <i class="fa-solid fa-link"></i> Solo.to Hub
+            </a>
+            <a href="https://discord.gg/Floris" target="_blank" class="social-card">
+                <i class="fa-brands fa-discord"></i> Discord Community
+            </a>
+            <a href="https://twitch.tv/Floris_N" target="_blank" class="social-card">
+                <i class="fa-brands fa-twitch"></i> Twitch Kanaal
+            </a>
+            <a href="https://youtube.com/@Floris_N" target="_blank" class="social-card">
+                <i class="fa-brands fa-youtube"></i> YouTube Clips
+            </a>
         </div>
 
         <!-- FAQ Section -->
@@ -985,9 +1077,6 @@
     </div>
 
     <script>
-        // ============================================
-        // TAALTRANSLATIES (NL / EN)
-        // ============================================
         let currentLang = 'nl';
 
         const i18n = {
@@ -999,6 +1088,9 @@
                 head_stream: "Live Stream",
                 head_smp: "Minecraft Community SMP",
                 head_faq: "Veelgestelde Vragen",
+                head_socials: "Officiële Socials",
+                socials_sub: "Blijf op de hoogte via al onze kanalen!",
+                goal_title: "Community Sub Doel",
                 hero_desc: "De centrale plek voor de livestream, de hechte SMP-community en al je in-game statistieken.",
                 btn_channel: "Bekijk Kanaal",
                 btn_copy_ip: "Kopieer IP: play.florisn.nl",
@@ -1035,6 +1127,9 @@
                 head_stream: "Live Stream",
                 head_smp: "Minecraft Community SMP",
                 head_faq: "Frequently Asked Questions",
+                head_socials: "Official Socials",
+                socials_sub: "Stay updated through all our channels!",
+                goal_title: "Community Sub Goal",
                 hero_desc: "The central hub for the livestream, the tight-knit SMP community, and all your in-game statistics.",
                 btn_channel: "Watch Channel",
                 btn_copy_ip: "Copy IP: play.florisn.nl",
@@ -1086,26 +1181,20 @@
             }
         }
 
-        // ============================================
-        // SMART HIDING NAVBAR LOGICA (Scroll Up / Down)
-        // ============================================
+        // SMART HIDING NAVBAR
         let lastScrollTop = 0;
         const navWrapper = document.getElementById('nav-wrapper');
 
         window.addEventListener('scroll', () => {
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
             if (scrollTop > lastScrollTop && scrollTop > 100) {
-                // Scroll naar beneden -> Verberg menu
                 navWrapper.classList.add('nav-hidden');
             } else {
-                // Scroll naar boven -> Toon menu
                 navWrapper.classList.remove('nav-hidden');
             }
             lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
         });
 
-        // Pagina Transitie & Categorie Switcher
         function switchCategory(targetId) {
             document.querySelectorAll('.nav-link-btn').forEach(btn => btn.classList.remove('active'));
             const activeBtn = document.getElementById(`nav-${targetId.replace('-info', '')}`);
@@ -1129,7 +1218,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
-            }, 1300);
+            }, 1200);
 
             setTimeout(() => {
                 const prompt = document.getElementById('chat-prompt');
@@ -1193,9 +1282,7 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // ============================================
         // CHATBOT LOGICA
-        // ============================================
         const chatKnowledgeBase = [
             {
                 keywords: ['schema', 'rooster', 'tijden', 'wanneer live', 'streamtijd', 'schedule', 'when live', 'time'],
@@ -1216,16 +1303,6 @@
                 keywords: ['ip', 'server', 'meedoen', 'join', 'adres', 'spelen'],
                 nl: "Je kunt meedoen op de Minecraft SMP via Java Edition met het IP-adres: **play.florisn.nl**! 🎮",
                 en: "You can join the Minecraft SMP via Java Edition using the server IP: **play.florisn.nl**! 🎮"
-            },
-            {
-                keywords: ['voice', 'chat', 'praten', 'proximity', 'mod'],
-                nl: "Voor de in-game voice chat gebruiken we de **Simple Voice Chat** mod! Download deze in je Minecraft client om te praten met spelers dichtbij.",
-                en: "For in-game voice chat, we use the **Simple Voice Chat** mod! Install it in your Minecraft client to talk with nearby players."
-            },
-            {
-                keywords: ['statistieken', 'stats', 'kills', 'speeltijd', 'dashboard', 'playtime'],
-                nl: "Al je in-game statistieken, speeltijd en ranglijsten bekijk je via de 'Minecraft SMP' knop bovenin het menu! 📊",
-                en: "All your in-game stats, playtime, and leaderboards can be viewed via the 'Minecraft SMP' page link in the menu! 📊"
             },
             {
                 keywords: ['hoi', 'hey', 'hallo', 'hi', 'hello'],
@@ -1280,13 +1357,11 @@
             chatInput.value = '';
             chatQuickReplies.innerHTML = '';
 
-            showTyping();
             setTimeout(() => {
-                removeTyping();
                 const reply = getBotReply(text);
                 addBotMessage(reply);
                 renderQuickReplies(getQuickReplies());
-            }, 750);
+            }, 600);
         }
 
         function getBotReply(input) {
@@ -1313,20 +1388,6 @@
             div.textContent = text;
             chatMessages.appendChild(div);
             scrollToBottom();
-        }
-
-        function showTyping() {
-            const div = document.createElement('div');
-            div.className = 'chat-typing';
-            div.id = 'chat-typing';
-            div.innerHTML = '<span></span><span></span><span></span>';
-            chatMessages.appendChild(div);
-            scrollToBottom();
-        }
-
-        function removeTyping() {
-            const typing = document.getElementById('chat-typing');
-            if (typing) typing.remove();
         }
 
         function renderQuickReplies(items) {
