@@ -6,7 +6,7 @@
     <title>Floris_N | Official Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -21,7 +21,6 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: rgba(255, 255, 255, 0.06);
-            --font-heading: 'Syne', sans-serif;
             --font-body: 'Plus Jakarta Sans', sans-serif;
         }
 
@@ -42,7 +41,7 @@
         }
 
         /* ============================================
-           LOADING / INTRO SCHERM ANIMATIES
+           LOADING / INTRO SCHERM
            ============================================ */
         .loader {
             position: fixed;
@@ -63,10 +62,9 @@
         }
 
         .loader-logo {
-            font-family: var(--font-heading);
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 800;
-            letter-spacing: -2px;
+            letter-spacing: -1px;
             color: var(--text-main);
             opacity: 0;
             animation: loaderReveal 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -75,18 +73,18 @@
         .loader-logo span { color: var(--accent-purple); }
 
         @keyframes loaderReveal {
-            from { opacity: 0; transform: translateY(20px); letter-spacing: 15px; }
-            to { opacity: 1; transform: translateY(0); letter-spacing: -2px; }
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .loader-bar {
-            width: 200px;
+            width: 180px;
             height: 2px;
             background: rgba(255, 255, 255, 0.08);
             border-radius: 2px;
             overflow: hidden;
             opacity: 0;
-            animation: loaderReveal 0.5s 0.5s forwards;
+            animation: loaderReveal 0.5s 0.4s forwards;
         }
 
         .loader-bar-fill {
@@ -94,7 +92,7 @@
             height: 100%;
             background: var(--accent-purple);
             box-shadow: 0 0 15px var(--accent-purple);
-            animation: loaderFill 1.2s 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: loaderFill 1.1s 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes loaderFill {
@@ -132,8 +130,7 @@
         }
 
         .logo {
-            font-family: var(--font-heading);
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             font-weight: 800;
             display: flex;
             align-items: center;
@@ -186,11 +183,10 @@
         }
 
         .hero h1 {
-            font-family: var(--font-heading);
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             font-weight: 800;
-            letter-spacing: -1.5px;
-            line-height: 1.1;
+            letter-spacing: -1px;
+            line-height: 1.15;
             color: #fff;
         }
 
@@ -305,7 +301,6 @@
         }
 
         .section-header h2 {
-            font-family: var(--font-heading);
             font-size: 2rem;
             font-weight: 800;
             letter-spacing: -0.5px;
@@ -494,6 +489,112 @@
             transform: translateY(0);
         }
 
+        /* ============================================
+           CHATBOT STYLING
+           ============================================ */
+        .chat-toggle-btn {
+            position: fixed; bottom: 2rem; right: 2rem; width: 56px; height: 56px;
+            border-radius: 50%; background: var(--accent-purple); color: #fff;
+            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 30px rgba(145, 70, 255, 0.4);
+            z-index: 9997; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .chat-toggle-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 15px 35px rgba(145, 70, 255, 0.6); }
+        .chat-toggle-btn svg { width: 22px; height: 22px; }
+        .chat-toggle-btn .chat-icon-close { display: none; }
+        .chat-toggle-btn.open .chat-icon-chat { display: none; }
+        .chat-toggle-btn.open .chat-icon-close { display: block; }
+
+        .chat-window {
+            position: fixed; bottom: 5.5rem; right: 2rem; width: 360px;
+            max-width: calc(100% - 3rem); height: 500px; max-height: calc(100vh - 7rem);
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+            border-radius: 16px; z-index: 9996; display: flex; flex-direction: column;
+            overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            opacity: 0; visibility: hidden; transform: translateY(15px) scale(0.96);
+            transform-origin: bottom right; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .chat-window.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+
+        .chat-header {
+            padding: 1.1rem 1.3rem;
+            background: rgba(15, 22, 36, 0.95);
+            border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0;
+        }
+        .chat-avatar {
+            width: 38px; height: 38px; border-radius: 50%; background: var(--accent-purple); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+            box-shadow: 0 0 15px var(--accent-purple-glow);
+        }
+        .chat-header-info { flex: 1; }
+        .chat-header-info h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; }
+        .chat-header-info span { font-size: 0.72rem; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
+        .chat-status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+        .chat-close-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);
+            color: var(--text-main); width: 30px; height: 30px; border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; transition: all 0.2s; flex-shrink: 0;
+        }
+        .chat-close-btn:hover { background: var(--accent-purple); border-color: var(--accent-purple); }
+
+        .chat-messages {
+            flex: 1; overflow-y: auto; padding: 1.1rem;
+            display: flex; flex-direction: column; gap: 0.8rem;
+        }
+        .chat-messages::-webkit-scrollbar { width: 4px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+        .chat-message {
+            max-width: 85%; padding: 0.7rem 0.9rem; border-radius: 12px;
+            font-size: 0.85rem; line-height: 1.45; word-wrap: break-word;
+        }
+        .chat-message.bot { background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 3px; }
+        .chat-message.user { background: var(--accent-purple); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; font-weight: 500; }
+
+        .chat-typing {
+            align-self: flex-start; background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border-color); padding: 0.8rem 1rem;
+            border-radius: 12px; border-bottom-left-radius: 3px;
+            display: flex; gap: 4px; align-items: center;
+        }
+        .chat-typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); animation: typingBounce 1.4s infinite; }
+        .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+        .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+        .chat-quick-replies { padding: 0 1.1rem 0.7rem 1.1rem; display: flex; flex-wrap: wrap; gap: 0.4rem; flex-shrink: 0; }
+        .quick-reply-btn {
+            background: rgba(145, 70, 255, 0.1); border: 1px solid rgba(145, 70, 255, 0.3);
+            color: #d8b4fe; padding: 0.4rem 0.8rem; border-radius: 20px;
+            font-size: 0.72rem; cursor: pointer; transition: all 0.2s; font-weight: 600;
+        }
+        .quick-reply-btn:hover { background: var(--accent-purple); color: #fff; }
+
+        .chat-input-area {
+            padding: 0.8rem 1.1rem; border-top: 1px solid var(--border-color);
+            background: rgba(8, 11, 17, 0.5); display: flex; gap: 0.5rem;
+            align-items: center; flex-shrink: 0;
+        }
+        .chat-input {
+            flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color);
+            padding: 0.7rem 0.9rem; color: var(--text-main); border-radius: 20px;
+            font-size: 0.82rem; outline: none; transition: border-color 0.2s;
+        }
+        .chat-input:focus { border-color: var(--accent-purple); }
+        .chat-input::placeholder { color: var(--text-muted); }
+        .chat-send-btn {
+            width: 38px; height: 38px; border-radius: 50%; background: var(--accent-purple);
+            color: #fff; border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s; flex-shrink: 0;
+        }
+        .chat-send-btn:hover { transform: scale(1.05); }
+        .chat-send-btn svg { width: 15px; height: 15px; }
+
         /* Footer */
         footer {
             text-align: center;
@@ -510,7 +611,7 @@
             .twitch-chat { display: none; }
             .bento-grid { grid-template-columns: 1fr; }
             .card-large { grid-column: span 1; flex-direction: column; align-items: flex-start; gap: 1rem; }
-            .hero h1 { font-size: 2.4rem; }
+            .hero h1 { font-size: 2.3rem; }
             .nav-links { display: none; }
         }
     </style>
@@ -671,12 +772,45 @@
         <p>&copy; 2026 Floris_N Community. Alle rechten voorbehouden.</p>
     </footer>
 
+    <!-- Chatbot Widget -->
+    <button class="chat-toggle-btn" id="chat-toggle-btn" type="button" aria-label="Open chat">
+        <svg class="chat-icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <svg class="chat-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+    </button>
+
+    <div class="chat-window" id="chat-window">
+        <div class="chat-header">
+            <div class="chat-avatar">F</div>
+            <div class="chat-header-info">
+                <h4>Floris_N Assistent</h4>
+                <span><span class="chat-status-dot"></span> Online — reageert direct</span>
+            </div>
+            <button class="chat-close-btn" id="chat-close-btn" type="button" aria-label="Sluit chat">&times;</button>
+        </div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-quick-replies" id="chat-quick-replies"></div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Typ je vraag..." autocomplete="off">
+            <button class="chat-send-btn" id="chat-send-btn" type="button" aria-label="Verstuur">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"/>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
     <script>
         // Intro Loader Verbergen
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
-            }, 1500);
+            }, 1400);
         });
 
         // Kopieer IP Functie
@@ -714,11 +848,9 @@
         document.querySelectorAll('.faq-question').forEach(item => {
             item.addEventListener('click', () => {
                 const parent = item.parentElement;
-                
                 document.querySelectorAll('.faq-item').forEach(other => {
                     if (other !== parent) other.classList.remove('active');
                 });
-
                 parent.classList.toggle('active');
             });
         });
@@ -734,6 +866,120 @@
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Chatbot Functionaliteit
+        const chatToggleBtn = document.getElementById('chat-toggle-btn');
+        const chatWindow = document.getElementById('chat-window');
+        const chatCloseBtn = document.getElementById('chat-close-btn');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const chatSendBtn = document.getElementById('chat-send-btn');
+        const chatQuickReplies = document.getElementById('chat-quick-replies');
+
+        let chatInitialized = false;
+        const knowledgeBase = [
+            { keywords: ['ip', 'server', 'meedoen', 'join', 'adres', 'spelen'], answer: 'Je kunt meedoen op de Minecraft server via Java Edition met het IP-adres: **play.florisn.nl**! 🎮' },
+            { keywords: ['bedrock', 'console', 'ps4', 'xbox', 'telefoon', 'ipad'], answer: 'Op dit moment is de server primair ingesteld voor Java Edition. Houd de Discord in de gaten voor eventuele Bedrock-updates!' },
+            { keywords: ['voice', 'chat', 'praten', 'proximity', 'mod'], answer: 'Voor de in-game voice chat heb je de **Simple Voice Chat** mod nodig in je Minecraft client. Daarmee praat je direct met spelers om je heen!' },
+            { keywords: ['statistieken', 'stats', 'kills', 'speeltijd', 'dashboard'], answer: 'Je kunt al je live in-game statistieken, speeltijd en ranglijsten bekijken op de Statistieken pagina in het menu! 📊' },
+            { keywords: ['stream', 'twitch', 'wanneer', 'tijden'], answer: 'Check het Twitch kanaal (Floris_N) om te zien wanneer de volgende livestream begint! 💜' },
+            { keywords: ['hoi', 'hey', 'hallo', 'hulp'], answer: 'Hoi! 👋 Vraag me gerust naar het server IP, de voice chat mod of de statistieken.' }
+        ];
+        const quickReplies = ['Server IP?', 'Voice Chat?', 'Statistieken bekijken?'];
+
+        chatToggleBtn.addEventListener('click', () => {
+            chatWindow.classList.toggle('open');
+            chatToggleBtn.classList.toggle('open');
+            if (chatWindow.classList.contains('open') && !chatInitialized) {
+                chatInitialized = true;
+                setTimeout(() => {
+                    addBotMessage('Hoi! 👋 Ik ben de Floris_N assistent. Waar kan ik je vandaag mee helpen?');
+                    renderQuickReplies(quickReplies);
+                }, 300);
+            }
+        });
+
+        chatCloseBtn.addEventListener('click', () => {
+            chatWindow.classList.remove('open');
+            chatToggleBtn.classList.remove('open');
+        });
+
+        chatSendBtn.addEventListener('click', sendUserMessage);
+        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendUserMessage(); });
+
+        function sendUserMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            addUserMessage(text);
+            chatInput.value = '';
+            chatQuickReplies.innerHTML = '';
+
+            showTyping();
+            setTimeout(() => {
+                removeTyping();
+                const reply = getBotReply(text);
+                addBotMessage(reply);
+                renderQuickReplies(quickReplies);
+            }, 800);
+        }
+
+        function getBotReply(input) {
+            const query = input.toLowerCase();
+            for (let item of knowledgeBase) {
+                if (item.keywords.some(kw => query.includes(kw))) {
+                    return item.answer;
+                }
+            }
+            return 'Daar kan ik je zo direct geen antwoord op geven, maar stel je vraag gerust in de Twitch-chat of op de Discord!';
+        }
+
+        function addBotMessage(text) {
+            const div = document.createElement('div');
+            div.className = 'chat-message bot';
+            div.innerHTML = text;
+            chatMessages.appendChild(div);
+            scrollToBottom();
+        }
+
+        function addUserMessage(text) {
+            const div = document.createElement('div');
+            div.className = 'chat-message user';
+            div.textContent = text;
+            chatMessages.appendChild(div);
+            scrollToBottom();
+        }
+
+        function showTyping() {
+            const div = document.createElement('div');
+            div.className = 'chat-typing';
+            div.id = 'chat-typing';
+            div.innerHTML = '<span></span><span></span><span></span>';
+            chatMessages.appendChild(div);
+            scrollToBottom();
+        }
+
+        function removeTyping() {
+            const typing = document.getElementById('chat-typing');
+            if (typing) typing.remove();
+        }
+
+        function renderQuickReplies(items) {
+            chatQuickReplies.innerHTML = '';
+            items.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'quick-reply-btn';
+                btn.textContent = item;
+                btn.addEventListener('click', () => {
+                    chatInput.value = item;
+                    sendUserMessage();
+                });
+                chatQuickReplies.appendChild(btn);
+            });
+        }
+
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
     </script>
 </body>
 </html>
