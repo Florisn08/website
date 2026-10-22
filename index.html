@@ -41,7 +41,7 @@
         }
 
         /* ============================================
-           LOADING / INTRO SCHERM
+           INTRO / LOADER & PAGE TRANSITION
            ============================================ */
         .loader {
             position: fixed;
@@ -100,7 +100,50 @@
             to { width: 100%; }
         }
 
-        /* Ambient background glow */
+        /* Page Transition Overlay */
+        .page-transition {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-dark);
+            z-index: 99998;
+            transform: translateY(100%);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-transition::after {
+            content: 'Floris_N';
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-purple);
+            letter-spacing: -1px;
+            opacity: 0;
+        }
+
+        .page-transition.active {
+            animation: pageTrans 0.8s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+
+        .page-transition.active::after {
+            animation: pageTransText 0.8s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+
+        @keyframes pageTrans {
+            0% { transform: translateY(100%); }
+            40% { transform: translateY(0); }
+            60% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
+        }
+
+        @keyframes pageTransText {
+            0%, 30% { opacity: 0; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1); }
+            70%, 100% { opacity: 0; transform: scale(1.05); }
+        }
+
+        /* Ambient glow */
         body::before {
             content: '';
             position: fixed;
@@ -138,6 +181,7 @@
             color: #fff;
             text-decoration: none;
             letter-spacing: -0.5px;
+            cursor: pointer;
         }
 
         .logo-icon {
@@ -156,9 +200,15 @@
         .logo:hover .logo-icon { transform: scale(1.05); }
         .logo span { color: var(--accent-purple); }
 
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
         .nav-links {
             display: flex;
-            gap: 32px;
+            gap: 24px;
             list-style: none;
         }
 
@@ -168,9 +218,38 @@
             font-weight: 600;
             font-size: 0.9rem;
             transition: color 0.2s ease;
+            cursor: pointer;
         }
 
-        .nav-links a:hover { color: #fff; }
+        .nav-links a:hover, .nav-links a.active { color: #fff; }
+
+        /* Language Switcher Button */
+        .lang-switcher {
+            display: flex;
+            gap: 2px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            padding: 3px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .lang-btn.active {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 0 12px var(--accent-purple-glow);
+        }
 
         /* Hero Section */
         .hero {
@@ -193,7 +272,7 @@
         .hero p {
             font-size: 1.1rem;
             color: var(--text-muted);
-            max-width: 580px;
+            max-width: 620px;
             line-height: 1.6;
         }
 
@@ -241,7 +320,7 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* Actions & Buttons */
+        /* Buttons */
         .action-group {
             display: flex;
             gap: 14px;
@@ -315,7 +394,7 @@
             font-size: 0.95rem;
         }
 
-        /* Twitch Stream Container */
+        /* Twitch Stream */
         .twitch-wrapper {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -411,6 +490,7 @@
             font-size: 0.9rem;
             text-decoration: none;
             transition: gap 0.2s ease;
+            cursor: pointer;
         }
 
         .card-link:hover { gap: 10px; }
@@ -490,8 +570,59 @@
         }
 
         /* ============================================
-           CHATBOT STYLING
+           CHATBOT & NOTIFICATION PROMPT
            ============================================ */
+        .chat-prompt {
+            position: fixed;
+            bottom: 6.2rem;
+            right: 2rem;
+            background: rgba(15, 22, 36, 0.95);
+            border: 1px solid var(--accent-purple);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px var(--accent-purple-glow);
+            padding: 0.75rem 1.1rem;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #fff;
+            z-index: 9995;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(12px);
+            opacity: 0;
+            transform: translateY(10px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .chat-prompt.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .chat-prompt::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            right: 22px;
+            width: 10px;
+            height: 10px;
+            background: rgba(15, 22, 36, 0.95);
+            border-right: 1px solid var(--accent-purple);
+            border-bottom: 1px solid var(--accent-purple);
+            transform: rotate(45deg);
+        }
+
+        .chat-prompt-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 4px;
+        }
+
         .chat-toggle-btn {
             position: fixed; bottom: 2rem; right: 2rem; width: 56px; height: 56px;
             border-radius: 50%; background: var(--accent-purple); color: #fff;
@@ -499,6 +630,7 @@
             box-shadow: 0 10px 30px rgba(145, 70, 255, 0.4);
             z-index: 9997; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         .chat-toggle-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 15px 35px rgba(145, 70, 255, 0.6); }
         .chat-toggle-btn svg { width: 22px; height: 22px; }
         .chat-toggle-btn .chat-icon-close { display: none; }
@@ -515,6 +647,7 @@
             opacity: 0; visibility: hidden; transform: translateY(15px) scale(0.96);
             transform-origin: bottom right; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         .chat-window.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
 
         .chat-header {
@@ -523,35 +656,41 @@
             border-bottom: 1px solid var(--border-color);
             display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0;
         }
+
         .chat-avatar {
             width: 38px; height: 38px; border-radius: 50%; background: var(--accent-purple); color: #fff;
             display: flex; align-items: center; justify-content: center;
             font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
             box-shadow: 0 0 15px var(--accent-purple-glow);
         }
+
         .chat-header-info { flex: 1; }
         .chat-header-info h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; }
         .chat-header-info span { font-size: 0.72rem; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
         .chat-status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+
         .chat-close-btn {
             background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);
             color: var(--text-main); width: 30px; height: 30px; border-radius: 50%;
             cursor: pointer; display: flex; align-items: center; justify-content: center;
             font-size: 1rem; transition: all 0.2s; flex-shrink: 0;
         }
+
         .chat-close-btn:hover { background: var(--accent-purple); border-color: var(--accent-purple); }
 
         .chat-messages {
             flex: 1; overflow-y: auto; padding: 1.1rem;
             display: flex; flex-direction: column; gap: 0.8rem;
         }
+
         .chat-messages::-webkit-scrollbar { width: 4px; }
         .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
 
         .chat-message {
-            max-width: 85%; padding: 0.7rem 0.9rem; border-radius: 12px;
+            max-width: 88%; padding: 0.7rem 0.9rem; border-radius: 12px;
             font-size: 0.85rem; line-height: 1.45; word-wrap: break-word;
         }
+
         .chat-message.bot { background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 3px; }
         .chat-message.user { background: var(--accent-purple); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; font-weight: 500; }
 
@@ -561,6 +700,7 @@
             border-radius: 12px; border-bottom-left-radius: 3px;
             display: flex; gap: 4px; align-items: center;
         }
+
         .chat-typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); animation: typingBounce 1.4s infinite; }
         .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
         .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
@@ -572,6 +712,7 @@
             color: #d8b4fe; padding: 0.4rem 0.8rem; border-radius: 20px;
             font-size: 0.72rem; cursor: pointer; transition: all 0.2s; font-weight: 600;
         }
+
         .quick-reply-btn:hover { background: var(--accent-purple); color: #fff; }
 
         .chat-input-area {
@@ -579,19 +720,23 @@
             background: rgba(8, 11, 17, 0.5); display: flex; gap: 0.5rem;
             align-items: center; flex-shrink: 0;
         }
+
         .chat-input {
             flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color);
             padding: 0.7rem 0.9rem; color: var(--text-main); border-radius: 20px;
             font-size: 0.82rem; outline: none; transition: border-color 0.2s;
         }
+
         .chat-input:focus { border-color: var(--accent-purple); }
         .chat-input::placeholder { color: var(--text-muted); }
+
         .chat-send-btn {
             width: 38px; height: 38px; border-radius: 50%; background: var(--accent-purple);
             color: #fff; border: none; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             transition: transform 0.2s; flex-shrink: 0;
         }
+
         .chat-send-btn:hover { transform: scale(1.05); }
         .chat-send-btn svg { width: 15px; height: 15px; }
 
@@ -618,23 +763,35 @@
 </head>
 <body>
 
-    <!-- Intro / Loading Screen -->
+    <!-- Intro Loader -->
     <div class="loader" id="loader">
         <div class="loader-logo">Floris<span>_N</span></div>
         <div class="loader-bar"><div class="loader-bar-fill"></div></div>
     </div>
 
+    <!-- Page Transition Overlay -->
+    <div class="page-transition" id="page-transition"></div>
+
     <!-- Navbar -->
     <nav>
-        <a href="index.html" class="logo">
+        <a onclick="switchCategory('stream')" class="logo">
             <div class="logo-icon"><i class="fa-brands fa-twitch"></i></div>
             Floris<span>_N</span>
         </a>
-        <ul class="nav-links">
-            <li><a href="#stream">Live Stream</a></li>
-            <li><a href="smp.html">Statistieken</a></li>
-            <li><a href="#faq">Veelgestelde Vragen</a></li>
-        </ul>
+        
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a onclick="switchCategory('stream')" id="nav-stream" class="active" data-i18n="nav_stream">Live Stream</a></li>
+                <li><a onclick="switchCategory('mc-info')" id="nav-mc" data-i18n="nav_mc">SMP Server</a></li>
+                <li><a onclick="switchCategory('faq')" id="nav-faq" data-i18n="nav_faq">Veelgestelde Vragen</a></li>
+            </ul>
+
+            <!-- Language Switcher -->
+            <div class="lang-switcher">
+                <button class="lang-btn active" onclick="setLanguage('nl')">NL</button>
+                <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+            </div>
+        </div>
     </nav>
 
     <!-- Hero Section -->
@@ -651,26 +808,26 @@
         </div>
 
         <h1>Floris_N Community Hub</h1>
-        <p>Kijk gezellig mee op Twitch en speel direct mee op de officiële Minecraft SMP server!</p>
+        <p data-i18n="hero_desc">De centrale plek voor de livestream, de hechte SMP-community en al je in-game statistieken.</p>
 
         <div class="action-group">
             <a href="https://twitch.tv/Floris_N" target="_blank" class="btn btn-twitch">
-                <i class="fa-brands fa-twitch"></i> Bekijk Kanaal
+                <i class="fa-brands fa-twitch"></i> <span data-i18n="btn_channel">Bekijk Kanaal</span>
             </a>
             <button class="btn btn-mc" onclick="copyIP()">
                 <i class="fa-solid fa-server"></i>
-                <span id="ip-btn-text">Kopieer IP: play.florisn.nl</span>
+                <span id="ip-btn-text" data-i18n="btn_copy_ip">Kopieer IP: play.florisn.nl</span>
             </button>
         </div>
     </section>
 
-    <!-- Content Container -->
+    <!-- Main Container -->
     <div class="container">
 
-        <!-- Twitch Player Section -->
+        <!-- Twitch Stream Section -->
         <div class="section-header reveal" id="stream">
             <h2><i class="fa-brands fa-twitch" style="color: var(--accent-purple);"></i> Live Stream</h2>
-            <p>Kijk hieronder rechtstreeks mee met de livestream!</p>
+            <p data-i18n="stream_sub">Volg de livestream live met interactieve chat en unieke content!</p>
         </div>
 
         <div class="twitch-wrapper reveal">
@@ -688,79 +845,79 @@
             </div>
         </div>
 
-        <!-- Minecraft SMP Section (Bento Grid) -->
+        <!-- Minecraft SMP Section -->
         <div class="section-header reveal" id="mc-info">
             <h2><i class="fa-solid fa-cubes" style="color: var(--accent-green);"></i> Minecraft Community SMP</h2>
-            <p>Speel mee met kijkers en bekijk live al je in-game statistieken</p>
+            <p data-i18n="smp_sub">Stap in de wereld, bouw mee met de community en volg je prestaties op de voet.</p>
         </div>
 
         <div class="bento-grid reveal">
             <div class="card card-large">
                 <div>
                     <div class="card-icon"><i class="fa-solid fa-users"></i></div>
-                    <h3>Gezellige Survival</h3>
-                    <p>Een unieke SMP server waar bouwen, avontuur en samenwerken met de stream-community centraal staan.</p>
+                    <h3 data-i18n="card1_title">Gezellige Survival</h3>
+                    <p data-i18n="card1_desc">Een unieke SMP server waar bouwen, avontuur en samenwerken met de stream-community centraal staan.</p>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-icon"><i class="fa-solid fa-headset"></i></div>
-                <h3>Simple Voice Chat</h3>
-                <p>Proximity voice-chat geïntegreerd. Praat direct in-game met spelers die om je heen staan.</p>
+                <h3 data-i18n="card2_title">Simple Voice Chat</h3>
+                <p data-i18n="card2_desc">Proximity voice-chat geïntegreerd. Praat direct in-game met spelers die om je heen staan.</p>
             </div>
 
             <div class="card">
                 <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
-                <h3>Speler Statistieken</h3>
-                <p>Houd je speeltijd, kills, deaths en ranglijsten live bij op ons uitgebreide speler-dashboard.</p>
-                <a href="smp.html" class="card-link">Bekijk Statistieken <i class="fa-solid fa-arrow-right"></i></a>
+                <h3 data-i18n="card3_title">Speler Statistieken</h3>
+                <p data-i18n="card3_desc">Houd je speeltijd, kills, deaths en ranglijsten live bij op ons uitgebreide speler-dashboard.</p>
+                <a onclick="switchCategory('stats-page')" class="card-link"><span data-i18n="card3_link">Bekijk Statistieken</span> <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
 
         <!-- FAQ Section -->
         <div class="section-header reveal" id="faq">
             <h2><i class="fa-solid fa-circle-question" style="color: var(--accent-purple);"></i> Veelgestelde Vragen</h2>
-            <p>Alles wat je moet weten over de Minecraft server & stream</p>
+            <p data-i18n="faq_sub">Direct antwoord op vragen over de Minecraft server & livestream.</p>
         </div>
 
         <div class="faq-list reveal">
             <div class="faq-item">
                 <div class="faq-question">
-                    <span>Hoe kan ik meedoen op de Minecraft server?</span>
+                    <span data-i18n="faq1_q">Hoe kan ik meedoen op de Minecraft server?</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
-                <div class="faq-answer">
+                <div class="faq-answer" data-i18n="faq1_a">
                     Start Minecraft Java Edition en voeg het serveradres <strong>play.florisn.nl</strong> toe in je serverlijst!
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">
-                    <span>Kan ik ook meedoen via Minecraft Bedrock (Console/Telefoon)?</span>
+                    <span data-i18n="faq2_q">Wanneer is Floris_N meestal live?</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
-                <div class="faq-answer">
-                    Op dit moment is de server ingesteld voor Java Edition. Bekijk onze Discord voor updates rondom Bedrock ondersteuning!
+                <div class="faq-answer" data-i18n="faq2_a">
+                    Het exacte schema staat in de Discord, maar Floris gaat vooral live zodra hij er zin in heeft! Zorg dat je notificaties op Twitch aanstaan.
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">
-                    <span>Hoe werkt de Simple Voice Chat mod?</span>
+                    <span data-i18n="faq3_q">Hoe werkt de Simple Voice Chat mod?</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
-                <div class="faq-answer">
+                <div class="faq-answer" data-i18n="faq3_a">
                     Download en installeer de Simple Voice Chat mod in je Minecraft client om in-game direct te praten met spelers die dichtbij je staan.
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">
-                    <span>Waar kan ik mijn spelerstatistieken bekijken?</span>
+                    <span data-i18n="faq4_q">Waar vind ik alle Socials & Discord?</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
-                <div class="faq-answer">
-                    Je kunt je in-game speeltijd, statistieken en prestaties inzien op de <a href="smp.html" style="color: var(--accent-purple); font-weight: 600;">Minecraft SMP Statistieken pagina</a>.
+                <div class="faq-answer" data-i18n="faq4_a">
+                    Alle officiële links en de Discord-community vind je via onze verzamelpagina op <a href="https://solo.to/floris_n" target="_blank" style="color: var(--accent-purple); font-weight:600;">solo.to/floris_n</a>!
                 </div>
             </div>
         </div>
@@ -771,6 +928,13 @@
     <footer>
         <p>&copy; 2026 Floris_N Community. Alle rechten voorbehouden.</p>
     </footer>
+
+    <!-- Chat Notification Prompt Banner -->
+    <div class="chat-prompt" id="chat-prompt">
+        <i class="fa-solid fa-comment-dots" style="color: var(--accent-purple);"></i>
+        <span id="prompt-text">Vragen? Stel ze direct aan de assistent!</span>
+        <button class="chat-prompt-close" onclick="closePrompt()">&times;</button>
+    </div>
 
     <!-- Chatbot Widget -->
     <button class="chat-toggle-btn" id="chat-toggle-btn" type="button" aria-label="Open chat">
@@ -788,7 +952,7 @@
             <div class="chat-avatar">F</div>
             <div class="chat-header-info">
                 <h4>Floris_N Assistent</h4>
-                <span><span class="chat-status-dot"></span> Online — reageert direct</span>
+                <span><span class="chat-status-dot"></span> <span id="chat-status-text">Online — reageert direct</span></span>
             </div>
             <button class="chat-close-btn" id="chat-close-btn" type="button" aria-label="Sluit chat">&times;</button>
         </div>
@@ -806,20 +970,147 @@
     </div>
 
     <script>
-        // Intro Loader Verbergen
+        // ============================================
+        // TAALTRANSLATIES (NL / EN)
+        // ============================================
+        let currentLang = 'nl';
+
+        const i18n = {
+            nl: {
+                nav_stream: "Live Stream",
+                nav_mc: "SMP Server",
+                nav_faq: "Veelgestelde Vragen",
+                hero_desc: "De centrale plek voor de livestream, de hechte SMP-community en al je in-game statistieken.",
+                btn_channel: "Bekijk Kanaal",
+                btn_copy_ip: "Kopieer IP: play.florisn.nl",
+                ip_copied: "IP Gekopieerd!",
+                stream_sub: "Volg de livestream live met interactieve chat en unieke content!",
+                smp_sub: "Stap in de wereld, bouw mee met de community en volg je prestaties op de voet.",
+                card1_title: "Gezellige Survival",
+                card1_desc: "Een unieke SMP server waar bouwen, avontuur en samenwerken met de stream-community centraal staan.",
+                card2_title: "Simple Voice Chat",
+                card2_desc: "Proximity voice-chat geïntegreerd. Praat direct in-game met spelers die om je heen staan.",
+                card3_title: "Speler Statistieken",
+                card3_desc: "Houd je speeltijd, kills, deaths en ranglijsten live bij op ons uitgebreide speler-dashboard.",
+                card3_link: "Bekijk Statistieken",
+                faq_sub: "Direct antwoord op vragen over de Minecraft server & livestream.",
+                faq1_q: "Hoe kan ik meedoen op de Minecraft server?",
+                faq1_a: "Start Minecraft Java Edition en voeg het serveradres <strong>play.florisn.nl</strong> toe in je serverlijst!",
+                faq2_q: "Wanneer is Floris_N meestal live?",
+                faq2_a: "Het exacte schema staat in de Discord, maar Floris gaat vooral live zodra hij er zin in heeft! Zorg dat je notificaties op Twitch aanstaan.",
+                faq3_q: "Hoe werkt de Simple Voice Chat mod?",
+                faq3_a: "Download en installeer de Simple Voice Chat mod in je Minecraft client om in-game direct te praten met spelers die dichtbij je staan.",
+                faq4_q: "Waar vind ik alle Socials & Discord?",
+                faq4_a: "Alle officiële links en de Discord-community vind je via onze verzamelpagina op <a href='https://solo.to/floris_n' target='_blank' style='color: var(--accent-purple); font-weight:600;'>solo.to/floris_n</a>!",
+                chat_prompt: "Vragen? Stel ze direct aan de assistent!",
+                chat_placeholder: "Typ je vraag...",
+                chat_status: "Online — reageert direct",
+                chat_welcome: "Hoi! 👋 Ik ben de Floris_N assistent. Vraag me gerust alles over de stream, het schema, de Minecraft SMP of de socials!",
+                chat_not_found: "Daar heb ik zo direct geen specifiek antwoord op, maar stel je vraag gerust in de Twitch chat of op onze Discord!"
+            },
+            en: {
+                nav_stream: "Live Stream",
+                nav_mc: "SMP Server",
+                nav_faq: "FAQ",
+                hero_desc: "The central hub for the livestream, the tight-knit SMP community, and all your in-game statistics.",
+                btn_channel: "Watch Channel",
+                btn_copy_ip: "Copy IP: play.florisn.nl",
+                ip_copied: "IP Copied!",
+                stream_sub: "Watch the stream live with interactive chat and unique content!",
+                smp_sub: "Jump into the world, build with the community, and track your stats live.",
+                card1_title: "Cozy Survival",
+                card1_desc: "A unique SMP server centered around building, adventure, and collaborating with the stream community.",
+                card2_title: "Simple Voice Chat",
+                card2_desc: "Integrated proximity voice chat. Talk directly in-game with players standing around you.",
+                card3_title: "Player Statistics",
+                card3_desc: "Track your playtime, kills, deaths, and leaderboards live on our player dashboard.",
+                card3_link: "View Statistics",
+                faq_sub: "Direct answers to questions regarding the Minecraft server & livestream.",
+                faq1_q: "How can I join the Minecraft server?",
+                faq1_a: "Launch Minecraft Java Edition and add the server address <strong>play.florisn.nl</strong> to your server list!",
+                faq2_q: "When is Floris_N usually streaming?",
+                faq2_a: "The exact schedule is posted in Discord, but Floris goes live whenever he feels like it! Make sure your Twitch notifications are enabled.",
+                faq3_q: "How does the Simple Voice Chat mod work?",
+                faq3_a: "Download and install the Simple Voice Chat mod in your Minecraft client to speak directly in-game with nearby players.",
+                faq4_q: "Where can I find all Socials & Discord?",
+                faq4_a: "All official links and the Discord community can be found via our page at <a href='https://solo.to/floris_n' target='_blank' style='color: var(--accent-purple); font-weight:600;'>solo.to/floris_n</a>!",
+                chat_prompt: "Questions? Ask our assistant right here!",
+                chat_placeholder: "Type your question...",
+                chat_status: "Online — replies instantly",
+                chat_welcome: "Hi! 👋 I'm the Floris_N assistant. Feel free to ask me anything about the stream, schedule, Minecraft SMP, or socials!",
+                chat_not_found: "I don't have a specific answer for that yet, but feel free to ask in the Twitch chat or on our Discord!"
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText.toLowerCase() === lang);
+            });
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) {
+                    el.innerHTML = i18n[lang][key];
+                }
+            });
+
+            document.getElementById('prompt-text').innerText = i18n[lang].chat_prompt;
+            document.getElementById('chat-input').placeholder = i18n[lang].chat_placeholder;
+            document.getElementById('chat-status-text').innerText = i18n[lang].chat_status;
+
+            if (chatInitialized) {
+                renderQuickReplies(getQuickReplies());
+            }
+        }
+
+        // ============================================
+        // CATEGORIE / PAGINA TRANSITIE
+        // ============================================
+        function switchCategory(targetId) {
+            const overlay = document.getElementById('page-transition');
+            overlay.classList.add('active');
+
+            setTimeout(() => {
+                if (targetId === 'stats-page') {
+                    window.location.href = 'smp.html';
+                } else {
+                    const el = document.getElementById(targetId);
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 350);
+
+            setTimeout(() => {
+                overlay.classList.remove('active');
+            }, 800);
+        }
+
+        // Intro Loader Hide
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
             }, 1400);
+
+            // Pop-up melding tonen na 4 seconden
+            setTimeout(() => {
+                const prompt = document.getElementById('chat-prompt');
+                if (!chatWindow.classList.contains('open')) {
+                    prompt.classList.add('visible');
+                }
+            }, 4000);
         });
+
+        function closePrompt() {
+            document.getElementById('chat-prompt').classList.remove('visible');
+        }
 
         // Kopieer IP Functie
         function copyIP() {
             navigator.clipboard.writeText("play.florisn.nl").then(() => {
                 const btnText = document.getElementById("ip-btn-text");
-                btnText.innerText = "IP Gekopieerd!";
+                btnText.innerText = i18n[currentLang].ip_copied;
                 setTimeout(() => {
-                    btnText.innerText = "Kopieer IP: play.florisn.nl";
+                    btnText.innerText = i18n[currentLang].btn_copy_ip;
                 }, 2000);
             });
         }
@@ -832,7 +1123,7 @@
                 const countElement = document.getElementById('player-count');
                 
                 if (data.online) {
-                    countElement.innerText = `${data.players.now} / ${data.players.max} Spelers Online`;
+                    countElement.innerText = `${data.players.now} / ${data.players.max} MC Spelers`;
                 } else {
                     countElement.innerText = "MC Server Online";
                 }
@@ -844,7 +1135,7 @@
         fetchPlayers();
         setInterval(fetchPlayers, 30000);
 
-        // Accordion (FAQ) Interactiviteit
+        // Accordion FAQ
         document.querySelectorAll('.faq-question').forEach(item => {
             item.addEventListener('click', () => {
                 const parent = item.parentElement;
@@ -855,7 +1146,7 @@
             });
         });
 
-        // Scroll Reveal Animatie
+        // Scroll Reveal
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -867,7 +1158,53 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Chatbot Functionaliteit
+        // ============================================
+        // KENNISBANK CHATBOT (NL & EN)
+        // ============================================
+        const chatKnowledgeBase = [
+            {
+                keywords: ['schema', 'rooster', 'tijden', 'wanneer live', 'streamtijd', 'schedule', 'when live', 'time'],
+                nl: "Het stream-schema staat in de Discord, maar Floris gaat vooral live **wanneer hij er zin in heeft**! 🔔 Zorg dus dat je notificaties op Twitch aanstaan.",
+                en: "The exact stream schedule is posted in Discord, but Floris mostly goes live **whenever he feels like it**! 🔔 Make sure your Twitch notifications are turned on."
+            },
+            {
+                keywords: ['socials', 'social', 'links', 'discord', 'instagram', 'tiktok'],
+                nl: "Alle officiële links en de Discord vind je overzichtelijk bij elkaar op: **https://solo.to/floris_n** 🔗",
+                en: "All official links and the Discord community can be found directly at: **https://solo.to/floris_n** 🔗"
+            },
+            {
+                keywords: ['twitch', 'kanaal', 'stream', 'kijken', 'channel', 'watch'],
+                nl: "De livestreams kun je bekijken op het officiële Twitch kanaal: **https://twitch.tv/floris_n** 💜",
+                en: "You can watch the livestreams on the official Twitch channel: **https://twitch.tv/floris_n** 💜"
+            },
+            {
+                keywords: ['ip', 'server', 'meedoen', 'join', 'adres', 'spelen'],
+                nl: "Je kunt meedoen op de Minecraft SMP via Java Edition met het IP-adres: **play.florisn.nl**! 🎮",
+                en: "You can join the Minecraft SMP via Java Edition using the server IP: **play.florisn.nl**! 🎮"
+            },
+            {
+                keywords: ['voice', 'chat', 'praten', 'proximity', 'mod'],
+                nl: "Voor de in-game voice chat gebruiken we de **Simple Voice Chat** mod! Download deze in je Minecraft client om te praten met spelers dichtbij.",
+                en: "For in-game voice chat, we use the **Simple Voice Chat** mod! Install it in your Minecraft client to talk with nearby players."
+            },
+            {
+                keywords: ['statistieken', 'stats', 'kills', 'speeltijd', 'dashboard', 'playtime'],
+                nl: "Al je in-game statistieken, speeltijd en ranglijsten bekijk je via de 'Statistieken' knop bovenin het menu! 📊",
+                en: "All your in-game stats, playtime, and leaderboards can be viewed via the 'SMP Server' page link in the menu! 📊"
+            },
+            {
+                keywords: ['hoi', 'hey', 'hallo', 'hi', 'hello'],
+                nl: "Hey! 👋 Vraag me gerust alles over de livestreams, het schema, het Minecraft IP of onze socials!",
+                en: "Hello! 👋 Feel free to ask me anything about the streams, schedule, Minecraft IP, or socials!"
+            }
+        ];
+
+        function getQuickReplies() {
+            return currentLang === 'nl' 
+                ? ['Stream schema?', 'Socials & Discord?', 'Minecraft IP?']
+                : ['Stream schedule?', 'Socials & Discord?', 'Minecraft IP?'];
+        }
+
         const chatToggleBtn = document.getElementById('chat-toggle-btn');
         const chatWindow = document.getElementById('chat-window');
         const chatCloseBtn = document.getElementById('chat-close-btn');
@@ -877,24 +1214,17 @@
         const chatQuickReplies = document.getElementById('chat-quick-replies');
 
         let chatInitialized = false;
-        const knowledgeBase = [
-            { keywords: ['ip', 'server', 'meedoen', 'join', 'adres', 'spelen'], answer: 'Je kunt meedoen op de Minecraft server via Java Edition met het IP-adres: **play.florisn.nl**! 🎮' },
-            { keywords: ['bedrock', 'console', 'ps4', 'xbox', 'telefoon', 'ipad'], answer: 'Op dit moment is de server primair ingesteld voor Java Edition. Houd de Discord in de gaten voor eventuele Bedrock-updates!' },
-            { keywords: ['voice', 'chat', 'praten', 'proximity', 'mod'], answer: 'Voor de in-game voice chat heb je de **Simple Voice Chat** mod nodig in je Minecraft client. Daarmee praat je direct met spelers om je heen!' },
-            { keywords: ['statistieken', 'stats', 'kills', 'speeltijd', 'dashboard'], answer: 'Je kunt al je live in-game statistieken, speeltijd en ranglijsten bekijken op de Statistieken pagina in het menu! 📊' },
-            { keywords: ['stream', 'twitch', 'wanneer', 'tijden'], answer: 'Check het Twitch kanaal (Floris_N) om te zien wanneer de volgende livestream begint! 💜' },
-            { keywords: ['hoi', 'hey', 'hallo', 'hulp'], answer: 'Hoi! 👋 Vraag me gerust naar het server IP, de voice chat mod of de statistieken.' }
-        ];
-        const quickReplies = ['Server IP?', 'Voice Chat?', 'Statistieken bekijken?'];
 
         chatToggleBtn.addEventListener('click', () => {
+            closePrompt();
             chatWindow.classList.toggle('open');
             chatToggleBtn.classList.toggle('open');
+            
             if (chatWindow.classList.contains('open') && !chatInitialized) {
                 chatInitialized = true;
                 setTimeout(() => {
-                    addBotMessage('Hoi! 👋 Ik ben de Floris_N assistent. Waar kan ik je vandaag mee helpen?');
-                    renderQuickReplies(quickReplies);
+                    addBotMessage(i18n[currentLang].chat_welcome);
+                    renderQuickReplies(getQuickReplies());
                 }, 300);
             }
         });
@@ -910,6 +1240,7 @@
         function sendUserMessage() {
             const text = chatInput.value.trim();
             if (!text) return;
+
             addUserMessage(text);
             chatInput.value = '';
             chatQuickReplies.innerHTML = '';
@@ -919,18 +1250,18 @@
                 removeTyping();
                 const reply = getBotReply(text);
                 addBotMessage(reply);
-                renderQuickReplies(quickReplies);
-            }, 800);
+                renderQuickReplies(getQuickReplies());
+            }, 750);
         }
 
         function getBotReply(input) {
             const query = input.toLowerCase();
-            for (let item of knowledgeBase) {
+            for (let item of chatKnowledgeBase) {
                 if (item.keywords.some(kw => query.includes(kw))) {
-                    return item.answer;
+                    return item[currentLang];
                 }
             }
-            return 'Daar kan ik je zo direct geen antwoord op geven, maar stel je vraag gerust in de Twitch-chat of op de Discord!';
+            return i18n[currentLang].chat_not_found;
         }
 
         function addBotMessage(text) {
