@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Floris_N | Official Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --bg-dark: #080b11;
@@ -18,14 +21,15 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: rgba(255, 255, 255, 0.06);
-            --border-hover: rgba(145, 70, 255, 0.35);
+            --font-heading: 'Syne', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: var(--font-body);
             scroll-behavior: smooth;
         }
 
@@ -37,7 +41,68 @@
             position: relative;
         }
 
-        /* Subtiele achtergrond gloed */
+        /* ============================================
+           LOADING / INTRO SCHERM ANIMATIES
+           ============================================ */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-dark);
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-logo {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            color: var(--text-main);
+            opacity: 0;
+            animation: loaderReveal 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .loader-logo span { color: var(--accent-purple); }
+
+        @keyframes loaderReveal {
+            from { opacity: 0; transform: translateY(20px); letter-spacing: 15px; }
+            to { opacity: 1; transform: translateY(0); letter-spacing: -2px; }
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 2px;
+            overflow: hidden;
+            opacity: 0;
+            animation: loaderReveal 0.5s 0.5s forwards;
+        }
+
+        .loader-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--accent-purple);
+            box-shadow: 0 0 15px var(--accent-purple);
+            animation: loaderFill 1.2s 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes loaderFill {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        /* Ambient background glow */
         body::before {
             content: '';
             position: fixed;
@@ -60,7 +125,6 @@
             padding: 1.2rem 8%;
             background: rgba(8, 11, 17, 0.85);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -68,7 +132,8 @@
         }
 
         .logo {
-            font-size: 1.35rem;
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
             font-weight: 800;
             display: flex;
             align-items: center;
@@ -91,13 +156,8 @@
             transition: transform 0.25s ease;
         }
 
-        .logo:hover .logo-icon {
-            transform: scale(1.05);
-        }
-
-        .logo span {
-            color: var(--accent-purple);
-        }
+        .logo:hover .logo-icon { transform: scale(1.05); }
+        .logo span { color: var(--accent-purple); }
 
         .nav-links {
             display: flex;
@@ -113,13 +173,11 @@
             transition: color 0.2s ease;
         }
 
-        .nav-links a:hover {
-            color: #fff;
-        }
+        .nav-links a:hover { color: #fff; }
 
         /* Hero Section */
         .hero {
-            padding: 5rem 8% 3.5rem;
+            padding: 5.5rem 8% 3.5rem;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -128,10 +186,11 @@
         }
 
         .hero h1 {
-            font-size: 3.2rem;
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
             font-weight: 800;
             letter-spacing: -1.5px;
-            line-height: 1.15;
+            line-height: 1.1;
             color: #fff;
         }
 
@@ -186,7 +245,7 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* Actions */
+        /* Actions & Buttons */
         .action-group {
             display: flex;
             gap: 14px;
@@ -233,7 +292,7 @@
             border-color: var(--accent-green);
         }
 
-        /* Container Layout */
+        /* Main Container */
         .container {
             max-width: 1100px;
             margin: 0 auto;
@@ -246,6 +305,7 @@
         }
 
         .section-header h2 {
+            font-family: var(--font-heading);
             font-size: 2rem;
             font-weight: 800;
             letter-spacing: -0.5px;
@@ -281,7 +341,7 @@
             border: none;
         }
 
-        /* Bento Grid SMP Cards */
+        /* Bento Grid Layout */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -358,9 +418,7 @@
             transition: gap 0.2s ease;
         }
 
-        .card-link:hover {
-            gap: 10px;
-        }
+        .card-link:hover { gap: 10px; }
 
         /* FAQ Accordion */
         .faq-list {
@@ -422,8 +480,18 @@
             padding: 0 1.5rem 1.2rem;
         }
 
-        .faq-item.active .faq-question i {
-            transform: rotate(180deg);
+        .faq-item.active .faq-question i { transform: rotate(180deg); }
+
+        /* Scroll reveal animaties */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* Footer */
@@ -437,7 +505,6 @@
             margin-top: 5rem;
         }
 
-        /* Responsive */
         @media (max-width: 850px) {
             .twitch-wrapper { grid-template-columns: 1fr; }
             .twitch-chat { display: none; }
@@ -449,6 +516,12 @@
     </style>
 </head>
 <body>
+
+    <!-- Intro / Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-logo">Floris<span>_N</span></div>
+        <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+    </div>
 
     <!-- Navbar -->
     <nav>
@@ -494,12 +567,12 @@
     <div class="container">
 
         <!-- Twitch Player Section -->
-        <div class="section-header" id="stream">
+        <div class="section-header reveal" id="stream">
             <h2><i class="fa-brands fa-twitch" style="color: var(--accent-purple);"></i> Live Stream</h2>
             <p>Kijk hieronder rechtstreeks mee met de livestream!</p>
         </div>
 
-        <div class="twitch-wrapper">
+        <div class="twitch-wrapper reveal">
             <div class="twitch-player">
                 <iframe 
                     src="https://player.twitch.tv/?channel=floris_n&parent=florisn.nl&parent=localhost" 
@@ -515,13 +588,12 @@
         </div>
 
         <!-- Minecraft SMP Section (Bento Grid) -->
-        <div class="section-header" id="mc-info">
+        <div class="section-header reveal" id="mc-info">
             <h2><i class="fa-solid fa-cubes" style="color: var(--accent-green);"></i> Minecraft Community SMP</h2>
             <p>Speel mee met kijkers en bekijk live al je in-game statistieken</p>
         </div>
 
-        <div class="bento-grid">
-            <!-- Hero Bento Card -->
+        <div class="bento-grid reveal">
             <div class="card card-large">
                 <div>
                     <div class="card-icon"><i class="fa-solid fa-users"></i></div>
@@ -530,14 +602,12 @@
                 </div>
             </div>
 
-            <!-- Normal Bento Card 1 -->
             <div class="card">
                 <div class="card-icon"><i class="fa-solid fa-headset"></i></div>
                 <h3>Simple Voice Chat</h3>
                 <p>Proximity voice-chat geïntegreerd. Praat direct in-game met spelers die om je heen staan.</p>
             </div>
 
-            <!-- Normal Bento Card 2 -->
             <div class="card">
                 <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
                 <h3>Speler Statistieken</h3>
@@ -547,12 +617,12 @@
         </div>
 
         <!-- FAQ Section -->
-        <div class="section-header" id="faq">
+        <div class="section-header reveal" id="faq">
             <h2><i class="fa-solid fa-circle-question" style="color: var(--accent-purple);"></i> Veelgestelde Vragen</h2>
             <p>Alles wat je moet weten over de Minecraft server & stream</p>
         </div>
 
-        <div class="faq-list">
+        <div class="faq-list reveal">
             <div class="faq-item">
                 <div class="faq-question">
                     <span>Hoe kan ik meedoen op de Minecraft server?</span>
@@ -589,7 +659,7 @@
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer">
-                    Je kunt je in-game speeltijd, statistieken en prestaties inzien op de <a href="smp.html" style="color: var(--accent-purple); font-weight:600;">Minecraft SMP Statistieken pagina</a>.
+                    Je kunt je in-game speeltijd, statistieken en prestaties inzien op de <a href="smp.html" style="color: var(--accent-purple); font-weight: 600;">Minecraft SMP Statistieken pagina</a>.
                 </div>
             </div>
         </div>
@@ -602,6 +672,13 @@
     </footer>
 
     <script>
+        // Intro Loader Verbergen
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1500);
+        });
+
         // Kopieer IP Functie
         function copyIP() {
             navigator.clipboard.writeText("play.florisn.nl").then(() => {
@@ -638,7 +715,6 @@
             item.addEventListener('click', () => {
                 const parent = item.parentElement;
                 
-                // Sluit eventuele andere open FAQ items voor een strakker effect
                 document.querySelectorAll('.faq-item').forEach(other => {
                     if (other !== parent) other.classList.remove('active');
                 });
@@ -646,6 +722,18 @@
                 parent.classList.toggle('active');
             });
         });
+
+        // Scroll Reveal Animatie
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
