@@ -40,24 +40,28 @@
             position: relative;
         }
 
-        /* Ambient Glow Background */
+        /* Dynamische Bewegende Achtergrond Glow */
         body::before {
             content: '';
             position: fixed;
-            top: -100px;
+            top: -120px;
             left: 50%;
             transform: translateX(-50%);
-            width: 800px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(145, 70, 255, 0.15) 0%, rgba(34, 197, 94, 0.05) 65%, transparent 80%);
-            filter: blur(120px);
+            width: 900px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(145, 70, 255, 0.18) 0%, rgba(34, 197, 94, 0.06) 60%, transparent 80%);
+            filter: blur(130px);
             z-index: -1;
             pointer-events: none;
+            animation: backgroundPulse 12s ease-in-out infinite alternate;
         }
 
-        /* ============================================
-           INTRO LOADER & TRANSITION
-           ============================================ */
+        @keyframes backgroundPulse {
+            0% { transform: translateX(-50%) scale(1); opacity: 0.8; }
+            100% { transform: translateX(-45%) scale(1.15); opacity: 1; }
+        }
+
+        /* Intro Loader & Transformatie */
         .loader {
             position: fixed;
             inset: 0;
@@ -78,8 +82,8 @@
             font-weight: 800;
             letter-spacing: -1px;
             color: var(--text-main);
-            opacity: 0;
             animation: loaderReveal 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
         }
         .loader-logo span { color: var(--accent-purple); }
 
@@ -131,7 +135,7 @@
         }
 
         /* ============================================
-           MODERNE FLOATING NAVBAR
+           SMART HIDING NAVBAR (Scroll up/down)
            ============================================ */
         .nav-wrapper {
             position: sticky;
@@ -140,12 +144,17 @@
             display: flex;
             justify-content: center;
             padding: 0 1.5rem;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-wrapper.nav-hidden {
+            transform: translateY(-120%);
         }
 
         nav {
             width: 100%;
-            max-width: 1050px;
-            background: rgba(13, 18, 30, 0.75);
+            max-width: 1150px;
+            background: rgba(13, 18, 30, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
@@ -155,7 +164,6 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
-            transition: all 0.3s ease;
         }
 
         .logo {
@@ -188,7 +196,7 @@
 
         .nav-center {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             background: rgba(255, 255, 255, 0.03);
             padding: 4px;
             border-radius: 50px;
@@ -199,13 +207,16 @@
             background: transparent;
             border: none;
             color: var(--text-muted);
-            padding: 0.5rem 1.1rem;
+            padding: 0.5rem 1rem;
             border-radius: 50px;
-            font-size: 0.85rem;
+            font-size: 0.84rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.25s ease;
             text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .nav-link-btn:hover { color: #fff; }
@@ -754,7 +765,7 @@
             margin-top: 5rem;
         }
 
-        @media (max-width: 850px) {
+        @media (max-width: 900px) {
             .twitch-wrapper { grid-template-columns: 1fr; }
             .twitch-chat { display: none; }
             .bento-grid { grid-template-columns: 1fr; }
@@ -775,8 +786,8 @@
     <!-- Page Transition Overlay -->
     <div class="page-transition" id="page-transition"></div>
 
-    <!-- Floating Navbar -->
-    <div class="nav-wrapper">
+    <!-- Smart Hiding Floating Navbar -->
+    <div class="nav-wrapper" id="nav-wrapper">
         <nav>
             <a onclick="switchCategory('stream')" class="logo">
                 <div class="logo-icon"><i class="fa-brands fa-twitch"></i></div>
@@ -787,6 +798,7 @@
                 <button class="nav-link-btn active" id="nav-stream" onclick="switchCategory('stream')" data-i18n="nav_stream">Live Stream</button>
                 <button class="nav-link-btn" id="nav-mc" onclick="switchCategory('mc-info')" data-i18n="nav_mc">Minecraft SMP</button>
                 <button class="nav-link-btn" id="nav-faq" onclick="switchCategory('faq')" data-i18n="nav_faq">Veelgestelde Vragen</button>
+                <a href="alerts.html" class="nav-link-btn" data-i18n="nav_alerts"><i class="fa-solid fa-bell" style="font-size:0.75rem; color:var(--accent-purple);"></i> Stream Alerts</a>
             </div>
 
             <!-- Language Switcher -->
@@ -920,7 +932,7 @@
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer" data-i18n="faq4_a">
-                    Alle officiële links en de Discord-community vind je via onze verzamelpagina op <a href="https://solo.to/floris_n" target="_blank" style="color: var(--accent-purple); font-weight:600;">solo.to/floris_n</a>!
+                    Alle officiële links en de Discord-community vind je via onze verzamelpagina op <a href='https://solo.to/floris_n' target='_blank' style='color: var(--accent-purple); font-weight:600;'>solo.to/floris_n</a>!
                 </div>
             </div>
         </div>
@@ -974,7 +986,7 @@
 
     <script>
         // ============================================
-        // COMPLETE TAALTRANSLATIES (INCL. ALLE KOPPEN)
+        // TAALTRANSLATIES (NL / EN)
         // ============================================
         let currentLang = 'nl';
 
@@ -983,6 +995,7 @@
                 nav_stream: "Live Stream",
                 nav_mc: "Minecraft SMP",
                 nav_faq: "Veelgestelde Vragen",
+                nav_alerts: "Stream Alerts",
                 head_stream: "Live Stream",
                 head_smp: "Minecraft Community SMP",
                 head_faq: "Veelgestelde Vragen",
@@ -1018,6 +1031,7 @@
                 nav_stream: "Live Stream",
                 nav_mc: "Minecraft SMP",
                 nav_faq: "FAQ",
+                nav_alerts: "Stream Alerts",
                 head_stream: "Live Stream",
                 head_smp: "Minecraft Community SMP",
                 head_faq: "Frequently Asked Questions",
@@ -1053,7 +1067,6 @@
 
         function setLanguage(lang) {
             currentLang = lang;
-            
             document.getElementById('btn-lang-nl').classList.toggle('active', lang === 'nl');
             document.getElementById('btn-lang-en').classList.toggle('active', lang === 'en');
 
@@ -1074,8 +1087,25 @@
         }
 
         // ============================================
-        // CATEGORIE / PAGINA TRANSITIE
+        // SMART HIDING NAVBAR LOGICA (Scroll Up / Down)
         // ============================================
+        let lastScrollTop = 0;
+        const navWrapper = document.getElementById('nav-wrapper');
+
+        window.addEventListener('scroll', () => {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                // Scroll naar beneden -> Verberg menu
+                navWrapper.classList.add('nav-hidden');
+            } else {
+                // Scroll naar boven -> Toon menu
+                navWrapper.classList.remove('nav-hidden');
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+        });
+
+        // Pagina Transitie & Categorie Switcher
         function switchCategory(targetId) {
             document.querySelectorAll('.nav-link-btn').forEach(btn => btn.classList.remove('active'));
             const activeBtn = document.getElementById(`nav-${targetId.replace('-info', '')}`);
