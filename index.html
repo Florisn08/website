@@ -20,6 +20,7 @@
             --accent-green-glow: rgba(34, 197, 94, 0.35);
             --accent-cyan: #06b6d4;
             --accent-cyan-glow: rgba(6, 182, 212, 0.35);
+            --accent-amber: #f59e0b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: rgba(255, 255, 255, 0.08);
@@ -188,7 +189,6 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
-        /* AANGEPAST: LOGO WEG, ALLEEN TEKST */
         .brand-logo {
             display: flex;
             align-items: center;
@@ -453,18 +453,29 @@
             border: none;
         }
 
-        /* STREAMELEMENTS GOAL OVERLAY EMBED CONTAINER - VASTGEZET */
-        .se-goal-wrapper {
+        /* ============================================================
+           STREAMELEMENTS DASHBOARD: SUB GOAL + LATEST ACTIVITY
+           ============================================================ */
+        .se-dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-bottom: 4rem;
+            align-items: stretch;
+        }
+
+        .se-goal-wrapper,
+        .se-activity-wrapper {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 20px;
-            padding: 1.2rem 1.8rem;
-            margin-bottom: 4rem;
+            padding: 1rem 1.2rem;
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             backdrop-filter: blur(16px);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
+            min-width: 0;
         }
 
         .se-goal-header {
@@ -472,7 +483,7 @@
             align-items: center;
             justify-content: space-between;
             font-weight: 800;
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: var(--text-main);
         }
 
@@ -481,20 +492,97 @@
             margin-right: 8px;
         }
 
+        .se-live-tag {
+            font-size: 0.7rem;
+            color: var(--accent-green);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 700;
+        }
+        .se-live-tag i {
+            font-size: 0.55rem;
+            animation: pulseGlow 2s infinite;
+        }
+
+        /* SUB GOAL IFRAME (KLEINER) */
         .se-goal-iframe {
             width: 100%;
-            height: 90px;
+            height: 60px;
             border: none;
             border-radius: 12px;
             overflow: hidden;
             background: transparent;
-            /* Scrollen uitschakelen */
             pointer-events: none;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE/Edge */
+            scrollbar-width: none;
         }
-        .se-goal-iframe::-webkit-scrollbar {
-            display: none; /* Chrome/Safari */
+        .se-goal-iframe::-webkit-scrollbar { display: none; }
+
+        /* LATEST ACTIVITY GRID (4 vakjes) */
+        .se-activity-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .se-activity-item {
+            background: linear-gradient(180deg, rgba(145,70,255,0.06), rgba(6,182,212,0.03));
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .se-activity-label {
+            font-size: 0.62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding-left: 2px;
+        }
+        .se-activity-label i { font-size: 0.6rem; }
+
+        .se-activity-item.follow .se-activity-label i { color: #3b82f6; }
+        .se-activity-item.sub .se-activity-label i { color: var(--accent-purple); }
+        .se-activity-item.bits .se-activity-label i { color: var(--accent-amber); }
+        .se-activity-item.donate .se-activity-label i { color: var(--accent-green); }
+
+        .se-activity-frame {
+            position: relative;
+            width: 100%;
+            height: 64px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .se-activity-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            pointer-events: none;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .se-activity-iframe::-webkit-scrollbar { display: none; }
+
+        /* fade onderkant voor moderne look */
+        .se-activity-frame::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 14px;
+            background: linear-gradient(180deg, transparent, rgba(13, 19, 32, 0.9));
+            pointer-events: none;
         }
 
         /* Bento Grid Layout */
@@ -701,7 +789,6 @@
 
         .chat-prompt.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
 
-        /* AANGEPAST: KRUSJE WIT, GEEN WITTE ACHTERGROND */
         .chat-prompt-close {
             background: transparent;
             border: none;
@@ -713,9 +800,7 @@
             padding: 0 4px;
             transition: opacity 0.2s ease;
         }
-        .chat-prompt-close:hover {
-            opacity: 0.7;
-        }
+        .chat-prompt-close:hover { opacity: 0.7; }
 
         .chat-toggle-btn {
             position: fixed; bottom: 2rem; right: 2rem; width: 56px; height: 56px;
@@ -792,7 +877,7 @@
             color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
         }
 
-        /* VERBETERDE EN UITGEBREIDE FOOTER (AFTITELING) */
+        /* FOOTER */
         footer {
             background: rgba(5, 7, 12, 0.98);
             border-top: 1px solid var(--border-color);
@@ -871,15 +956,13 @@
             font-weight: 600;
         }
 
-        /* AANGEPAST: MOBIEL MENU (ALERTS BLIJFT ZICHTBAAR) */
         @media (max-width: 900px) {
             .twitch-wrapper { grid-template-columns: 1fr; }
             .twitch-chat { display: none; }
             .bento-grid { grid-template-columns: 1fr; }
             .card-large { grid-column: span 1; flex-direction: column; align-items: flex-start; gap: 1rem; }
             .hero h1 { font-size: 2.3rem; }
-            
-            /* Nav center wordt nu een horizontale scrollbare balk i.p.v. verborgen */
+            .se-dashboard-grid { grid-template-columns: 1fr; }
             nav {
                 flex-wrap: wrap;
                 justify-content: center;
@@ -896,9 +979,7 @@
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: none;
             }
-            .nav-center::-webkit-scrollbar {
-                display: none;
-            }
+            .nav-center::-webkit-scrollbar { display: none; }
             .nav-link-btn {
                 white-space: nowrap;
                 font-size: 0.78rem;
@@ -908,9 +989,7 @@
                 width: 100%;
                 justify-content: center;
             }
-            .lang-switcher {
-                margin-left: auto;
-            }
+            .lang-switcher { margin-left: auto; }
             .footer-content { grid-template-columns: 1fr; gap: 2rem; }
         }
     </style>
@@ -934,7 +1013,6 @@
     <!-- Smart Hiding Floating Navbar -->
     <div class="nav-wrapper" id="nav-wrapper">
         <nav>
-            <!-- AANGEPAST: LOGO WEG, ALLEEN TEKST -->
             <a onclick="switchCategory('stream')" class="brand-logo">
                 <div class="brand-text-wrapper">
                     <span class="brand-title">Floris<span>_N</span></span>
@@ -952,14 +1030,12 @@
                 <button class="nav-link-btn" id="nav-faq" onclick="switchCategory('faq')">
                     <span data-i18n="nav_faq">Veelgestelde Vragen</span>
                 </button>
-                <!-- STREAM ALERTS LINK (MET PERMANENT BEHOUDEN ICOON) -->
                 <a href="alerts.html" class="nav-link-btn">
                     <i class="fa-solid fa-bell" style="color: var(--accent-purple); font-size: 0.8rem;"></i>
                     <span data-i18n="nav_alerts">Stream Alerts</span>
                 </a>
             </div>
 
-            <!-- Language Switcher -->
             <div class="lang-switcher">
                 <button class="lang-btn active" id="btn-lang-nl" onclick="setLanguage('nl')">NL</button>
                 <button class="lang-btn" id="btn-lang-en" onclick="setLanguage('en')">EN</button>
@@ -1018,13 +1094,56 @@
             </div>
         </div>
 
-        <!-- STREAMELEMENTS AUTOMATISCHE LIVE SUB GOAL EMBED - VASTGEZET -->
-        <div class="se-goal-wrapper reveal">
-            <div class="se-goal-header">
-                <span><i class="fa-solid fa-trophy"></i> <span data-i18n="goal_title">Live Stream Sub Goal</span></span>
-                <span style="font-size: 0.8rem; color: var(--accent-green);"><i class="fa-solid fa-circle" style="font-size:0.6rem;"></i> Live Sync</span>
+        <!-- ============================================================
+             STREAMELEMENTS: SUB GOAL + LATEST ACTIVITY (4 losse overlays)
+             ============================================================ -->
+        <div class="se-dashboard-grid reveal">
+            <!-- Sub Goal (kleiner) -->
+            <div class="se-goal-wrapper">
+                <div class="se-goal-header">
+                    <span><i class="fa-solid fa-trophy"></i> <span data-i18n="goal_title">Live Stream Sub Goal</span></span>
+                    <span class="se-live-tag"><i class="fa-solid fa-circle"></i> Live</span>
+                </div>
+                <iframe class="se-goal-iframe" src="https://streamelements.com/overlay/69611270b73f9c3ca9abe7a2/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
             </div>
-            <iframe class="se-goal-iframe" src="https://streamelements.com/overlay/69611270b73f9c3ca9abe7a2/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
+
+            <!-- Latest Activity (4 losse overlays in volgorde) -->
+            <div class="se-activity-wrapper">
+                <div class="se-goal-header">
+                    <span><i class="fa-solid fa-bolt"></i> <span data-i18n="activity_title">Latest Activity</span></span>
+                    <span class="se-live-tag"><i class="fa-solid fa-circle"></i> Live</span>
+                </div>
+                <div class="se-activity-grid">
+                    <!-- 1. Laatste Follow -->
+                    <div class="se-activity-item follow">
+                        <div class="se-activity-label"><i class="fa-solid fa-user-plus"></i> Follow</div>
+                        <div class="se-activity-frame">
+                            <iframe class="se-activity-iframe" src="https://streamelements.com/overlay/6ad978fd5f959abf17778661/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
+                        </div>
+                    </div>
+                    <!-- 2. Laatste Sub -->
+                    <div class="se-activity-item sub">
+                        <div class="se-activity-label"><i class="fa-solid fa-star"></i> Sub</div>
+                        <div class="se-activity-frame">
+                            <iframe class="se-activity-iframe" src="https://streamelements.com/overlay/6ad97a6de6390eb5d96535fa/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
+                        </div>
+                    </div>
+                    <!-- 3. Laatste Bits -->
+                    <div class="se-activity-item bits">
+                        <div class="se-activity-label"><i class="fa-solid fa-gem"></i> Bits</div>
+                        <div class="se-activity-frame">
+                            <iframe class="se-activity-iframe" src="https://streamelements.com/overlay/6ad97a94503dd55613ff53eb/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
+                        </div>
+                    </div>
+                    <!-- 4. Laatste Donatie -->
+                    <div class="se-activity-item donate">
+                        <div class="se-activity-label"><i class="fa-solid fa-euro-sign"></i> Donatie</div>
+                        <div class="se-activity-frame">
+                            <iframe class="se-activity-iframe" src="https://streamelements.com/overlay/6ad97ab9e6390eb5d9654000/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Minecraft SMP Section -->
@@ -1127,7 +1246,7 @@
 
     </div>
 
-    <!-- UITGEBREIDE & STRAKKE FOOTER (AFTITELING) -->
+    <!-- FOOTER -->
     <footer>
         <div class="footer-content">
             <div class="footer-brand">
@@ -1217,6 +1336,7 @@
                 head_socials: "Officiële Socials",
                 socials_sub: "Blijf op de hoogte via al onze kanalen!",
                 goal_title: "Live Stream Sub Goal",
+                activity_title: "Latest Activity",
                 hero_desc: "De centrale plek voor de livestream, de hechte SMP-community en al je in-game statistieken.",
                 btn_channel: "Bekijk Kanaal",
                 btn_copy_ip: "Kopieer IP: play.florisn.nl",
@@ -1259,6 +1379,7 @@
                 head_socials: "Official Socials",
                 socials_sub: "Stay updated through all our channels!",
                 goal_title: "Live Stream Sub Goal",
+                activity_title: "Latest Activity",
                 hero_desc: "The central hub for the livestream, the tight-knit SMP community, and all your in-game statistics.",
                 btn_channel: "Watch Channel",
                 btn_copy_ip: "Copy IP: play.florisn.nl",
