@@ -68,7 +68,7 @@
             transition: border-color 0.2s;
         }
 
-        select { cursor: pointer; min-width: 180px; }
+        select { cursor: pointer; min-width: 180px; max-width: 100%; }
         input { flex: 1; min-width: 220px; }
         input:focus, select:focus { border-color: var(--accent-purple); }
 
@@ -87,6 +87,7 @@
         }
 
         .player-card:hover { transform: translateY(-3px); border-color: rgba(145, 70, 255, 0.4); }
+        .player-card.leeg { opacity: 0.5; }
 
         .rank-badge {
             position: absolute; top: 10px; left: 10px;
@@ -95,6 +96,9 @@
             display: flex; align-items: center; justify-content: center; font-size: 0.78rem;
             border: 1px solid rgba(251, 191, 36, 0.4);
         }
+        .rank-badge.zilver { background: rgba(203, 213, 225, 0.18); color: #cbd5e1; border-color: rgba(203, 213, 225, 0.4); }
+        .rank-badge.brons { background: rgba(217, 119, 6, 0.2); color: #d97706; border-color: rgba(217, 119, 6, 0.4); }
+        .rank-badge.overig { background: rgba(148, 163, 184, 0.12); color: var(--text-muted); border-color: var(--border-color); }
 
         .player-avatar { width: 64px; height: 64px; border-radius: 10px; margin: 0.4rem 0 0.6rem; image-rendering: pixelated; }
         .player-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -102,6 +106,12 @@
         .loading-text { text-align: center; grid-column: 1 / -1; padding: 3rem; color: var(--text-muted); }
 
         footer { margin-top: auto; text-align: center; padding: 2rem; background: rgba(11, 15, 25, 0.95); border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.88rem; }
+
+        @media (max-width: 600px) {
+            .container { padding: 1.5rem 5% 3rem; }
+            .stats-title { font-size: 2rem; }
+            select { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -115,17 +125,9 @@
         <h1 class="stats-title">Statistieken</h1>
 
         <div class="controls-bar">
-            <select id="stat-filter" onchange="renderPlayers()">
-                <option value="playtime">Speeltijd</option>
-                <option value="damage">Schade ontvangen</option>
-                <option value="mobs">Mobs gedood</option>
-                <option value="distance">Afstand (km)</option>
-                <option value="jumps">Sprongen</option>
-                <option value="sneak">Sneak tijd</option>
-                <option value="fish">Vis gevangen</option>
-                <option value="kills">Speler kills</option>
-            </select>
-            <input type="text" id="search-input" placeholder="Zoek een speler..." oninput="renderPlayers()">
+            <select id="cat-filter"></select>
+            <select id="stat-filter"></select>
+            <input type="text" id="search-input" placeholder="Zoek een speler...">
         </div>
 
         <div class="last-updated">Laatst bijgewerkt: <span id="current-date">--</span></div>
@@ -138,63 +140,185 @@
     <footer><p>&copy; 2026 Floris_N Community. Alle rechten voorbehouden.</p></footer>
 
     <script>
-        let serverPlayersData = [];
+        // Categorie-id -> sleutel in het stats-bestand van Minecraft + label
+        const CATEGORIEEN = {
+            custom:    { key: 'minecraft:custom',    label: 'Algemeen' },
+            mined:     { key: 'minecraft:mined',     label: 'Gedolven' },
+            crafted:   { key: 'minecraft:crafted',   label: 'Gecraft' },
+            used:      { key: 'minecraft:used',      label: 'Gebruikt' },
+            broken:    { key: 'minecraft:broken',    label: 'Kapotgegaan' },
+            picked_up: { key: 'minecraft:picked_up', label: 'Opgepakt' },
+            dropped:   { key: 'minecraft:dropped',   label: 'Weggegooid' },
+            killed:    { key: 'minecraft:killed',    label: 'Mobs gedood' },
+            killed_by: { key: 'minecraft:killed_by', label: 'Gedood door' }
+        };
+        const TOTAAL = '__totaal__';
 
-        document.getElementById('current-date').innerText = new Date().toLocaleString('nl-NL');
+        // Nederlandse namen voor de bekendste algemene stats (de rest wordt automatisch "mooi" gemaakt)
+        const NAMEN_CUSTOM = {
+            play_time: 'Speeltijd', play_one_minute: 'Speeltijd', total_world_time: 'Totale wereldtijd',
+            damage_taken: 'Schade ontvangen', damage_dealt: 'Schade uitgedeeld',
+            mob_kills: 'Mobs gedood', player_kills: 'Speler kills', deaths: 'Doodgegaan',
+            jump: 'Sprongen', sneak_time: 'Sneak tijd', fish_caught: 'Vis gevangen',
+            walk_one_cm: 'Gelopen', sprint_one_cm: 'Gesprint', swim_one_cm: 'Gezwommen',
+            fly_one_cm: 'Gevlogen (elytra)', boat_one_cm: 'Per boot', horse_one_cm: 'Te paard',
+            minecart_one_cm: 'Per mijnkar', aviate_one_cm: 'Gevlogen (elytra)',
+            walk_on_water_one_cm: 'Over water gelopen', walk_under_water_one_cm: 'Onder water gelopen',
+            fall_one_cm: 'Gevallen', climb_one_cm: 'Geklommen', crouch_one_cm: 'Gesneakt'
+        };
+
+        let spelers = [];   // [{ naam, uuid, stats }]
+        const params = new URLSearchParams(location.search);
+        let cat = (params.get('cat') in CATEGORIEEN) ? params.get('cat') : 'custom';
+        let stat = params.get('stat') || null;
+
+        function esc(t) {
+            return String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        function mooi(sleutel) {
+            const kort = sleutel.replace('minecraft:', '');
+            if (cat === 'custom' && NAMEN_CUSTOM[kort]) return NAMEN_CUSTOM[kort];
+            const t = kort.replace(/_/g, ' ');
+            return t.charAt(0).toUpperCase() + t.slice(1);
+        }
+
+        function formatteer(catId, sleutel, waarde) {
+            if (catId === 'custom') {
+                const k = sleutel.replace('minecraft:', '');
+                if (['play_time', 'play_one_minute', 'total_world_time', 'sneak_time'].includes(k) || k.startsWith('time_since')) {
+                    const totMin = Math.floor(waarde / 1200);
+                    const u = Math.floor(totMin / 60), m = totMin % 60;
+                    return u + 'u ' + m + 'm';
+                }
+                if (k.endsWith('_one_cm')) {
+                    return (waarde / 100000).toLocaleString('nl-NL', { maximumFractionDigits: 1 }) + ' km';
+                }
+            }
+            return waarde.toLocaleString('nl-NL');
+        }
 
         async function loadServerData() {
+            const lijst = document.getElementById('players-list');
             try {
-                // Haalt het automatisch gegenereerde players.json bestand op uit de map
-                const res = await fetch('./cached_json/players.json');
-                if (!res.ok) throw new Error("Kon JSON-bestand niet laden");
-                const data = await res.json();
-                
-                serverPlayersData = Object.values(data).map(p => ({
-                    name: p.name || p.username,
-                    playtime: p.playtime_formatted || "0u 0m",
-                    raw_playtime: p.playtime || 0,
-                    damage: p.damage_taken || 0,
-                    mobs: p.mob_kills || 0,
-                    distance: p.distance_traveled ? (p.distance_traveled / 1000).toFixed(1) + " km" : "0 km",
-                    jumps: p.jump_count || 0,
-                    sneak: p.sneak_time_formatted || "0m",
-                    fish: p.fish_caught || 0,
-                    kills: p.player_kills || 0
-                }));
+                const res = await fetch('data/usercache.json');
+                if (!res.ok) throw new Error('usercache.json niet gevonden');
+                const cache = await res.json();
 
+                const uniek = new Map();
+                cache.forEach(p => uniek.set(p.uuid, p.name));
+
+                const resultaten = await Promise.all([...uniek].map(async ([uuid, naam]) => {
+                    try {
+                        const r = await fetch('data/' + uuid + '.json');
+                        if (!r.ok) return null;
+                        const json = await r.json();
+                        return { naam, uuid, stats: json.stats || {} };
+                    } catch (e) { return null; }
+                }));
+                spelers = resultaten.filter(Boolean);
+
+                if (!spelers.length) {
+                    lijst.innerHTML = '<div class="loading-text">Geen stats-bestanden gevonden in de map data/.</div>';
+                    return;
+                }
+
+                const lm = res.headers.get('Last-Modified');
+                document.getElementById('current-date').innerText = (lm ? new Date(lm) : new Date()).toLocaleString('nl-NL');
+
+                bouwCategorieen();
+                bouwStatSelect();
                 renderPlayers();
             } catch (err) {
-                console.error("Fout bij inlezen data:", err);
-                document.getElementById('players-list').innerHTML = `<div class="loading-text">Wachten op eerste synchronisatie vanuit de server...</div>`;
+                console.error('Fout bij inlezen data:', err);
+                lijst.innerHTML = '<div class="loading-text">Kon de gegevens niet laden. Controleer of data/usercache.json bestaat.</div>';
             }
+        }
+
+        function bouwCategorieen() {
+            const sel = document.getElementById('cat-filter');
+            sel.innerHTML = '';
+            for (const [id, c] of Object.entries(CATEGORIEEN)) {
+                const o = document.createElement('option');
+                o.value = id;
+                o.textContent = c.label;
+                if (id === cat) o.selected = true;
+                sel.appendChild(o);
+            }
+            sel.onchange = () => { cat = sel.value; stat = null; bouwStatSelect(); renderPlayers(); };
+        }
+
+        function bouwStatSelect() {
+            const sel = document.getElementById('stat-filter');
+            const key = CATEGORIEEN[cat].key;
+            const sleutels = new Set();
+            spelers.forEach(s => Object.keys(s.stats[key] || {}).forEach(k => sleutels.add(k)));
+
+            const opties = [...sleutels].sort((a, b) => mooi(a).localeCompare(mooi(b), 'nl'));
+            if (cat !== 'custom') opties.unshift(TOTAAL);
+
+            if (!stat || !opties.includes(stat)) {
+                stat = cat === 'custom'
+                    ? (opties.find(o => /play_time|play_one_minute/.test(o)) || opties[0])
+                    : TOTAAL;
+            }
+
+            sel.innerHTML = '';
+            opties.forEach(o => {
+                const opt = document.createElement('option');
+                opt.value = o;
+                opt.textContent = o === TOTAAL ? 'Alles samen (totaal)' : mooi(o);
+                if (o === stat) opt.selected = true;
+                sel.appendChild(opt);
+            });
+            sel.onchange = () => { stat = sel.value; renderPlayers(); };
         }
 
         function renderPlayers() {
-            const filterType = document.getElementById('stat-filter').value;
-            const searchVal = document.getElementById('search-input').value.toLowerCase();
-            const listContainer = document.getElementById('players-list');
+            const zoek = document.getElementById('search-input').value.toLowerCase();
+            const lijst = document.getElementById('players-list');
+            const key = CATEGORIEEN[cat].key;
 
-            listContainer.innerHTML = '';
-            let filtered = serverPlayersData.filter(p => p.name && p.name.toLowerCase().includes(searchVal));
+            // Score van alle spelers, hoogste bovenaan. Rang geldt voor de hele lijst, ook tijdens het zoeken.
+            const alle = spelers.map(s => {
+                const groep = s.stats[key] || {};
+                const waarde = stat === TOTAAL
+                    ? Object.values(groep).reduce((a, b) => a + b, 0)
+                    : (groep[stat] || 0);
+                return { naam: s.naam, uuid: s.uuid, waarde };
+            }).sort((a, b) => b.waarde - a.waarde || a.naam.localeCompare(b.naam));
+            alle.forEach((p, i) => p.rang = i + 1);
 
-            if (filtered.length === 0) {
-                listContainer.innerHTML = `<div class="loading-text">Geen spelers gevonden voor "${searchVal}"</div>`;
+            // URL bijwerken zodat je de pagina kunt delen
+            try {
+                const u = new URL(location.href);
+                u.searchParams.set('cat', cat);
+                u.searchParams.set('stat', stat);
+                history.replaceState(null, '', u);
+            } catch (e) {}
+
+            const gefilterd = alle.filter(p => p.naam.toLowerCase().includes(zoek));
+            lijst.innerHTML = '';
+
+            if (!gefilterd.length) {
+                lijst.innerHTML = '<div class="loading-text">Geen spelers gevonden voor "' + esc(zoek) + '"</div>';
                 return;
             }
 
-            filtered.forEach((player, index) => {
+            gefilterd.forEach(p => {
+                const badgeKlasse = p.rang === 2 ? 'zilver' : p.rang === 3 ? 'brons' : p.rang > 3 ? 'overig' : '';
                 const card = document.createElement('div');
-                card.className = 'player-card';
-                card.innerHTML = `
-                    <div class="rank-badge">${index + 1}</div>
-                    <img class="player-avatar" src="https://mc-heads.net/avatar/${player.name}/64" alt="${player.name}">
-                    <div class="player-name">${player.name}</div>
-                    <div class="stat-value">${player[filterType] !== undefined ? player[filterType] : '-'}</div>
-                `;
-                listContainer.appendChild(card);
+                card.className = 'player-card' + (p.waarde === 0 ? ' leeg' : '');
+                card.innerHTML =
+                    '<div class="rank-badge ' + badgeKlasse + '">' + p.rang + '</div>' +
+                    '<img class="player-avatar" src="https://mc-heads.net/avatar/' + esc(p.uuid) + '/64" alt="' + esc(p.naam) + '" loading="lazy">' +
+                    '<div class="player-name">' + esc(p.naam) + '</div>' +
+                    '<div class="stat-value">' + esc(formatteer(cat, stat, p.waarde)) + '</div>';
+                lijst.appendChild(card);
             });
         }
 
+        document.getElementById('search-input').addEventListener('input', renderPlayers);
         loadServerData();
     </script>
 </body>
