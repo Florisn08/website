@@ -1,1 +1,500 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | Floris_N</title>
+    <meta name="description" content="Neem contact op met Floris_N — voor vragen, samenwerkingen of support.">
+    <meta name="theme-color" content="#05070c">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📬</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>document.documentElement.classList.add('js');</script>
 
+    <style>
+        /* ===== DESIGN SYSTEM (identiek aan hoofdpagina) ===== */
+        :root {
+            --bg: #05070c;
+            --bg-solid: #0a0e18;
+            --surface: rgba(13, 19, 32, 0.72);
+            --surface-2: rgba(22, 32, 54, 0.9);
+            --line: rgba(255, 255, 255, 0.08);
+            --line-strong: rgba(255, 255, 255, 0.16);
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --purple: #9146ff;
+            --green: #22c55e;
+            --cyan: #06b6d4;
+            --amber: #f59e0b;
+            --discord: #5865f2;
+            --youtube: #ff2d55;
+            --sec: var(--purple);
+            --r-lg: 24px;
+            --r-md: 18px;
+            --r-sm: 14px;
+            --pill: 999px;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.5;
+            overflow-x: hidden;
+            position: relative;
+        }
+        a { color: inherit; }
+        button, input, textarea { font-family: inherit; color: inherit; }
+        :focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; border-radius: 6px; }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0; z-index: -2; pointer-events: none;
+            background:
+                radial-gradient(600px 400px at 30% -5%, rgba(145,70,255,0.32), transparent 70%),
+                radial-gradient(520px 520px at 98% 92%, rgba(6,182,212,0.24), transparent 70%),
+                radial-gradient(460px 460px at -5% 45%, rgba(34,197,94,0.2), transparent 70%);
+        }
+        body::after {
+            content: '';
+            position: fixed; inset: 0;
+            background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+            z-index: -2; pointer-events: none;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+        .section { padding-top: 6rem; }
+
+        /* ===== Navigatie (compact) ===== */
+        .nav-wrap {
+            position: sticky; top: 1rem; z-index: 1000;
+            display: flex; justify-content: center; padding: 0 1.5rem;
+        }
+        nav {
+            width: 100%; max-width: 1150px;
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            padding: 0.55rem 0.6rem 0.55rem 1rem;
+            background: rgba(10,14,24,0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--line); border-radius: var(--pill);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .brand-mark {
+            width: 36px; height: 36px; border-radius: 12px; flex-shrink: 0;
+            display: grid; place-items: center; font-size: 0.95rem; color: #fff;
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            box-shadow: 0 0 18px rgba(145,70,255,0.4);
+            transition: transform 0.5s var(--ease);
+        }
+        .brand:hover .brand-mark { transform: rotate(-12deg) scale(1.08); }
+        .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+        .brand-title { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; }
+        .brand-title span { color: var(--purple); }
+        .brand-sub { font-size: 0.64rem; font-weight: 700; color: var(--muted); letter-spacing: 1px; }
+
+        .nav-links { display: flex; gap: 2px; padding: 4px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04); border-radius: var(--pill); }
+        .nav-link {
+            display: inline-flex; align-items: center; gap: 7px;
+            padding: 0.5rem 1rem; border-radius: var(--pill);
+            font-size: 0.82rem; font-weight: 700; color: var(--muted);
+            text-decoration: none; white-space: nowrap; transition: color 0.25s, background 0.25s;
+        }
+        .nav-link i { font-size: 0.78rem; }
+        .nav-link:hover { color: #fff; background: rgba(255,255,255,0.06); }
+        .nav-link.active { color: #fff; background: rgba(255,255,255,0.1); }
+
+        /* ===== Hero ===== */
+        .contact-hero {
+            text-align: center;
+            padding: clamp(3rem, 9vh, 5.5rem) 1.5rem 2rem;
+            display: flex; flex-direction: column; align-items: center; gap: 1rem;
+        }
+        .eyebrow {
+            display: inline-flex; align-items: center; gap: 0.55rem;
+            padding: 0.35rem 0.9rem; border-radius: var(--pill);
+            font-size: 0.72rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase;
+            color: var(--purple);
+            background: color-mix(in srgb, var(--purple) 12%, transparent);
+            border: 1px solid color-mix(in srgb, var(--purple) 28%, transparent);
+        }
+        .contact-hero h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; }
+        .contact-hero h1 span { background: linear-gradient(100deg, var(--purple), var(--cyan)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .contact-hero p { color: var(--muted); max-width: 560px; font-size: 1.05rem; }
+
+        /* ===== Grid ===== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+            margin-bottom: 5rem;
+        }
+
+        .surface {
+            position: relative; isolation: isolate; overflow: hidden;
+            background: var(--surface);
+            border: 1px solid var(--line); border-radius: var(--r-lg);
+            transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+        }
+
+        /* ===== Formulier ===== */
+        .contact-form {
+            padding: 2.2rem;
+            display: flex; flex-direction: column; gap: 1.3rem;
+        }
+        .form-head { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.2rem; }
+        .form-head i { font-size: 1.4rem; color: var(--purple); }
+        .form-head h2 { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; }
+
+        .field { display: flex; flex-direction: column; gap: 0.45rem; }
+        .field label { font-size: 0.82rem; font-weight: 700; color: #cbd5e1; }
+        .field label span { color: var(--purple); }
+        .field input, .field textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--line-strong);
+            border-radius: var(--r-sm);
+            font-size: 0.92rem;
+            color: var(--text);
+            transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+            resize: vertical;
+        }
+        .field input::placeholder, .field textarea::placeholder { color: #64748b; }
+        .field input:focus, .field textarea:focus {
+            outline: none;
+            border-color: var(--purple);
+            background: rgba(0,0,0,0.45);
+            box-shadow: 0 0 0 4px rgba(145,70,255,0.15);
+        }
+        .field textarea { min-height: 140px; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+        .btn {
+            position: relative; overflow: hidden; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+            padding: 0.9rem 1.5rem; border-radius: var(--r-sm);
+            font-weight: 800; font-size: 0.92rem; text-decoration: none;
+            border: 1px solid transparent;
+            transition: translate 0.3s var(--ease), box-shadow 0.3s, background 0.3s, border-color 0.3s;
+        }
+        .btn::after {
+            content: ''; position: absolute; top: -50%; left: -60%; width: 50%; height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            transform: rotate(30deg); transition: left 0.6s ease;
+        }
+        .btn:hover { translate: 0 -3px; }
+        .btn:hover::after { left: 130%; }
+        .btn-purple { background: var(--purple); color: #fff; box-shadow: 0 6px 20px rgba(145,70,255,0.4); }
+        .btn-purple:hover { box-shadow: 0 10px 30px rgba(145,70,255,0.5); }
+        .btn-ghost { background: rgba(255,255,255,0.04); border-color: var(--line-strong); }
+        .btn-ghost:hover { background: rgba(255,255,255,0.09); }
+        .btn-discord { background: var(--discord); color: #fff; box-shadow: 0 6px 20px rgba(88,101,242,0.35); }
+
+        .form-note { font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 0.4rem; }
+        .form-note i { color: var(--green); }
+
+        /* ===== Contact Info Cards ===== */
+        .info-stack { display: flex; flex-direction: column; gap: 1.25rem; }
+        .info-card {
+            padding: 1.8rem;
+            display: flex; flex-direction: column; gap: 0.7rem;
+            text-decoration: none;
+            transition: border-color 0.3s, background 0.3s, translate 0.3s var(--ease), box-shadow 0.3s;
+        }
+        .info-card:hover {
+            border-color: color-mix(in srgb, var(--purple) 45%, transparent);
+            background: var(--surface-2);
+            translate: 0 -3px;
+            box-shadow: 0 18px 40px rgba(0,0,0,0.3);
+        }
+        .info-icon {
+            width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center;
+            font-size: 1.15rem; color: var(--sec);
+            background: color-mix(in srgb, var(--sec) 12%, transparent);
+            transition: transform 0.4s var(--ease);
+        }
+        .info-card:hover .info-icon { transform: rotate(-8deg) scale(1.08); }
+        .info-card h3 { font-size: 1rem; font-weight: 800; }
+        .info-card .value { font-size: 0.95rem; color: #e2e8f0; font-weight: 600; word-break: break-all; }
+        .info-card .hint { font-size: 0.8rem; color: var(--muted); }
+        .info-card .arrow { margin-top: auto; color: var(--sec); font-size: 0.95rem; transition: transform 0.3s var(--ease); }
+        .info-card:hover .arrow { transform: translateX(6px); }
+
+        .copy-email {
+            margin-top: 0.4rem;
+            align-self: flex-start;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 0.9rem; border-radius: var(--pill);
+            font-size: 0.78rem; font-weight: 700; cursor: pointer;
+            background: rgba(145,70,255,0.12);
+            border: 1px solid rgba(145,70,255,0.35);
+            color: #c4a1ff;
+            transition: background 0.2s, translate 0.2s;
+        }
+        .copy-email:hover { background: rgba(145,70,255,0.22); translate: 0 -2px; }
+
+        /* ===== Socials strip ===== */
+        .social-strip {
+            display: flex; flex-wrap: wrap; gap: 0.7rem;
+            margin-top: 0.3rem;
+        }
+        .social-pill {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.55rem 1rem; border-radius: var(--pill);
+            border: 1px solid var(--line); background: var(--surface);
+            font-size: 0.82rem; font-weight: 700; text-decoration: none;
+            transition: border-color 0.25s, translate 0.25s var(--ease), background 0.25s;
+        }
+        .social-pill:hover { translate: 0 -2px; border-color: color-mix(in srgb, var(--purple) 55%, transparent); background: var(--surface-2); }
+        .social-pill i { color: var(--purple); }
+        .social-pill.discord i { color: var(--discord); }
+        .social-pill.twitch i { color: var(--purple); }
+        .social-pill.youtube i { color: var(--youtube); }
+
+        /* ===== Toast ===== */
+        .toast {
+            position: fixed; left: 50%; bottom: 2rem; z-index: 9999;
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 0.75rem 1.3rem; border-radius: var(--pill);
+            background: rgba(15,22,36,0.96); border: 1px solid rgba(34,197,94,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-size: 0.88rem; font-weight: 700;
+            transform: translate(-50%, 30px); opacity: 0; pointer-events: none;
+            transition: transform 0.4s var(--ease), opacity 0.3s;
+        }
+        .toast i { color: var(--green); }
+        .toast.show { transform: translate(-50%, 0); opacity: 1; }
+
+        /* ===== Footer ===== */
+        footer { margin-top: 2rem; padding: 2.5rem 1.5rem 2rem; background: rgba(5,7,12,0.98); border-top: 1px solid var(--line); }
+        .footer-bottom {
+            max-width: 1100px; margin: 0 auto;
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;
+            font-size: 0.82rem; color: var(--muted);
+        }
+        .to-top { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); text-decoration: none; font-weight: 700; transition: color 0.2s; }
+        .to-top:hover { color: #fff; }
+
+        /* ===== Reveal ===== */
+        @keyframes rise { from { opacity: 0; translate: 0 32px; } to { opacity: 1; translate: 0 0; } }
+        .js .reveal { opacity: 0; }
+        .js .reveal.visible { opacity: 1; animation: rise 0.85s var(--ease) both; animation-delay: calc(var(--d, 0) * 90ms); }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 900px) {
+            .contact-grid { grid-template-columns: 1fr; }
+            .info-stack { order: -1; }
+            nav { flex-wrap: wrap; justify-content: center; gap: 8px; padding: 0.6rem 0.8rem; border-radius: var(--r-md); }
+            .brand { width: 100%; justify-content: center; }
+            .nav-links { width: 100%; justify-content: center; flex-wrap: wrap; }
+        }
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+            .contact-form { padding: 1.6rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= NAVIGATIE ================= -->
+    <div class="nav-wrap">
+        <nav>
+            <a class="brand" href="index.html">
+                <span class="brand-mark"><i class="fa-solid fa-cubes"></i></span>
+                <span class="brand-text">
+                    <span class="brand-title">Floris<span>_N</span></span>
+                    <span class="brand-sub">Official Hub</span>
+                </span>
+            </a>
+            <div class="nav-links">
+                <a class="nav-link" href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+                <a class="nav-link" href="index.html#stream"><i class="fa-brands fa-twitch"></i> Stream</a>
+                <a class="nav-link" href="index.html#minecraft"><i class="fa-solid fa-cube"></i> SMP</a>
+                <a class="nav-link" href="index.html#community"><i class="fa-solid fa-users"></i> Community</a>
+                <a class="nav-link active" href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+            </div>
+        </nav>
+    </div>
+
+    <main class="container">
+
+        <!-- ================= HERO ================= -->
+        <header class="contact-hero">
+            <span class="eyebrow reveal"><i class="fa-solid fa-paper-plane"></i> Contact</span>
+            <h1 class="reveal" style="--d:1">Laten we <span>praten</span></h1>
+            <p class="reveal" style="--d:2">Vragen over de SMP, een samenwerking, of gewoon een hallo? Stuur een bericht — je hoort zo snel mogelijk van me!</p>
+        </header>
+
+        <!-- ================= GRID ================= -->
+        <div class="contact-grid">
+
+            <!-- Formulier -->
+            <form class="surface contact-form reveal" style="--d:1" id="contact-form" novalidate>
+                <div class="form-head">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                    <h2>Stuur een bericht</h2>
+                </div>
+
+                <div class="form-row">
+                    <div class="field">
+                        <label for="cf-name">Naam <span>*</span></label>
+                        <input type="text" id="cf-name" name="name" placeholder="Jouw naam" required autocomplete="name">
+                    </div>
+                    <div class="field">
+                        <label for="cf-email">E-mailadres <span>*</span></label>
+                        <input type="email" id="cf-email" name="email" placeholder="jij@voorbeeld.nl" required autocomplete="email">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="cf-subject">Onderwerp</label>
+                    <input type="text" id="cf-subject" name="subject" placeholder="Waar gaat je bericht over?">
+                </div>
+
+                <div class="field">
+                    <label for="cf-message">Bericht <span>*</span></label>
+                    <textarea id="cf-message" name="message" placeholder="Typ hier je bericht..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-purple" style="width:100%;">
+                    <i class="fa-solid fa-paper-plane"></i> Verstuur bericht
+                </button>
+
+                <p class="form-note"><i class="fa-solid fa-shield-halved"></i> Je gegevens worden alleen gebruikt om je bericht te beantwoorden.</p>
+            </form>
+
+            <!-- Info cards -->
+            <div class="info-stack">
+
+                <a class="surface info-card reveal" style="--d:2; --sec: var(--purple);" href="mailto:JustFlorisscontact@gmail.com">
+                    <span class="info-icon"><i class="fa-solid fa-envelope"></i></span>
+                    <h3>E-mail</h3>
+                    <span class="value" id="email-value">JustFlorisscontact@gmail.com</span>
+                    <span class="hint">Voor samenwerkingen, support & vragen</span>
+                    <button type="button" class="copy-email" id="copy-email-btn" onclick="event.preventDefault(); event.stopPropagation();">
+                        <i class="fa-solid fa-copy"></i> Kopieer e-mail
+                    </button>
+                </a>
+
+                <a class="surface info-card reveal" style="--d:3; --sec: var(--discord);" href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener">
+                    <span class="info-icon"><i class="fa-brands fa-discord"></i></span>
+                    <h3>Discord</h3>
+                    <span class="value">Join de community</span>
+                    <span class="hint">Snelste manier om contact te krijgen</span>
+                    <i class="fa-solid fa-arrow-right arrow"></i>
+                </a>
+
+                <div class="surface info-card reveal" style="--d:4; --sec: var(--cyan);">
+                    <span class="info-icon"><i class="fa-solid fa-clock"></i></span>
+                    <h3>Reactietijd</h3>
+                    <span class="value">Meestal binnen 24–48 uur</span>
+                    <span class="hint">Soms iets langer tijdens streams</span>
+                </div>
+
+                <div class="surface info-card reveal" style="--d:5;">
+                    <h3 style="display:flex; align-items:center; gap:0.5rem;"><i class="fa-solid fa-share-nodes" style="color: var(--purple);"></i> Liever via socials?</h3>
+                    <div class="social-strip">
+                        <a class="social-pill twitch" href="https://twitch.tv/Floris_N" target="_blank" rel="noopener"><i class="fa-brands fa-twitch"></i> Twitch</a>
+                        <a class="social-pill discord" href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener"><i class="fa-brands fa-discord"></i> Discord</a>
+                        <a class="social-pill youtube" href="https://youtube.com/@Floris_N" target="_blank" rel="noopener"><i class="fa-brands fa-youtube"></i> YouTube</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+        <div class="footer-bottom">
+            <div>&copy; <span id="year">2026</span> Floris_N. Alle rechten voorbehouden.</div>
+            <a class="to-top" href="#top"><i class="fa-solid fa-arrow-up"></i> Naar boven</a>
+        </div>
+    </footer>
+
+    <div class="toast" id="toast" role="status"><i class="fa-solid fa-circle-check"></i><span id="toast-text"></span></div>
+
+    <script>
+    (() => {
+        'use strict';
+        const $ = (s, r = document) => r.querySelector(s);
+        const EMAIL = 'JustFlorisscontact@gmail.com';
+
+        // Jaartal
+        $('#year').textContent = new Date().getFullYear();
+
+        // Reveal
+        const reveal = new IntersectionObserver(entries => {
+            entries.forEach(en => {
+                if (en.isIntersecting) { en.target.classList.add('visible'); reveal.unobserve(en.target); }
+            });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.reveal').forEach(el => reveal.observe(el));
+
+        // Toast
+        let toastTimer;
+        function toast(msg) {
+            $('#toast-text').textContent = msg;
+            $('#toast').classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => $('#toast').classList.remove('show'), 2400);
+        }
+
+        // Kopieer e-mail
+        async function copyEmail() {
+            try { await navigator.clipboard.writeText(EMAIL); }
+            catch (e) {
+                const ta = document.createElement('textarea');
+                ta.value = EMAIL; ta.style.position = 'fixed'; ta.style.opacity = '0';
+                document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); } catch (_) {}
+                ta.remove();
+            }
+            toast('E-mailadres gekopieerd!');
+        }
+        $('#copy-email-btn').addEventListener('click', copyEmail);
+
+        // Formulier → mailto
+        $('#contact-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const name = $('#cf-name').value.trim();
+            const email = $('#cf-email').value.trim();
+            const subject = $('#cf-subject').value.trim();
+            const message = $('#cf-message').value.trim();
+
+            if (!name || !email || !message) {
+                toast('Vul naam, e-mail en bericht in.');
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                toast('Vul een geldig e-mailadres in.');
+                return;
+            }
+
+            const mailSubject = subject || ('Contact via website — ' + name);
+            const body = 'Naam: ' + name + '\nE-mail: ' + email + '\n\n' + message;
+            const href = 'mailto:' + EMAIL +
+                '?subject=' + encodeURIComponent(mailSubject) +
+                '&body=' + encodeURIComponent(body);
+
+            window.location.href = href;
+            toast('Je e-mailapp wordt geopend…');
+        });
+    })();
+    </script>
+</body>
+</html>
