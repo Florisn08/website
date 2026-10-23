@@ -4,1662 +4,1664 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Floris_N | Official Hub</title>
+    <meta name="description" content="De officiële hub van Floris_N: livestream, Minecraft SMP, speler-statistieken en community.">
+    <meta name="theme-color" content="#05070c">
+    <meta property="og:title" content="Floris_N | Official Hub">
+    <meta property="og:description" content="Livestream, Minecraft SMP, speler-statistieken en community op één plek.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧊</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <script>document.documentElement.classList.add('js');</script>
+
     <style>
+        /* =====================================================
+           DESIGN SYSTEM
+           Kleur per sectie (--sec):  stream = paars, minecraft = groen,
+           community = cyaan, faq = amber.
+           Radii:  surfaces 24px · inner blokken 18px · knoppen/controls 14px · badges/nav = pill
+           ===================================================== */
         :root {
-            --bg-dark: #05070c;
-            --bg-card: rgba(13, 19, 32, 0.65);
-            --bg-card-hover: rgba(22, 32, 54, 0.88);
-            --accent-purple: #9146ff;
-            --accent-purple-glow: rgba(145, 70, 255, 0.45);
-            --accent-green: #22c55e;
-            --accent-green-glow: rgba(34, 197, 94, 0.35);
-            --accent-cyan: #06b6d4;
-            --accent-cyan-glow: rgba(6, 182, 212, 0.35);
-            --accent-amber: #f59e0b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --bg: #05070c;
+            --bg-solid: #0a0e18;
+            --surface: rgba(13, 19, 32, 0.62);
+            --surface-2: rgba(22, 32, 54, 0.85);
+            --line: rgba(255, 255, 255, 0.08);
+            --line-strong: rgba(255, 255, 255, 0.16);
+            --text: #f8fafc;
+            --muted: #94a3b8;
+
+            --purple: #9146ff;
+            --green: #22c55e;
+            --cyan: #06b6d4;
+            --amber: #f59e0b;
+            --discord: #5865f2;
+            --youtube: #ff2d55;
+            --sec: var(--purple);
+
+            --r-lg: 24px;
+            --r-md: 18px;
+            --r-sm: 14px;
+            --pill: 999px;
+
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: var(--font-body);
-            scroll-behavior: smooth;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
+            line-height: 1.5;
             overflow-x: hidden;
             position: relative;
         }
+        a { color: inherit; }
+        button, input { font-family: inherit; color: inherit; }
+        section[id], header[id] { scroll-margin-top: 6rem; }
+        :focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; border-radius: 6px; }
+        .link { color: var(--purple); font-weight: 700; text-decoration: none; }
+        .link:hover { text-decoration: underline; }
 
-        /* DYNAMISCHE ACHTERGROND MET AMBIENT ORBS EN GRID PATROON */
+        /* ---------- Achtergrond ---------- */
         body::after {
             content: '';
-            position: fixed;
-            inset: 0;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            position: fixed; inset: 0;
+            background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
             background-size: 32px 32px;
-            z-index: -2;
-            pointer-events: none;
+            z-index: -2; pointer-events: none;
+        }
+        .orb {
+            position: fixed; border-radius: 50%;
+            filter: blur(140px); z-index: -1; pointer-events: none;
+            opacity: 0.8; animation: orb 14s ease-in-out infinite alternate;
+        }
+        .orb-1 { top: -150px; left: 30%; width: 700px; height: 500px; background: radial-gradient(circle, rgba(145,70,255,0.45), transparent 70%); }
+        .orb-2 { bottom: 10%; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(6,182,212,0.35), transparent 70%); animation-delay: -4s; }
+        .orb-3 { top: 40%; left: -150px; width: 550px; height: 550px; background: radial-gradient(circle, rgba(34,197,94,0.32), transparent 70%); animation-delay: -8s; }
+        @keyframes orb {
+            from { transform: translateY(0) scale(1) rotate(0deg); }
+            to   { transform: translateY(40px) scale(1.15) rotate(15deg); }
         }
 
-        .ambient-orb {
-            position: fixed;
+        .cursor-glow {
+            position: fixed; left: 0; top: 0;
+            width: 460px; height: 460px; margin: -230px 0 0 -230px;
             border-radius: 50%;
-            filter: blur(140px);
-            z-index: -1;
-            pointer-events: none;
-            opacity: 0.85;
-            animation: floatOrb 12s ease-in-out infinite alternate;
+            background: radial-gradient(circle, rgba(145,70,255,0.13), transparent 65%);
+            pointer-events: none; z-index: -1;
+            transform: translate3d(-999px, -999px, 0);
+        }
+        @media (hover: none) { .cursor-glow { display: none; } }
+
+        .progress {
+            position: fixed; top: 0; left: 0; width: 100%; height: 3px;
+            transform-origin: 0 50%; transform: scaleX(var(--p, 0));
+            background: linear-gradient(90deg, var(--purple), var(--cyan), var(--green));
+            z-index: 1100; pointer-events: none;
         }
 
-        .orb-1 {
-            top: -150px;
-            left: 30%;
-            width: 700px;
-            height: 500px;
-            background: radial-gradient(circle, var(--accent-purple-glow) 0%, transparent 70%);
-        }
-
-        .orb-2 {
-            bottom: 10%;
-            right: -100px;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, var(--accent-cyan-glow) 0%, transparent 70%);
-            animation-delay: -4s;
-        }
-
-        .orb-3 {
-            top: 40%;
-            left: -150px;
-            width: 550px;
-            height: 550px;
-            background: radial-gradient(circle, var(--accent-green-glow) 0%, transparent 70%);
-            animation-delay: -8s;
-        }
-
-        @keyframes floatOrb {
-            0% { transform: translateY(0) scale(1) rotate(0deg); }
-            100% { transform: translateY(40px) scale(1.15) rotate(15deg); }
-        }
-
-        /* Intro Loader */
+        /* ---------- Loader & paginawissel ---------- */
         .loader {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-dark);
-            z-index: 999999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 1.5rem;
+            position: fixed; inset: 0; background: var(--bg); z-index: 999999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
             transition: opacity 0.6s ease, visibility 0.6s ease;
         }
-
         .loader.hidden { opacity: 0; visibility: hidden; }
-
-        .loader-logo {
-            font-size: 2.8rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            color: var(--text-main);
+        .loader-logo { font-size: 2.8rem; font-weight: 800; letter-spacing: -1px; }
+        .loader-logo span { color: var(--purple); }
+        .loader-bar { width: 180px; height: 3px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
+        .loader-bar i {
+            display: block; height: 100%; width: 0;
+            background: linear-gradient(90deg, var(--purple), var(--green));
+            box-shadow: 0 0 15px var(--purple);
+            animation: fill 1.05s var(--ease) forwards;
         }
-        .loader-logo span { color: var(--accent-purple); }
+        @keyframes fill { to { width: 100%; } }
 
-        .loader-bar {
-            width: 180px;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 4px;
-            overflow: hidden;
+        .wipe {
+            position: fixed; inset: 0; background: var(--bg); z-index: 99998;
+            display: flex; align-items: center; justify-content: center;
+            transform: translateY(100%); pointer-events: none;
+            transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
         }
+        .wipe.in { transform: translateY(0); pointer-events: auto; }
 
-        .loader-bar-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-purple), var(--accent-green));
-            box-shadow: 0 0 15px var(--accent-purple);
-            animation: loaderFill 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        /* ---------- Navigatie ---------- */
+        .nav-wrap {
+            position: sticky; top: 1rem; z-index: 1000;
+            display: flex; justify-content: center; padding: 0 1.5rem;
+            transition: transform 0.4s var(--ease);
         }
-
-        @keyframes loaderFill {
-            from { width: 0%; }
-            to { width: 100%; }
-        }
-
-        .page-transition {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-dark);
-            z-index: 99998;
-            transform: translateY(100%);
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .page-transition.active { animation: pageTrans 0.75s cubic-bezier(0.76, 0, 0.24, 1); }
-
-        @keyframes pageTrans {
-            0% { transform: translateY(100%); }
-            40%, 60% { transform: translateY(0); }
-            100% { transform: translateY(-100%); }
-        }
-
-        /* SMART HIDING FLOATING NAVBAR */
-        .nav-wrapper {
-            position: sticky;
-            top: 1.2rem;
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            padding: 0 1.5rem;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .nav-wrapper.nav-hidden {
-            transform: translateY(-120%);
-        }
-
+        .nav-wrap.hide { transform: translateY(-160%); }
         nav {
-            width: 100%;
-            max-width: 1150px;
-            background: rgba(10, 14, 24, 0.82);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--border-color);
-            border-radius: 100px;
-            padding: 0.6rem 1.4rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+            width: 100%; max-width: 1150px;
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            padding: 0.55rem 0.6rem 0.55rem 1rem;
+            background: rgba(10,14,24,0.78);
+            backdrop-filter: blur(24px) saturate(1.4); -webkit-backdrop-filter: blur(24px) saturate(1.4);
+            border: 1px solid var(--line); border-radius: var(--pill);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.08);
         }
-
-        .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            text-decoration: none;
-            cursor: pointer;
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .brand-mark {
+            width: 36px; height: 36px; border-radius: 12px; flex-shrink: 0;
+            display: grid; place-items: center; font-size: 0.95rem; color: #fff;
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            box-shadow: 0 0 18px rgba(145,70,255,0.45);
+            transition: transform 0.5s var(--ease);
         }
-
-        .brand-text-wrapper {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.1;
-        }
-
-        .brand-title {
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: -0.6px;
-        }
-
-        .brand-title span {
-            color: var(--accent-purple);
-        }
-
-        .brand-subtitle {
-            font-size: 0.68rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
+        .brand:hover .brand-mark { transform: rotate(-12deg) scale(1.08); }
+        .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+        .brand-title { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; }
+        .brand-title span { color: var(--purple); }
+        .brand-sub { font-size: 0.64rem; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
 
         .nav-center {
-            display: flex;
-            gap: 6px;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 4px;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            position: relative; display: flex; gap: 2px; padding: 4px;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04); border-radius: var(--pill);
         }
-
-        .nav-link-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            padding: 0.5rem 1.1rem;
-            border-radius: 50px;
-            font-size: 0.84rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+        .nav-ind {
+            position: absolute; top: 4px; bottom: 4px; left: 0; width: 0; opacity: 0;
+            border-radius: var(--pill); background: rgba(255,255,255,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+            transition: transform 0.45s var(--ease), width 0.45s var(--ease), opacity 0.3s;
+            z-index: 0;
         }
-
-        .nav-link-btn:hover { color: #fff; }
-        .nav-link-btn.active {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        .nav-link {
+            position: relative; z-index: 1;
+            display: inline-flex; align-items: center; gap: 7px;
+            padding: 0.5rem 1rem; border-radius: var(--pill);
+            font-size: 0.82rem; font-weight: 700; color: var(--muted);
+            text-decoration: none; white-space: nowrap; transition: color 0.25s;
         }
+        .nav-link i { font-size: 0.78rem; }
+        .nav-link:hover, .nav-link.active { color: #fff; }
+        .nav-link.nav-page i { color: var(--purple); }
 
-        .lang-switcher {
-            display: flex;
-            gap: 2px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border-color);
-            border-radius: 50px;
-            padding: 3px;
-        }
-
+        .lang { display: flex; gap: 2px; padding: 3px; background: rgba(255,255,255,0.04); border: 1px solid var(--line); border-radius: var(--pill); }
         .lang-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            font-weight: 800;
-            padding: 0.35rem 0.7rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.25s ease;
+            background: transparent; border: 0; padding: 0.35rem 0.75rem; border-radius: var(--pill);
+            font-size: 0.74rem; font-weight: 800; color: var(--muted); cursor: pointer; transition: all 0.25s;
         }
+        .lang-btn.active { background: var(--purple); color: #fff; box-shadow: 0 0 12px rgba(145,70,255,0.45); }
 
-        .lang-btn.active {
-            background: var(--accent-purple);
-            color: #fff;
-            box-shadow: 0 0 12px var(--accent-purple-glow);
-        }
+        /* ---------- Herbruikbare onderdelen ---------- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+        .section { padding-top: 6rem; }
 
-        /* HERO SECTION */
-        .hero {
-            padding: 5rem 8% 3rem;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.4rem;
+        .surface {
+            position: relative; isolation: isolate; overflow: hidden;
+            background: var(--surface);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--line); border-radius: var(--r-lg);
+            transition: border-color 0.3s, background 0.3s, box-shadow 0.3s, transform 0.25s ease-out;
         }
+        .surface::before {
+            content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+            pointer-events: none; opacity: 0; transition: opacity 0.3s;
+            background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--sec) 22%, transparent), transparent 45%);
+        }
+        .spot:hover::before { opacity: 1; }
+        .spot:hover { border-color: color-mix(in srgb, var(--sec) 45%, transparent); background: var(--surface-2); box-shadow: 0 18px 40px rgba(0,0,0,0.35); }
 
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            letter-spacing: -1.5px;
-            line-height: 1.15;
-            background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .section-head { text-align: center; margin-bottom: 2.5rem; }
+        .eyebrow {
+            display: inline-flex; align-items: center; gap: 0.55rem;
+            padding: 0.35rem 0.9rem; border-radius: var(--pill);
+            font-size: 0.72rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase;
+            color: var(--sec);
+            background: color-mix(in srgb, var(--sec) 12%, transparent);
+            border: 1px solid color-mix(in srgb, var(--sec) 28%, transparent);
         }
-
-        .hero p {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            max-width: 620px;
-            line-height: 1.6;
+        .eyebrow .num { opacity: 0.6; }
+        .section-head h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; letter-spacing: -0.03em; margin: 0.9rem 0 0.4rem; }
+        .section-head p { color: var(--muted); max-width: 560px; margin: 0 auto; font-size: 0.98rem; }
+        .js .section-head h2::after {
+            content: ''; display: block; width: 56px; height: 4px; margin: 0.8rem auto 0;
+            border-radius: 4px; background: var(--sec); transform: scaleX(0);
+            transition: transform 0.9s var(--ease) 0.35s;
         }
-
-        .badges-container {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .badge {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 0.5rem 1.2rem;
-            border-radius: 100px;
-            font-size: 0.82rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            backdrop-filter: blur(10px);
-        }
-
-        .dot-green {
-            width: 8px; height: 8px;
-            background: var(--accent-green);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent-green);
-            animation: pulse 2s infinite;
-        }
-
-        .dot-purple {
-            width: 8px; height: 8px;
-            background: var(--accent-purple);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent-purple);
-        }
-
-        .action-group {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 0.5rem;
-        }
+        .js .section-head.visible h2::after { transform: scaleX(1); }
 
         .btn {
-            position: relative;
-            padding: 0.85rem 1.8rem;
-            border-radius: 14px;
-            font-weight: 800;
-            font-size: 0.92rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            border: none;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative; overflow: hidden; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+            padding: 0.85rem 1.5rem; border-radius: var(--r-sm);
+            font-weight: 800; font-size: 0.92rem; text-decoration: none;
+            border: 1px solid transparent;
+            transform: translate(var(--tx, 0px), var(--ty, 0px));
+            transition: translate 0.3s var(--ease), box-shadow 0.3s, background 0.3s, border-color 0.3s, transform 0.2s ease-out;
         }
-
         .btn::after {
-            content: '';
-            position: absolute;
-            top: -50%; left: -60%;
-            width: 50%; height: 200%;
+            content: ''; position: absolute; top: -50%; left: -60%; width: 50%; height: 200%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-            transform: rotate(30deg);
-            transition: all 0.6s ease;
+            transform: rotate(30deg); transition: left 0.6s ease;
         }
-
+        .btn:hover { translate: 0 -3px; }
         .btn:hover::after { left: 130%; }
+        .btn-purple { background: var(--purple); color: #fff; box-shadow: 0 6px 20px rgba(145,70,255,0.45); }
+        .btn-purple:hover { box-shadow: 0 10px 30px rgba(145,70,255,0.55); }
+        .btn-green { background: rgba(34,197,94,0.1); color: #4ade80; border-color: rgba(34,197,94,0.3); }
+        .btn-green:hover { background: rgba(34,197,94,0.18); border-color: var(--green); box-shadow: 0 8px 25px rgba(34,197,94,0.2); }
+        .btn-ghost { background: rgba(255,255,255,0.04); border-color: var(--line-strong); }
+        .btn-ghost:hover { background: rgba(255,255,255,0.09); }
+        .btn-discord { background: var(--discord); color: #fff; box-shadow: 0 6px 20px rgba(88,101,242,0.4); }
 
-        .btn-twitch {
-            background: var(--accent-purple);
-            color: #fff;
-            box-shadow: 0 6px 20px var(--accent-purple-glow);
+        .chip {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.55rem 1rem; border-radius: var(--pill);
+            border: 1px solid var(--line); background: var(--surface);
+            font-size: 0.84rem; font-weight: 700; text-decoration: none; cursor: pointer;
+            transition: border-color 0.25s, translate 0.25s var(--ease), background 0.25s;
         }
+        .chip:hover { translate: 0 -2px; border-color: color-mix(in srgb, var(--sec) 55%, transparent); background: var(--surface-2); }
+        .chip i { color: var(--sec); }
 
-        .btn-twitch:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(145, 70, 255, 0.5);
+        .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+        .dot--green { background: var(--green); box-shadow: 0 0 10px var(--green); animation: pulse 2s infinite; }
+        .dot--red { background: #ef4444; box-shadow: 0 0 10px #ef4444; animation: pulse 1.4s infinite; }
+        .dot--purple { background: var(--purple); box-shadow: 0 0 10px var(--purple); }
+        .dot--gray { background: #64748b; }
+        @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.45; transform: scale(0.8); } }
+
+        /* ---------- Reveal-animaties ---------- */
+        @keyframes rise { from { opacity: 0; translate: 0 32px; } to { opacity: 1; translate: 0 0; } }
+        .js .reveal { opacity: 0; }
+        .js .reveal.visible { opacity: 1; animation: rise 0.85s var(--ease) both; animation-delay: calc(var(--d, 0) * 90ms); }
+        .js .rise { opacity: 0; }
+        .js.ready .rise { opacity: 1; animation: rise 0.95s var(--ease) both; animation-delay: calc(var(--d, 0) * 110ms + 0.1s); }
+
+        /* ---------- Hero ---------- */
+        .hero {
+            position: relative; text-align: center;
+            padding: clamp(4rem, 11vh, 7rem) 1.5rem 4.5rem;
+            display: flex; flex-direction: column; align-items: center; gap: 1.4rem;
         }
-
-        .btn-mc {
-            background: rgba(34, 197, 94, 0.08);
-            color: #4ade80;
-            border: 1px solid rgba(34, 197, 94, 0.25);
+        .hero-inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 1.4rem; }
+        .badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+        .badge {
+            display: inline-flex; align-items: center; gap: 9px;
+            padding: 0.5rem 1.15rem; border-radius: var(--pill);
+            background: var(--surface); border: 1px solid var(--line);
+            font-size: 0.82rem; font-weight: 600; backdrop-filter: blur(10px);
         }
-
-        .btn-mc:hover {
-            transform: translateY(-3px);
-            background: rgba(34, 197, 94, 0.16);
-            border-color: var(--accent-green);
-            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.2);
+        .hero h1 { font-size: clamp(2.4rem, 7vw, 4.6rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; }
+        .h1-a { background: linear-gradient(180deg, #fff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .grad {
+            background: linear-gradient(100deg, var(--purple), var(--cyan), var(--green), var(--purple));
+            background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+            animation: gradMove 8s linear infinite;
         }
+        @keyframes gradMove { to { background-position: 300% 0; } }
+        .lead { font-size: clamp(1.05rem, 2.4vw, 1.35rem); font-weight: 700; color: #e2e8f0; min-height: 1.8em; }
+        .typed { color: var(--cyan); }
+        .caret { display: inline-block; width: 2px; height: 1.1em; margin-left: 3px; vertical-align: -0.15em; background: var(--cyan); animation: blink 1s steps(1) infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        .hero-desc { color: var(--muted); max-width: 620px; font-size: 1.05rem; }
+        .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 0.4rem; }
 
-        /* MAIN CONTAINER & BENTO GRID */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem 4rem;
+        .scroll-cue {
+            margin-top: 1.2rem; width: 26px; height: 42px; border-radius: 14px;
+            border: 2px solid var(--line-strong); display: block; position: relative;
         }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 2.2rem;
+        .scroll-cue::after {
+            content: ''; position: absolute; left: 50%; top: 8px; width: 4px; height: 8px; margin-left: -2px;
+            border-radius: 4px; background: var(--muted); animation: wheel 1.8s ease-in-out infinite;
         }
+        @keyframes wheel { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(14px); } }
 
-        .section-header h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: -0.6px;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
+        /* Zwevende 3D-blokken */
+        .cubes { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+        .fc { position: absolute; width: var(--s); height: var(--s); will-change: transform; filter: drop-shadow(0 14px 22px rgba(0,0,0,0.5)); }
+        .bob { width: 100%; height: 100%; perspective: 700px; animation: bob var(--bd, 6s) ease-in-out infinite alternate; }
+        @keyframes bob { from { transform: translateY(0); } to { transform: translateY(-18px); } }
+        .cube { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; animation: spin var(--dur, 22s) linear infinite; }
+        @keyframes spin { from { transform: rotateX(-24deg) rotateY(0deg); } to { transform: rotateX(-24deg) rotateY(360deg); } }
+        .cube .f {
+            position: absolute; inset: 0; border: 1px solid rgba(0,0,0,0.25);
+            background-image: linear-gradient(var(--top) 0 24%, var(--body) 24% 100%), repeating-conic-gradient(rgba(0,0,0,0.12) 0 25%, rgba(255,255,255,0.05) 0 50%);
+            background-size: 100% 100%, 25% 25%;
         }
+        .cube .ft, .cube .fb { background-image: linear-gradient(var(--top), var(--top)), repeating-conic-gradient(rgba(0,0,0,0.12) 0 25%, rgba(255,255,255,0.05) 0 50%); }
+        .cube .fb { background-image: linear-gradient(var(--body), var(--body)), repeating-conic-gradient(rgba(0,0,0,0.12) 0 25%, rgba(255,255,255,0.05) 0 50%); }
+        .cube .f1 { transform: translateZ(calc(var(--s) / 2)); }
+        .cube .f2 { transform: rotateY(90deg) translateZ(calc(var(--s) / 2)); }
+        .cube .f3 { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
+        .cube .f4 { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); }
+        .cube .ft { transform: rotateX(90deg) translateZ(calc(var(--s) / 2)); }
+        .cube .fb { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); }
+        .cube.grass { --top: #4ade80; --body: #8b5a2b; }
+        .cube.amethyst { --top: #c4a1ff; --body: #6d34d9; }
+        .cube.ice { --top: #67e8f9; --body: #0e7490; }
 
-        .section-header p {
-            color: var(--text-muted);
-            margin-top: 0.4rem;
-            font-size: 0.95rem;
+        /* ---------- Marquee ---------- */
+        .marquee {
+            overflow: hidden; padding: 0.9rem 0;
+            border-block: 1px solid var(--line); background: rgba(255,255,255,0.02);
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
         }
-
-        .twitch-wrapper {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 0.8rem;
-            display: grid;
-            grid-template-columns: 1fr 320px;
-            gap: 12px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-            margin-bottom: 3.5rem;
-            transition: border-color 0.3s ease;
+        .mq-track { display: flex; width: max-content; animation: marquee 34s linear infinite; }
+        .marquee:hover .mq-track { animation-play-state: paused; }
+        .mq-group { display: flex; }
+        .mq-group span {
+            display: inline-flex; align-items: center; gap: 1.2rem; padding-right: 1.2rem;
+            font-size: 0.82rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
+            color: var(--muted); white-space: nowrap;
         }
+        .mq-group span::after { content: '✦'; color: var(--purple); }
+        @keyframes marquee { to { transform: translateX(-50%); } }
 
-        .twitch-wrapper:hover { border-color: rgba(145, 70, 255, 0.3); }
+        /* ---------- Stream ---------- */
+        .stream-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 0.75rem; padding: 0.75rem; }
+        .stream-grid:hover { border-color: color-mix(in srgb, var(--sec) 35%, transparent); }
+        .stream-player { aspect-ratio: 16 / 9; border-radius: var(--r-md); overflow: hidden; background: #000; }
+        .stream-chat { position: relative; min-height: 420px; border-radius: var(--r-md); overflow: hidden; background: #0e0e10; }
+        .stream-chat iframe { position: absolute; inset: 0; }
+        iframe { width: 100%; height: 100%; border: 0; display: block; }
+        .stream-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin: 1.2rem 0 1.25rem; }
 
-        .twitch-player iframe, .twitch-chat iframe {
-            width: 100%;
-            height: 100%;
-            min-height: 460px;
-            border-radius: 12px;
-            border: none;
-        }
-
-        /* ============================================================
-           STREAMELEMENTS DASHBOARD: SUB GOAL + LATEST ACTIVITY
-           ============================================================ */
-        .se-dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.25rem;
-            margin-bottom: 4rem;
-            align-items: stretch;
-        }
-
-        .se-goal-wrapper,
-        .se-activity-wrapper {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 1rem 1.2rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            backdrop-filter: blur(16px);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-width: 0;
-        }
-
-        .se-goal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-weight: 800;
-            font-size: 0.9rem;
-            color: var(--text-main);
-        }
-
-        .se-goal-header span i {
-            color: var(--accent-purple);
-            margin-right: 8px;
-        }
-
-        .se-live-tag {
-            font-size: 0.7rem;
-            color: var(--accent-green);
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            font-weight: 700;
-        }
-        .se-live-tag i {
-            font-size: 0.55rem;
-            animation: pulseGlow 2s infinite;
-        }
-
-        /* SUB GOAL IFRAME (KLEINER) */
-        .se-goal-iframe {
-            width: 100%;
-            height: 60px;
-            border: none;
-            border-radius: 12px;
-            overflow: hidden;
-            background: transparent;
-            pointer-events: none;
-            scrollbar-width: none;
-        }
-        .se-goal-iframe::-webkit-scrollbar { display: none; }
-
-        /* LATEST ACTIVITY GRID (4 vakjes) */
-        .se-activity-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .se-activity-item {
-            background: linear-gradient(180deg, rgba(145,70,255,0.06), rgba(6,182,212,0.03));
+        .se-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+        .panel { padding: 1rem 1.2rem; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+        .panel-head { display: flex; align-items: center; justify-content: space-between; font-weight: 800; font-size: 0.9rem; }
+        .panel-head > span:first-child i { color: var(--sec); margin-right: 8px; }
+        .live-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 0.7rem; font-weight: 700; color: var(--green); }
+        .se-goal-iframe { width: 100%; height: 60px; border-radius: 12px; pointer-events: none; background: transparent; }
+        .se-act-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .se-act {
+            --ac: var(--purple);
+            display: flex; flex-direction: column; gap: 4px; padding: 6px; border-radius: 12px;
+            background: linear-gradient(180deg, color-mix(in srgb, var(--ac) 8%, transparent), rgba(255,255,255,0.02));
             border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 12px;
-            padding: 6px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            position: relative;
-            overflow: hidden;
         }
+        .se-act.follow { --ac: #3b82f6; } .se-act.sub { --ac: var(--purple); } .se-act.bits { --ac: var(--amber); } .se-act.donate { --ac: var(--green); }
+        .se-label { display: flex; align-items: center; gap: 5px; padding-left: 2px; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); }
+        .se-label i { color: var(--ac); font-size: 0.6rem; }
+        .se-frame { position: relative; height: 64px; border-radius: 8px; overflow: hidden; background: rgba(0,0,0,0.2); }
+        .se-frame iframe { pointer-events: none; background: transparent; }
+        .se-frame::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 14px; background: linear-gradient(180deg, transparent, rgba(13,19,32,0.9)); pointer-events: none; }
 
-        .se-activity-label {
-            font-size: 0.62rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding-left: 2px;
+        /* ---------- Minecraft ---------- */
+        .server-card { display: grid; grid-template-columns: 1.35fr 1fr; margin-bottom: 1.25rem; }
+        .server-main { padding: 2.2rem; display: flex; flex-direction: column; align-items: flex-start; gap: 0.9rem; }
+        .server-main h3 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+        .ip-text {
+            font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+            font-size: clamp(1.4rem, 3.6vw, 2.1rem); font-weight: 700;
+            padding: 0.55rem 1rem; border-radius: var(--r-sm);
+            background: rgba(0,0,0,0.35); border: 1px dashed color-mix(in srgb, var(--sec) 45%, transparent);
+            color: #86efac; word-break: break-all;
         }
-        .se-activity-label i { font-size: 0.6rem; }
-
-        .se-activity-item.follow .se-activity-label i { color: #3b82f6; }
-        .se-activity-item.sub .se-activity-label i { color: var(--accent-purple); }
-        .se-activity-item.bits .se-activity-label i { color: var(--accent-amber); }
-        .se-activity-item.donate .se-activity-label i { color: var(--accent-green); }
-
-        .se-activity-frame {
-            position: relative;
-            width: 100%;
-            height: 64px;
-            border-radius: 8px;
-            overflow: hidden;
-            background: rgba(0,0,0,0.2);
+        .server-main p { color: var(--muted); font-size: 0.93rem; max-width: 460px; }
+        .server-live {
+            padding: 2.2rem; display: flex; flex-direction: column; gap: 0.9rem; justify-content: center;
+            background: rgba(0,0,0,0.22); border-left: 1px solid var(--line);
         }
-
-        .se-activity-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: transparent;
-            pointer-events: none;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+        .live-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; font-size: 0.85rem; color: var(--muted); }
+        .live-row strong { color: var(--text); font-weight: 700; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .status-pill { padding: 0.2rem 0.7rem; border-radius: var(--pill); font-size: 0.75rem; font-weight: 800; }
+        .status-pill.ok { color: #4ade80; background: rgba(34,197,94,0.14); }
+        .status-pill.bad { color: #f87171; background: rgba(239,68,68,0.14); }
+        .status-pill.unk { color: var(--muted); background: rgba(255,255,255,0.06); }
+        .big-number { font-size: 3.2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+        .big-number small { font-size: 1.1rem; font-weight: 700; color: var(--muted); letter-spacing: 0; }
+        .big-label { font-size: 0.78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+        .meter { height: 8px; border-radius: 99px; background: rgba(255,255,255,0.07); overflow: hidden; }
+        .meter i {
+            display: block; height: 100%; width: 0; border-radius: inherit;
+            background: linear-gradient(90deg, var(--green), #86efac, var(--green)); background-size: 200% 100%;
+            animation: shimmer 2.4s linear infinite; transition: width 1s var(--ease);
         }
-        .se-activity-iframe::-webkit-scrollbar { display: none; }
+        @keyframes shimmer { to { background-position: -200% 0; } }
 
-        /* fade onderkant voor moderne look */
-        .se-activity-frame::after {
-            content: '';
-            position: absolute;
-            left: 0; right: 0; bottom: 0;
-            height: 14px;
-            background: linear-gradient(180deg, transparent, rgba(13, 19, 32, 0.9));
-            pointer-events: none;
-        }
-
-        /* Bento Grid Layout */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.25rem;
-            margin-bottom: 4rem;
-        }
-
+        .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 1.25rem; }
         .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 2.2rem;
-            border-radius: 20px;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
+            padding: 2rem; display: flex; flex-direction: column;
+            transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
         }
-
-        .card-large {
-            grid-column: span 2;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(34, 197, 94, 0.35);
-            background: var(--bg-card-hover);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-        }
-
+        .card:hover { --lift: -4px; }
         .card-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(34, 197, 94, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            margin-bottom: 1.2rem;
-            color: var(--accent-green);
+            width: 50px; height: 50px; border-radius: 14px; display: grid; place-items: center;
+            font-size: 1.3rem; margin-bottom: 1.1rem; color: var(--sec);
+            background: color-mix(in srgb, var(--sec) 12%, transparent);
+            transition: transform 0.4s var(--ease);
         }
-
-        .card-large .card-icon {
-            margin-bottom: 0;
-            width: 58px;
-            height: 58px;
-            font-size: 1.6rem;
-            flex-shrink: 0;
-        }
-
-        .card h3 {
-            font-size: 1.25rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.3px;
-        }
-
-        .card p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
+        .card:hover .card-icon { transform: rotate(-8deg) scale(1.1); }
+        .card h3 { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.45rem; }
+        .card p { color: var(--muted); font-size: 0.93rem; }
         .card-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 1.2rem;
-            color: var(--accent-green);
-            font-weight: 700;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: gap 0.2s ease;
-            cursor: pointer;
+            margin-top: auto; padding-top: 1.1rem; display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.9rem; font-weight: 700; color: var(--sec); text-decoration: none; transition: gap 0.2s;
         }
+        .card-link:hover { gap: 11px; }
+        .deco { display: flex; align-items: flex-end; gap: 4px; height: 28px; margin-top: 1.1rem; }
+        .deco i { display: block; width: 5px; height: 100%; border-radius: 4px; background: var(--sec); transform-origin: bottom; animation: bars 1.2s ease-in-out infinite; animation-delay: calc(var(--i) * 0.13s); }
+        .deco.mid i { transform-origin: center; }
+        @keyframes bars { 0%,100% { transform: scaleY(0.25); } 50% { transform: scaleY(1); } }
+        .deco.blocks i { width: 16px; height: 16px; border-radius: 4px; opacity: 0; transform-origin: center; animation: pop 3.2s ease-in-out infinite; animation-delay: calc(var(--i) * 0.3s); }
+        @keyframes pop { 0%,12% { opacity: 0; transform: scale(0.3) translateY(8px); } 22%,70% { opacity: 1; transform: scale(1) translateY(0); } 90%,100% { opacity: 0; transform: scale(1) translateY(0); } }
 
-        .card-link:hover { gap: 10px; }
+        .lb-card { padding: 1.8rem 2rem; }
+        .lb-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 0.8rem; margin-bottom: 1.2rem; }
+        .lb-head h3 { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; }
+        .lb-head h3 i { color: var(--amber); margin-right: 8px; }
+        .lb-head p { color: var(--muted); font-size: 0.85rem; }
+        .lb-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+        .lb-row { display: grid; grid-template-columns: 30px 40px 1fr auto; gap: 0.8rem; align-items: center; padding: 0.55rem 0.8rem; border-radius: var(--r-sm); background: rgba(255,255,255,0.03); border: 1px solid transparent; transition: border-color 0.25s, background 0.25s, translate 0.25s var(--ease); }
+        .lb-row:hover { border-color: rgba(34,197,94,0.35); background: rgba(34,197,94,0.05); translate: 4px 0; }
+        .lb-rank { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 0.76rem; font-weight: 800; color: var(--muted); background: rgba(148,163,184,0.12); }
+        .lb-rank.r1 { color: #fbbf24; background: rgba(251,191,36,0.2); box-shadow: 0 0 14px rgba(251,191,36,0.25); }
+        .lb-rank.r2 { color: #cbd5e1; background: rgba(203,213,225,0.18); }
+        .lb-rank.r3 { color: #d97706; background: rgba(217,119,6,0.2); }
+        .lb-avatar { width: 40px; height: 40px; border-radius: 8px; image-rendering: pixelated; background: var(--bg-solid); }
+        .lb-info { min-width: 0; }
+        .lb-name { font-weight: 700; font-size: 0.93rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lb-bar { height: 6px; margin-top: 6px; border-radius: 6px; background: rgba(255,255,255,0.06); overflow: hidden; }
+        .lb-bar i { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--green), var(--cyan)); transition: width 1.2s var(--ease) calc(var(--i, 0) * 0.12s + 0.25s); }
+        .visible .lb-bar i { width: var(--w); }
+        .lb-val { font-weight: 800; font-size: 0.9rem; color: var(--amber); font-variant-numeric: tabular-nums; }
+        .lb-row.sk { height: 58px; border: 0; background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.08), rgba(255,255,255,0.03)); background-size: 200% 100%; animation: shimmer 1.6s linear infinite; }
 
-        /* SOCIALS GRID */
-        .socials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 5rem;
+        /* ---------- Community ---------- */
+        .socials { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+        .social { padding: 1.6rem 1.4rem; display: flex; flex-direction: column; gap: 0.9rem; text-decoration: none; }
+        .social-icon {
+            width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; font-size: 1.5rem; color: var(--sec);
+            background: color-mix(in srgb, var(--sec) 14%, transparent); transition: transform 0.4s var(--ease);
         }
+        .social:hover .social-icon { transform: translateY(-4px) rotate(-6deg) scale(1.08); }
+        .social h3 { font-size: 1.05rem; font-weight: 800; }
+        .social p { color: var(--muted); font-size: 0.86rem; }
+        .social .arrow { margin-top: auto; color: var(--sec); font-size: 0.95rem; transition: transform 0.3s var(--ease); }
+        .social:hover .arrow { transform: translateX(6px); }
 
-        .social-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 1.2rem 1.5rem;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: #fff;
-            font-weight: 700;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
+        /* ---------- FAQ ---------- */
+        .faq { display: flex; flex-direction: column; gap: 12px; max-width: 800px; margin: 0 auto; }
+        .faq-item { border-radius: var(--r-md); }
+        .faq-item:hover, .faq-item.open { border-color: color-mix(in srgb, var(--sec) 40%, transparent); background: var(--surface-2); }
+        .faq-q {
+            width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+            padding: 1.15rem 1.4rem; background: none; border: 0; cursor: pointer; text-align: left;
+            font-size: 1rem; font-weight: 700;
         }
+        .faq-q i { color: var(--sec); font-size: 0.85rem; transition: transform 0.35s var(--ease); }
+        .faq-item.open .faq-q i { transform: rotate(180deg); }
+        .faq-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s var(--ease); }
+        .faq-item.open .faq-a { grid-template-rows: 1fr; }
+        .faq-a > div { overflow: hidden; min-height: 0; }
+        .faq-a p { padding: 0 1.4rem 1.2rem; color: var(--muted); font-size: 0.95rem; }
 
-        .social-card i {
-            font-size: 1.4rem;
-            color: var(--accent-purple);
+        /* ---------- CTA ---------- */
+        @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+        .cta { padding-top: 6rem; }
+        .cta-box {
+            position: relative; text-align: center; padding: 3.5rem 2rem; border-radius: var(--r-lg);
+            border: 2px solid transparent;
+            background: linear-gradient(var(--bg-solid), var(--bg-solid)) padding-box,
+                        conic-gradient(from var(--angle), var(--purple), var(--cyan), var(--green), var(--purple)) border-box;
+            animation: angle 6s linear infinite;
         }
+        @keyframes angle { to { --angle: 360deg; } }
+        .cta-box h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.03em; }
+        .cta-box p { color: var(--muted); margin: 0.6rem auto 1.8rem; max-width: 520px; }
 
-        .social-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent-purple);
-            background: var(--bg-card-hover);
-            box-shadow: 0 10px 25px rgba(145, 70, 255, 0.2);
-        }
-
-        /* FAQ Accordion */
-        .faq-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .faq-item {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            overflow: hidden;
-            transition: all 0.25s ease;
-        }
-
-        .faq-item:hover {
-            border-color: rgba(145, 70, 255, 0.3);
-            background: var(--bg-card-hover);
-        }
-
-        .faq-question {
-            padding: 1.2rem 1.5rem;
-            font-weight: 700;
-            font-size: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .faq-question i {
-            color: var(--accent-purple);
-            font-size: 0.85rem;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
-            color: var(--text-muted);
-            padding: 0 1.5rem;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .faq-item.active {
-            border-color: rgba(145, 70, 255, 0.4);
-            background: var(--bg-card-hover);
-        }
-
-        .faq-item.active .faq-answer {
-            max-height: 180px;
-            padding: 0 1.5rem 1.2rem;
-        }
-
-        .faq-item.active .faq-question i { transform: rotate(180deg); }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-
-        /* CHATBOT & NOTIFICATION PROMPT */
-        .chat-prompt {
-            position: fixed;
-            bottom: 6.2rem; right: 2rem;
-            background: rgba(15, 22, 36, 0.95);
-            border: 1px solid var(--accent-purple);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px var(--accent-purple-glow);
-            padding: 0.75rem 1.1rem;
-            border-radius: 12px;
-            font-size: 0.82rem; font-weight: 600; color: #fff;
-            z-index: 9995; display: flex; align-items: center; gap: 10px;
-            backdrop-filter: blur(12px);
-            opacity: 0; transform: translateY(10px) scale(0.95);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            pointer-events: none;
-        }
-
-        .chat-prompt.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
-
-        .chat-prompt-close {
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-size: 1.2rem;
-            cursor: pointer;
-            margin-left: 6px;
-            line-height: 1;
-            padding: 0 4px;
-            transition: opacity 0.2s ease;
-        }
-        .chat-prompt-close:hover { opacity: 0.7; }
-
-        .chat-toggle-btn {
-            position: fixed; bottom: 2rem; right: 2rem; width: 56px; height: 56px;
-            border-radius: 50%; background: var(--accent-purple); color: #fff;
-            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 30px rgba(145, 70, 255, 0.4);
-            z-index: 9997; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .chat-toggle-btn:hover { transform: translateY(-3px) scale(1.05); }
-        .chat-toggle-btn svg { width: 22px; height: 22px; }
-        .chat-toggle-btn .chat-icon-close { display: none; }
-        .chat-toggle-btn.open .chat-icon-chat { display: none; }
-        .chat-toggle-btn.open .chat-icon-close { display: block; }
-
-        .chat-window {
-            position: fixed; bottom: 5.5rem; right: 2rem; width: 360px;
-            max-width: calc(100% - 3rem); height: 500px; max-height: calc(100vh - 7rem);
-            background: var(--bg-card); border: 1px solid var(--border-color);
-            backdrop-filter: blur(20px); border-radius: 18px; z-index: 9996;
-            display: flex; flex-direction: column; overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            opacity: 0; visibility: hidden; transform: translateY(15px) scale(0.96);
-            transform-origin: bottom right; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .chat-window.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-
-        .chat-header {
-            padding: 1.1rem 1.3rem; background: rgba(15, 22, 36, 0.95);
-            border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 0.8rem;
-        }
-
-        .chat-avatar {
-            width: 38px; height: 38px; border-radius: 50%; background: var(--accent-purple); color: #fff;
-            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;
-            box-shadow: 0 0 15px var(--accent-purple-glow);
-        }
-
-        .chat-header-info { flex: 1; }
-        .chat-header-info h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; }
-        .chat-header-info span { font-size: 0.72rem; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
-        .chat-status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
-
-        .chat-close-btn {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);
-            color: var(--text-main); width: 30px; height: 30px; border-radius: 50%;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem;
-        }
-
-        .chat-messages { flex: 1; overflow-y: auto; padding: 1.1rem; display: flex; flex-direction: column; gap: 0.8rem; }
-        .chat-message { max-width: 88%; padding: 0.7rem 0.9rem; border-radius: 12px; font-size: 0.85rem; line-height: 1.45; }
-        .chat-message.bot { background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 3px; }
-        .chat-message.user { background: var(--accent-purple); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; font-weight: 500; }
-
-        .chat-quick-replies { padding: 0 1.1rem 0.7rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
-        .quick-reply-btn {
-            background: rgba(145, 70, 255, 0.1); border: 1px solid rgba(145, 70, 255, 0.3);
-            color: #d8b4fe; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.72rem; cursor: pointer; font-weight: 600;
-        }
-
-        .chat-input-area {
-            padding: 0.8rem 1.1rem; border-top: 1px solid var(--border-color);
-            background: rgba(8, 11, 17, 0.5); display: flex; gap: 0.5rem; align-items: center;
-        }
-
-        .chat-input {
-            flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color);
-            padding: 0.7rem 0.9rem; color: var(--text-main); border-radius: 20px; font-size: 0.82rem; outline: none;
-        }
-
-        .chat-send-btn {
-            width: 38px; height: 38px; border-radius: 50%; background: var(--accent-purple);
-            color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
-        }
-
-        /* FOOTER */
-        footer {
-            background: rgba(5, 7, 12, 0.98);
-            border-top: 1px solid var(--border-color);
-            padding: 3.5rem 1.5rem 2rem;
-            margin-top: 5rem;
-        }
-
-        .footer-content {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 2.5rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .footer-brand h3 {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 0.6rem;
-        }
-
-        .footer-brand h3 span { color: var(--accent-purple); }
-
-        .footer-brand p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            max-width: 380px;
-        }
-
-        .footer-col h4 {
-            font-size: 0.92rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #fff;
-            margin-bottom: 1rem;
-        }
-
-        .footer-links {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.88rem;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover { color: var(--accent-purple); }
-
+        /* ---------- Footer ---------- */
+        footer { margin-top: 6rem; padding: 3.5rem 1.5rem 2rem; background: rgba(5,7,12,0.98); border-top: 1px solid var(--line); }
+        .footer-grid { max-width: 1100px; margin: 0 auto 2.5rem; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2.5rem; }
+        .footer-brand h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.6rem; }
+        .footer-brand h3 span { color: var(--purple); }
+        .footer-brand p { color: var(--muted); font-size: 0.9rem; max-width: 380px; }
+        .footer-col h4 { font-size: 0.82rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1rem; }
+        .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .footer-col a { color: var(--muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s, padding 0.2s; }
+        .footer-col a:hover { color: var(--purple); padding-left: 4px; }
         .footer-bottom {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding-top: 1.8rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            flex-wrap: wrap;
-            gap: 12px;
+            max-width: 1100px; margin: 0 auto; padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;
+            font-size: 0.82rem; color: var(--muted);
         }
+        .footer-status { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+        .to-top { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); text-decoration: none; font-weight: 700; transition: color 0.2s; }
+        .to-top:hover { color: #fff; }
+        .to-top i { animation: nudge 1.8s ease-in-out infinite; }
+        @keyframes nudge { 50% { transform: translateY(-4px); } }
 
-        .footer-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
+        /* ---------- Toast + confetti ---------- */
+        .toast {
+            position: fixed; left: 50%; bottom: 2rem; z-index: 9999;
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 0.75rem 1.3rem; border-radius: var(--pill);
+            background: rgba(15,22,36,0.96); border: 1px solid rgba(34,197,94,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-size: 0.88rem; font-weight: 700;
+            transform: translate(-50%, 30px); opacity: 0; pointer-events: none;
+            transition: transform 0.4s var(--ease), opacity 0.3s;
         }
+        .toast i { color: var(--green); }
+        .toast.show { transform: translate(-50%, 0); opacity: 1; }
+        .px { position: fixed; width: 8px; height: 8px; z-index: 100000; pointer-events: none; }
 
+        /* ---------- Chatbot ---------- */
+        .chat-prompt {
+            position: fixed; bottom: 6.2rem; right: 2rem; z-index: 9995;
+            display: flex; align-items: center; gap: 10px; padding: 0.75rem 1.1rem; border-radius: var(--r-sm);
+            background: rgba(15,22,36,0.95); border: 1px solid var(--purple);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(145,70,255,0.4);
+            font-size: 0.82rem; font-weight: 600; backdrop-filter: blur(12px);
+            opacity: 0; transform: translateY(10px) scale(0.95); pointer-events: none;
+            transition: all 0.4s var(--ease);
+        }
+        .chat-prompt.visible { opacity: 1; transform: none; pointer-events: auto; }
+        .chat-prompt button { background: none; border: 0; font-size: 1.2rem; line-height: 1; cursor: pointer; padding: 0 4px; }
+        .chat-toggle {
+            position: fixed; bottom: 2rem; right: 2rem; z-index: 9997;
+            width: 56px; height: 56px; border-radius: 50%; border: 0; cursor: pointer;
+            display: grid; place-items: center; color: #fff; background: var(--purple);
+            box-shadow: 0 10px 30px rgba(145,70,255,0.4); transition: transform 0.3s var(--ease);
+            animation: ring 3s ease-in-out infinite;
+        }
+        @keyframes ring { 0%,100% { box-shadow: 0 10px 30px rgba(145,70,255,0.4), 0 0 0 0 rgba(145,70,255,0.45); } 50% { box-shadow: 0 10px 30px rgba(145,70,255,0.4), 0 0 0 14px rgba(145,70,255,0); } }
+        .chat-toggle:hover { transform: translateY(-3px) scale(1.06); }
+        .chat-toggle svg { width: 22px; height: 22px; }
+        .chat-toggle .i-close { display: none; }
+        .chat-toggle.open .i-chat { display: none; }
+        .chat-toggle.open .i-close { display: block; }
+        .chat-window {
+            position: fixed; bottom: 5.5rem; right: 2rem; z-index: 9996;
+            width: 360px; max-width: calc(100% - 3rem); height: 500px; max-height: calc(100vh - 7rem);
+            display: flex; flex-direction: column; overflow: hidden;
+            background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-lg);
+            backdrop-filter: blur(20px); box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            opacity: 0; visibility: hidden; transform: translateY(15px) scale(0.96); transform-origin: bottom right;
+            transition: all 0.35s var(--ease);
+        }
+        .chat-window.open { opacity: 1; visibility: visible; transform: none; }
+        .chat-head { display: flex; align-items: center; gap: 0.8rem; padding: 1.1rem 1.3rem; background: rgba(15,22,36,0.95); border-bottom: 1px solid var(--line); }
+        .chat-avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 0.9rem; color: #fff; background: var(--purple); box-shadow: 0 0 15px rgba(145,70,255,0.45); }
+        .chat-head-info { flex: 1; }
+        .chat-head-info h4 { font-size: 0.9rem; font-weight: 700; }
+        .chat-head-info span { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--muted); }
+        .chat-close { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid var(--line); cursor: pointer; font-size: 1rem; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 1.1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+        .msg { max-width: 88%; padding: 0.7rem 0.9rem; border-radius: 12px; font-size: 0.85rem; line-height: 1.45; animation: rise 0.4s var(--ease) both; }
+        .msg.bot { align-self: flex-start; background: rgba(255,255,255,0.05); border: 1px solid var(--line); border-bottom-left-radius: 3px; }
+        .msg.user { align-self: flex-end; background: var(--purple); color: #fff; font-weight: 500; border-bottom-right-radius: 3px; }
+        .msg a { color: #c4a1ff; font-weight: 700; }
+        .typing { display: inline-flex; gap: 4px; padding: 0.9rem 1rem; }
+        .typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); animation: tdot 1s ease-in-out infinite; animation-delay: calc(var(--i) * 0.15s); }
+        @keyframes tdot { 0%,100% { opacity: 0.3; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-4px); } }
+        .quick { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0 1.1rem 0.7rem; }
+        .quick button { padding: 0.4rem 0.8rem; border-radius: var(--pill); font-size: 0.72rem; font-weight: 600; cursor: pointer; color: #d8b4fe; background: rgba(145,70,255,0.1); border: 1px solid rgba(145,70,255,0.3); transition: background 0.2s, translate 0.2s; }
+        .quick button:hover { background: rgba(145,70,255,0.2); translate: 0 -2px; }
+        .chat-input-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.1rem; background: rgba(8,11,17,0.5); border-top: 1px solid var(--line); }
+        .chat-input { flex: 1; padding: 0.7rem 0.9rem; border-radius: var(--pill); font-size: 0.82rem; outline: none; background: rgba(255,255,255,0.04); border: 1px solid var(--line); transition: border-color 0.2s; }
+        .chat-input:focus { border-color: var(--purple); }
+        .chat-send { width: 38px; height: 38px; border-radius: 50%; border: 0; cursor: pointer; display: grid; place-items: center; color: #fff; background: var(--purple); }
+        .chat-send svg { width: 16px; height: 16px; }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 1000px) {
+            .cards { grid-template-columns: 1fr; }
+            .socials { grid-template-columns: repeat(2, 1fr); }
+        }
         @media (max-width: 900px) {
-            .twitch-wrapper { grid-template-columns: 1fr; }
-            .twitch-chat { display: none; }
-            .bento-grid { grid-template-columns: 1fr; }
-            .card-large { grid-column: span 1; flex-direction: column; align-items: flex-start; gap: 1rem; }
-            .hero h1 { font-size: 2.3rem; }
-            .se-dashboard-grid { grid-template-columns: 1fr; }
-            nav {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 8px;
-                padding: 0.6rem 0.8rem;
-                border-radius: 20px;
-            }
-            .nav-center {
-                display: flex;
-                width: 100%;
-                overflow-x: auto;
-                justify-content: flex-start;
-                padding: 4px;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-            }
+            .stream-grid { grid-template-columns: 1fr; }
+            .stream-chat { display: none; }
+            .se-grid { grid-template-columns: 1fr; }
+            .server-card { grid-template-columns: 1fr; }
+            .server-live { border-left: 0; border-top: 1px solid var(--line); }
+            .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+            nav { flex-wrap: wrap; justify-content: center; gap: 8px; padding: 0.6rem 0.8rem; border-radius: var(--r-md); }
+            .brand { width: 100%; justify-content: center; }
+            .nav-center { width: 100%; overflow-x: auto; justify-content: flex-start; scrollbar-width: none; }
             .nav-center::-webkit-scrollbar { display: none; }
-            .nav-link-btn {
-                white-space: nowrap;
-                font-size: 0.78rem;
-                padding: 0.4rem 0.8rem;
-            }
-            .brand-logo {
-                width: 100%;
-                justify-content: center;
-            }
-            .lang-switcher { margin-left: auto; }
-            .footer-content { grid-template-columns: 1fr; gap: 2rem; }
+            .lang { margin-left: auto; margin-right: auto; }
+        }
+        @media (max-width: 700px) {
+            .bob { scale: 0.62; }
+            .cubes { opacity: 0.5; }
+            .section, .cta { padding-top: 4.5rem; }
+            .socials { grid-template-columns: 1fr; }
+            .lb-row { grid-template-columns: 28px 36px 1fr auto; gap: 0.6rem; }
+            .server-main, .server-live { padding: 1.6rem; }
+            .chat-prompt { right: 1rem; }
+            .chat-toggle { right: 1rem; bottom: 1rem; }
+            .chat-window { right: 1rem; bottom: 4.5rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Ambient Glowing Background Orbs -->
-    <div class="ambient-orb orb-1"></div>
-    <div class="ambient-orb orb-2"></div>
-    <div class="ambient-orb orb-3"></div>
+    <div class="progress" id="progress"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="cursor-glow" id="glow"></div>
 
-    <!-- Intro Loader -->
     <div class="loader" id="loader">
         <div class="loader-logo">Floris<span>_N</span></div>
-        <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+        <div class="loader-bar"><i></i></div>
     </div>
 
-    <!-- Page Transition Overlay -->
-    <div class="page-transition" id="page-transition"></div>
+    <div class="wipe" id="wipe"><div class="loader-logo">Floris<span>_N</span></div></div>
 
-    <!-- Smart Hiding Floating Navbar -->
-    <div class="nav-wrapper" id="nav-wrapper">
+    <!-- ================= NAVIGATIE ================= -->
+    <div class="nav-wrap" id="nav-wrap">
         <nav>
-            <a onclick="switchCategory('stream')" class="brand-logo">
-                <div class="brand-text-wrapper">
+            <a class="brand" href="#home">
+                <span class="brand-mark"><i class="fa-solid fa-cubes"></i></span>
+                <span class="brand-text">
                     <span class="brand-title">Floris<span>_N</span></span>
-                    <span class="brand-subtitle">Official Hub</span>
-                </div>
+                    <span class="brand-sub">Official Hub</span>
+                </span>
             </a>
-            
-            <div class="nav-center">
-                <button class="nav-link-btn active" id="nav-stream" onclick="switchCategory('stream')">
-                    <span data-i18n="nav_stream">Live Stream</span>
-                </button>
-                <button class="nav-link-btn" id="nav-mc" onclick="switchCategory('mc-info')">
-                    <span data-i18n="nav_mc">Minecraft SMP</span>
-                </button>
-                <button class="nav-link-btn" id="nav-faq" onclick="switchCategory('faq')">
-                    <span data-i18n="nav_faq">Veelgestelde Vragen</span>
-                </button>
-                <a href="alerts.html" class="nav-link-btn">
-                    <i class="fa-solid fa-bell" style="color: var(--accent-purple); font-size: 0.8rem;"></i>
-                    <span data-i18n="nav_alerts">Stream Alerts</span>
-                </a>
+
+            <div class="nav-center" id="nav-center">
+                <span class="nav-ind" id="nav-ind"></span>
+                <a class="nav-link" href="#stream" data-spy="stream"><i class="fa-brands fa-twitch"></i><span data-i18n="nav_stream">Live Stream</span></a>
+                <a class="nav-link" href="#minecraft" data-spy="minecraft"><i class="fa-solid fa-cube"></i><span data-i18n="nav_mc">Minecraft SMP</span></a>
+                <a class="nav-link" href="#community" data-spy="community"><i class="fa-solid fa-users"></i><span data-i18n="nav_comm">Community</span></a>
+                <a class="nav-link" href="#faq" data-spy="faq"><i class="fa-solid fa-circle-question"></i><span data-i18n="nav_faq">FAQ</span></a>
+                <a class="nav-link nav-page" href="alerts.html" data-page><i class="fa-solid fa-bell"></i><span data-i18n="nav_alerts">Stream Alerts</span></a>
             </div>
 
-            <div class="lang-switcher">
-                <button class="lang-btn active" id="btn-lang-nl" onclick="setLanguage('nl')">NL</button>
-                <button class="lang-btn" id="btn-lang-en" onclick="setLanguage('en')">EN</button>
+            <div class="lang" role="group" aria-label="Language">
+                <button class="lang-btn active" data-lang="nl" aria-pressed="true">NL</button>
+                <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
             </div>
         </nav>
     </div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="badges-container">
-            <div class="badge">
-                <span class="dot-purple"></span>
-                <span>Twitch: <strong>Floris_N</strong></span>
-            </div>
-            <div class="badge">
-                <span class="dot-green"></span>
-                <span id="player-count">MC Laden...</span>
-            </div>
-        </div>
-
-        <h1>Floris_N Community Hub</h1>
-        <p data-i18n="hero_desc">De centrale plek voor de livestream, de hechte SMP-community en al je in-game statistieken.</p>
-
-        <div class="action-group">
-            <a href="https://twitch.tv/Floris_N" target="_blank" class="btn btn-twitch">
-                <i class="fa-brands fa-twitch"></i> <span data-i18n="btn_channel">Bekijk Kanaal</span>
-            </a>
-            <button class="btn btn-mc" onclick="copyIP()">
-                <i class="fa-solid fa-server"></i>
-                <span id="ip-btn-text" data-i18n="btn_copy_ip">Kopieer IP: play.florisn.nl</span>
-            </button>
-        </div>
-    </section>
-
-    <!-- Main Container -->
-    <div class="container">
-
-        <!-- Twitch Stream Section -->
-        <div class="section-header reveal" id="stream">
-            <h2><i class="fa-brands fa-twitch" style="color: var(--accent-purple);"></i> <span data-i18n="head_stream">Live Stream</span></h2>
-            <p data-i18n="stream_sub">Volg de livestream live met interactieve chat en unieke content!</p>
-        </div>
-
-        <div class="twitch-wrapper reveal">
-            <div class="twitch-player">
-                <iframe 
-                    src="https://player.twitch.tv/?channel=floris_n&parent=florisn.nl&parent=localhost" 
-                    allowfullscreen>
-                </iframe>
-            </div>
-            <div class="twitch-chat">
-                <iframe 
-                    src="https://www.twitch.tv/embed/floris_n/chat?parent=florisn.nl&parent=localhost&darkpopout" 
-                    allowfullscreen>
-                </iframe>
-            </div>
-        </div>
-
-        <!-- ============================================================
-             STREAMELEMENTS: SUB GOAL + LATEST ACTIVITY (4 losse overlays)
-             ============================================================ -->
-        <div class="se-dashboard-grid reveal">
-            <!-- Sub Goal (kleiner) -->
-            <div class="se-goal-wrapper">
-                <div class="se-goal-header">
-                    <span><i class="fa-solid fa-trophy"></i> <span data-i18n="goal_title">Live Stream Sub Goal</span></span>
-                    <span class="se-live-tag"><i class="fa-solid fa-circle"></i> Live</span>
+    <main>
+        <!-- ================= HERO ================= -->
+        <header class="hero" id="home">
+            <div class="cubes" aria-hidden="true">
+                <div class="fc" data-depth="46" style="--s:78px; left:7%; top:20%;">
+                    <div class="bob" style="--bd:6s"><div class="cube grass" style="--dur:22s"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
                 </div>
-                <iframe class="se-goal-iframe" src="https://streamelements.com/overlay/69611270b73f9c3ca9abe7a2/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
+                <div class="fc" data-depth="30" style="--s:56px; right:9%; top:14%;">
+                    <div class="bob" style="--bd:7.5s"><div class="cube amethyst" style="--dur:17s"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
+                </div>
+                <div class="fc" data-depth="62" style="--s:42px; right:16%; bottom:20%;">
+                    <div class="bob" style="--bd:5s"><div class="cube ice" style="--dur:26s"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
+                </div>
+                <div class="fc" data-depth="22" style="--s:34px; left:17%; bottom:16%;">
+                    <div class="bob" style="--bd:8s"><div class="cube amethyst" style="--dur:30s"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
+                </div>
             </div>
 
-            <!-- Latest Activity (4 losse overlays in volgorde) -->
-            <div class="se-activity-wrapper">
-                <div class="se-goal-header">
-                    <span><i class="fa-solid fa-bolt"></i> <span data-i18n="activity_title">Latest Activity</span></span>
-                    <span class="se-live-tag"><i class="fa-solid fa-circle"></i> Live</span>
+            <div class="hero-inner">
+                <div class="badges rise" style="--d:0">
+                    <div class="badge"><span class="dot dot--purple" id="tw-dot"></span><span id="tw-text">Twitch: <strong>Floris_N</strong></span></div>
+                    <div class="badge"><span class="dot dot--gray" id="mc-dot"></span><span id="mc-text" data-i18n="mc_loading">MC laden…</span></div>
                 </div>
-                <div class="se-activity-grid">
-                    <!-- 1. Laatste Follow -->
-                    <div class="se-activity-item follow">
-                        <div class="se-activity-label"><i class="fa-solid fa-user-plus"></i> Follow</div>
-                        <div class="se-activity-frame">
-                            <iframe class="se-activity-iframe" src="https://streamelements.com/overlay/6ad978fd5f959abf17778661/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
+
+                <h1 class="rise" style="--d:1"><span class="h1-a">Floris_N</span> <span class="grad">Community Hub</span></h1>
+
+                <p class="lead rise" style="--d:2"><span data-i18n="hero_prefix">Alles over</span> <span class="typed" id="typed"></span><span class="caret"></span></p>
+
+                <p class="hero-desc rise" style="--d:3" data-i18n="hero_desc">De centrale plek voor de livestream, de hechte SMP-community en al je in-game statistieken.</p>
+
+                <div class="actions rise" style="--d:4">
+                    <a href="https://twitch.tv/Floris_N" target="_blank" rel="noopener" class="btn btn-purple" data-magnet><i class="fa-brands fa-twitch"></i><span data-i18n="btn_channel">Bekijk Kanaal</span></a>
+                    <button class="btn btn-green" data-copy data-magnet type="button"><i class="fa-solid fa-server"></i><span data-i18n="btn_copy_ip">Kopieer IP: play.florisn.nl</span></button>
+                    <a href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener" class="btn btn-ghost" data-magnet><i class="fa-brands fa-discord"></i><span>Discord</span></a>
+                </div>
+
+                <a class="scroll-cue rise" style="--d:5" href="#stream" data-i18n-aria="aria_scroll" aria-label="Scroll"></a>
+            </div>
+        </header>
+
+        <div class="marquee" aria-hidden="true">
+            <div class="mq-track">
+                <div class="mq-group"><span>Livestream</span><span>Minecraft SMP</span><span>Voice Chat</span><span>Community</span><span>Statistieken</span><span>play.florisn.nl</span></div>
+                <div class="mq-group"><span>Livestream</span><span>Minecraft SMP</span><span>Voice Chat</span><span>Community</span><span>Statistieken</span><span>play.florisn.nl</span></div>
+            </div>
+        </div>
+
+        <div class="container">
+
+            <!-- ================= 01 STREAM ================= -->
+            <section class="section" id="stream" style="--sec: var(--purple)">
+                <div class="section-head reveal">
+                    <span class="eyebrow"><span class="num">01</span><i class="fa-brands fa-twitch"></i><span data-i18n="eb_stream">Livestream</span></span>
+                    <h2 data-i18n="head_stream">Live Stream</h2>
+                    <p data-i18n="stream_sub">Volg de livestream live met interactieve chat en unieke content!</p>
+                </div>
+
+                <div class="surface stream-grid reveal">
+                    <div class="stream-player"><iframe id="tw-player" title="Twitch livestream" allowfullscreen loading="lazy"></iframe></div>
+                    <div class="stream-chat"><iframe id="tw-chat" title="Twitch chat" loading="lazy"></iframe></div>
+                </div>
+
+                <div class="stream-actions reveal">
+                    <a class="chip" href="https://twitch.tv/Floris_N" target="_blank" rel="noopener"><i class="fa-brands fa-twitch"></i><span data-i18n="act_follow">Volg op Twitch</span></a>
+                    <a class="chip" href="https://streamelements.com/floris_n/tip" target="_blank" rel="noopener"><i class="fa-solid fa-heart"></i><span data-i18n="act_tip">Steun met een tip</span></a>
+                    <a class="chip" href="https://www.twitch.tv/popout/floris_n/chat?popout=" target="_blank" rel="noopener"><i class="fa-solid fa-comments"></i><span data-i18n="act_chat">Open chat</span></a>
+                </div>
+
+                <div class="se-grid">
+                    <div class="surface panel reveal" style="--d:0">
+                        <div class="panel-head">
+                            <span><i class="fa-solid fa-trophy"></i><span data-i18n="goal_title">Live Stream Sub Goal</span></span>
+                            <span class="live-tag"><span class="dot dot--green"></span>Live</span>
+                        </div>
+                        <iframe class="se-goal-iframe" loading="lazy" title="Sub goal" src="https://streamelements.com/overlay/69611270b73f9c3ca9abe7a2/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
+                    </div>
+
+                    <div class="surface panel reveal" style="--d:1">
+                        <div class="panel-head">
+                            <span><i class="fa-solid fa-bolt"></i><span data-i18n="activity_title">Latest Activity</span></span>
+                            <span class="live-tag"><span class="dot dot--green"></span>Live</span>
+                        </div>
+                        <div class="se-act-grid">
+                            <div class="se-act follow">
+                                <div class="se-label"><i class="fa-solid fa-user-plus"></i> Follow</div>
+                                <div class="se-frame"><iframe loading="lazy" title="Laatste follow" src="https://streamelements.com/overlay/6ad978fd5f959abf17778661/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
+                            </div>
+                            <div class="se-act sub">
+                                <div class="se-label"><i class="fa-solid fa-star"></i> Sub</div>
+                                <div class="se-frame"><iframe loading="lazy" title="Laatste sub" src="https://streamelements.com/overlay/6ad97a6de6390eb5d96535fa/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
+                            </div>
+                            <div class="se-act bits">
+                                <div class="se-label"><i class="fa-solid fa-gem"></i> Bits</div>
+                                <div class="se-frame"><iframe loading="lazy" title="Laatste bits" src="https://streamelements.com/overlay/6ad97a94503dd55613ff53eb/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
+                            </div>
+                            <div class="se-act donate">
+                                <div class="se-label"><i class="fa-solid fa-euro-sign"></i> Donatie</div>
+                                <div class="se-frame"><iframe loading="lazy" title="Laatste donatie" src="https://streamelements.com/overlay/6ad97ab9e6390eb5d9654000/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
+                            </div>
                         </div>
                     </div>
-                    <!-- 2. Laatste Sub -->
-                    <div class="se-activity-item sub">
-                        <div class="se-activity-label"><i class="fa-solid fa-star"></i> Sub</div>
-                        <div class="se-activity-frame">
-                            <iframe class="se-activity-iframe" src="https://streamelements.com/overlay/6ad97a6de6390eb5d96535fa/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
+                </div>
+            </section>
+
+            <!-- ================= 02 MINECRAFT ================= -->
+            <section class="section" id="minecraft" style="--sec: var(--green)">
+                <div class="section-head reveal">
+                    <span class="eyebrow"><span class="num">02</span><i class="fa-solid fa-cube"></i><span data-i18n="eb_mc">Minecraft</span></span>
+                    <h2 data-i18n="head_smp">Minecraft Community SMP</h2>
+                    <p data-i18n="smp_sub">Stap in de wereld, bouw mee met de community en volg je prestaties op de voet.</p>
+                </div>
+
+                <div class="surface server-card reveal">
+                    <div class="server-main">
+                        <span class="eyebrow"><i class="fa-solid fa-server"></i><span data-i18n="srv_label">Server IP</span></span>
+                        <h3 data-i18n="srv_title">Spring in de wereld</h3>
+                        <div class="ip-text">play.florisn.nl</div>
+                        <p data-i18n="srv_help">Open Minecraft Java Edition → Multiplayer → Server toevoegen → plak het IP-adres.</p>
+                        <div class="actions" style="justify-content:flex-start; margin-top:0.2rem;">
+                            <button class="btn btn-green" data-copy type="button"><i class="fa-solid fa-copy"></i><span data-i18n="btn_copy">Kopieer IP</span></button>
+                            <a class="btn btn-ghost" href="statistieken.html" data-page><i class="fa-solid fa-chart-line"></i><span data-i18n="btn_stats">Bekijk statistieken</span></a>
                         </div>
                     </div>
-                    <!-- 3. Laatste Bits -->
-                    <div class="se-activity-item bits">
-                        <div class="se-activity-label"><i class="fa-solid fa-gem"></i> Bits</div>
-                        <div class="se-activity-frame">
-                            <iframe class="se-activity-iframe" src="https://streamelements.com/overlay/6ad97a94503dd55613ff53eb/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
+                    <div class="server-live">
+                        <div class="live-row"><span data-i18n="srv_status">Status</span><span class="status-pill unk" id="srv-status">…</span></div>
+                        <div>
+                            <div class="big-label" data-i18n="srv_players">Spelers online</div>
+                            <div class="big-number"><span id="srv-now">0</span> <small>/ <span id="srv-max">–</span></small></div>
                         </div>
-                    </div>
-                    <!-- 4. Laatste Donatie -->
-                    <div class="se-activity-item donate">
-                        <div class="se-activity-label"><i class="fa-solid fa-euro-sign"></i> Donatie</div>
-                        <div class="se-activity-frame">
-                            <iframe class="se-activity-iframe" src="https://streamelements.com/overlay/6ad97ab9e6390eb5d9654000/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
-                        </div>
+                        <div class="meter"><i id="srv-meter"></i></div>
+                        <div class="live-row"><span data-i18n="srv_version">Versie</span><strong id="srv-version">–</strong></div>
                     </div>
                 </div>
-            </div>
+
+                <div class="cards" data-stagger>
+                    <div class="surface card spot" data-tilt>
+                        <div class="card-icon"><i class="fa-solid fa-users"></i></div>
+                        <h3 data-i18n="card1_title">Gezellige Survival</h3>
+                        <p data-i18n="card1_desc">Een unieke SMP server waar bouwen, avontuur en samenwerken met de stream-community centraal staan.</p>
+                        <div class="deco blocks" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>
+                    </div>
+                    <div class="surface card spot" data-tilt>
+                        <div class="card-icon"><i class="fa-solid fa-headset"></i></div>
+                        <h3 data-i18n="card2_title">Simple Voice Chat</h3>
+                        <p data-i18n="card2_desc">Proximity voice-chat geïntegreerd. Praat direct in-game met spelers die om je heen staan.</p>
+                        <div class="deco mid" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i></div>
+                    </div>
+                    <div class="surface card spot" data-tilt>
+                        <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <h3 data-i18n="card3_title">Speler Statistieken</h3>
+                        <p data-i18n="card3_desc">Houd je speeltijd, kills, deaths en ranglijsten bij op ons uitgebreide speler-dashboard.</p>
+                        <a href="statistieken.html" data-page class="card-link"><span data-i18n="card3_link">Bekijk Statistieken</span> <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="surface lb-card reveal" id="lb-card">
+                    <div class="lb-head">
+                        <div>
+                            <h3><i class="fa-solid fa-crown"></i><span data-i18n="lb_title">Top 5 speeltijd</span></h3>
+                            <p data-i18n="lb_sub">Uit de dagelijkse statistieken van de server.</p>
+                        </div>
+                        <a class="chip" href="statistieken.html" data-page><i class="fa-solid fa-arrow-right"></i><span data-i18n="lb_link">Alle statistieken</span></a>
+                    </div>
+                    <ul class="lb-list" id="lb-list">
+                        <li class="lb-row sk"></li><li class="lb-row sk"></li><li class="lb-row sk"></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ================= 03 COMMUNITY ================= -->
+            <section class="section" id="community" style="--sec: var(--cyan)">
+                <div class="section-head reveal">
+                    <span class="eyebrow"><span class="num">03</span><i class="fa-solid fa-share-nodes"></i><span data-i18n="eb_comm">Community</span></span>
+                    <h2 data-i18n="head_socials">Officiële Socials</h2>
+                    <p data-i18n="socials_sub">Blijf op de hoogte via al onze kanalen!</p>
+                </div>
+
+                <div class="socials" data-stagger>
+                    <a class="surface social spot" style="--sec: var(--discord)" href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener">
+                        <span class="social-icon"><i class="fa-brands fa-discord"></i></span>
+                        <div><h3>Discord</h3><p data-i18n="soc_discord">Praat mee met de community</p></div>
+                        <i class="fa-solid fa-arrow-right arrow"></i>
+                    </a>
+                    <a class="surface social spot" style="--sec: var(--purple)" href="https://twitch.tv/Floris_N" target="_blank" rel="noopener">
+                        <span class="social-icon"><i class="fa-brands fa-twitch"></i></span>
+                        <div><h3>Twitch</h3><p data-i18n="soc_twitch">Volg de livestreams</p></div>
+                        <i class="fa-solid fa-arrow-right arrow"></i>
+                    </a>
+                    <a class="surface social spot" style="--sec: var(--youtube)" href="https://youtube.com/@Floris_N" target="_blank" rel="noopener">
+                        <span class="social-icon"><i class="fa-brands fa-youtube"></i></span>
+                        <div><h3>YouTube</h3><p data-i18n="soc_youtube">Clips &amp; highlights</p></div>
+                        <i class="fa-solid fa-arrow-right arrow"></i>
+                    </a>
+                    <a class="surface social spot" style="--sec: var(--cyan)" href="https://solo.to/floris_n" target="_blank" rel="noopener">
+                        <span class="social-icon"><i class="fa-solid fa-link"></i></span>
+                        <div><h3>Solo.to</h3><p data-i18n="soc_solo">Alle links op één plek</p></div>
+                        <i class="fa-solid fa-arrow-right arrow"></i>
+                    </a>
+                </div>
+            </section>
+
+            <!-- ================= 04 FAQ ================= -->
+            <section class="section" id="faq" style="--sec: var(--amber)">
+                <div class="section-head reveal">
+                    <span class="eyebrow"><span class="num">04</span><i class="fa-solid fa-circle-question"></i><span data-i18n="eb_faq">Support</span></span>
+                    <h2 data-i18n="head_faq">Veelgestelde Vragen</h2>
+                    <p data-i18n="faq_sub">Direct antwoord op vragen over de Minecraft server &amp; livestream.</p>
+                </div>
+
+                <div class="faq" data-stagger>
+                    <div class="surface faq-item">
+                        <button class="faq-q" type="button" aria-expanded="false" aria-controls="fa1"><span data-i18n="faq1_q">Hoe kan ik meedoen op de Minecraft server?</span><i class="fa-solid fa-chevron-down"></i></button>
+                        <div class="faq-a" id="fa1"><div><p data-i18n="faq1_a"></p></div></div>
+                    </div>
+                    <div class="surface faq-item">
+                        <button class="faq-q" type="button" aria-expanded="false" aria-controls="fa2"><span data-i18n="faq2_q">Wanneer is Floris_N meestal live?</span><i class="fa-solid fa-chevron-down"></i></button>
+                        <div class="faq-a" id="fa2"><div><p data-i18n="faq2_a"></p></div></div>
+                    </div>
+                    <div class="surface faq-item">
+                        <button class="faq-q" type="button" aria-expanded="false" aria-controls="fa3"><span data-i18n="faq3_q">Hoe werkt de Simple Voice Chat mod?</span><i class="fa-solid fa-chevron-down"></i></button>
+                        <div class="faq-a" id="fa3"><div><p data-i18n="faq3_a"></p></div></div>
+                    </div>
+                    <div class="surface faq-item">
+                        <button class="faq-q" type="button" aria-expanded="false" aria-controls="fa4"><span data-i18n="faq4_q">Waar vind ik alle Socials &amp; Discord?</span><i class="fa-solid fa-chevron-down"></i></button>
+                        <div class="faq-a" id="fa4"><div><p data-i18n="faq4_a"></p></div></div>
+                    </div>
+                    <div class="surface faq-item">
+                        <button class="faq-q" type="button" aria-expanded="false" aria-controls="fa5"><span data-i18n="faq5_q">Waar vind ik de speler-statistieken?</span><i class="fa-solid fa-chevron-down"></i></button>
+                        <div class="faq-a" id="fa5"><div><p data-i18n="faq5_a"></p></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= CTA ================= -->
+            <section class="cta">
+                <div class="cta-box reveal">
+                    <h2 data-i18n="cta_title">Klaar om mee te doen?</h2>
+                    <p data-i18n="cta_desc">Pak het server-IP, hop in de Discord en bouw mee aan de SMP.</p>
+                    <div class="actions">
+                        <button class="btn btn-green" data-copy data-magnet type="button"><i class="fa-solid fa-copy"></i><span data-i18n="btn_copy_ip">Kopieer IP: play.florisn.nl</span></button>
+                        <a class="btn btn-discord" href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener" data-magnet><i class="fa-brands fa-discord"></i><span data-i18n="btn_discord">Join de Discord</span></a>
+                    </div>
+                </div>
+            </section>
         </div>
+    </main>
 
-        <!-- Minecraft SMP Section -->
-        <div class="section-header reveal" id="mc-info">
-            <h2><i class="fa-solid fa-cubes" style="color: var(--accent-green);"></i> <span data-i18n="head_smp">Minecraft Community SMP</span></h2>
-            <p data-i18n="smp_sub">Stap in de wereld, bouw mee met de community en volg je prestaties op de voet.</p>
-        </div>
-
-        <div class="bento-grid reveal">
-            <div class="card card-large">
-                <div>
-                    <div class="card-icon"><i class="fa-solid fa-users"></i></div>
-                    <h3 data-i18n="card1_title">Gezellige Survival</h3>
-                    <p data-i18n="card1_desc">Een unieke SMP server waar bouwen, avontuur en samenwerken met de stream-community centraal staan.</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-icon"><i class="fa-solid fa-headset"></i></div>
-                <h3 data-i18n="card2_title">Simple Voice Chat</h3>
-                <p data-i18n="card2_desc">Proximity voice-chat geïntegreerd. Praat direct in-game met spelers die om je heen staan.</p>
-            </div>
-
-            <div class="card">
-                <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
-                <h3 data-i18n="card3_title">Speler Statistieken</h3>
-                <p data-i18n="card3_desc">Houd je speeltijd, kills, deaths en ranglijsten live bij op ons uitgebreide speler-dashboard.</p>
-                <a onclick="switchCategory('stats-page')" class="card-link"><span data-i18n="card3_link">Bekijk Statistieken</span> <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-        </div>
-
-        <!-- SOCIALS GRID -->
-        <div class="section-header reveal">
-            <h2><i class="fa-solid fa-share-nodes" style="color: var(--accent-cyan);"></i> <span data-i18n="head_socials">Officiële Socials</span></h2>
-            <p data-i18n="socials_sub">Blijf op de hoogte via al onze kanalen!</p>
-        </div>
-
-        <div class="socials-grid reveal">
-            <a href="https://solo.to/floris_n" target="_blank" class="social-card">
-                <i class="fa-solid fa-link"></i> Solo.to Hub
-            </a>
-            <a href="https://discord.com/invite/snQDpNyd6D" target="_blank" class="social-card">
-                <i class="fa-brands fa-discord"></i> Discord Community
-            </a>
-            <a href="https://twitch.tv/Floris_N" target="_blank" class="social-card">
-                <i class="fa-brands fa-twitch"></i> Twitch Kanaal
-            </a>
-            <a href="https://youtube.com/@Floris_N" target="_blank" class="social-card">
-                <i class="fa-brands fa-youtube"></i> YouTube Clips
-            </a>
-        </div>
-
-        <!-- FAQ Section -->
-        <div class="section-header reveal" id="faq">
-            <h2><i class="fa-solid fa-circle-question" style="color: var(--accent-purple);"></i> <span data-i18n="head_faq">Veelgestelde Vragen</span></h2>
-            <p data-i18n="faq_sub">Direct antwoord op vragen over de Minecraft server & livestream.</p>
-        </div>
-
-        <div class="faq-list reveal">
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span data-i18n="faq1_q">Hoe kan ik meedoen op de Minecraft server?</span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer" data-i18n="faq1_a">
-                    Start Minecraft Java Edition en voeg het serveradres <strong>play.florisn.nl</strong> toe in je serverlijst!
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span data-i18n="faq2_q">Wanneer is Floris_N meestal live?</span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer" data-i18n="faq2_a">
-                    Het exacte schema staat in de Discord, maar Floris gaat vooral live zodra hij er zin in heeft! Zorg dat je notificaties op Twitch aanstaan.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span data-i18n="faq3_q">Hoe werkt de Simple Voice Chat mod?</span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer" data-i18n="faq3_a">
-                    Download en installeer de Simple Voice Chat mod in je Minecraft client om in-game direct te praten met spelers die dichtbij je staan.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span data-i18n="faq4_q">Waar vind ik alle Socials & Discord?</span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer" data-i18n="faq4_a">
-                    Alle officiële links en de Discord-community vind je via onze verzamelpagina op <a href='https://solo.to/floris_n' target='_blank' style='color: var(--accent-purple); font-weight:600;'>solo.to/floris_n</a>!
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- FOOTER -->
+    <!-- ================= FOOTER ================= -->
     <footer>
-        <div class="footer-content">
+        <div class="footer-grid">
             <div class="footer-brand">
                 <h3>Floris<span>_N</span> Hub</h3>
                 <p data-i18n="footer_desc">De officiële ontmoetingsplek voor de Floris_N livestream, de gezellige Minecraft SMP community en al onze custom projecten.</p>
             </div>
             <div class="footer-col">
                 <h4 data-i18n="footer_nav">Navigatie</h4>
-                <ul class="footer-links">
-                    <li><a onclick="switchCategory('stream')" data-i18n="nav_stream">Live Stream</a></li>
-                    <li><a onclick="switchCategory('mc-info')" data-i18n="nav_mc">Minecraft SMP</a></li>
-                    <li><a href="alerts.html" data-i18n="nav_alerts">Stream Alerts</a></li>
-                    <li><a onclick="switchCategory('faq')" data-i18n="nav_faq">Veelgestelde Vragen</a></li>
+                <ul>
+                    <li><a href="#stream" data-i18n="nav_stream">Live Stream</a></li>
+                    <li><a href="#minecraft" data-i18n="nav_mc">Minecraft SMP</a></li>
+                    <li><a href="statistieken.html" data-page data-i18n="footer_stats">Statistieken</a></li>
+                    <li><a href="alerts.html" data-page data-i18n="nav_alerts">Stream Alerts</a></li>
+                    <li><a href="#faq" data-i18n="nav_faq">FAQ</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4 data-i18n="footer_community">Community</h4>
-                <ul class="footer-links">
-                    <li><a href="https://twitch.tv/Floris_N" target="_blank">Twitch Kanaal</a></li>
-                    <li><a href="https://discord.gg/Floris" target="_blank">Discord Server</a></li>
-                    <li><a href="https://streamelements.com/floris_n/tip" target="_blank">Doneren (Tip)</a></li>
-                    <li><a href="https://solo.to/floris_n" target="_blank">Solo.to Links</a></li>
+                <ul>
+                    <li><a href="https://twitch.tv/Floris_N" target="_blank" rel="noopener">Twitch</a></li>
+                    <li><a href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener">Discord</a></li>
+                    <li><a href="https://streamelements.com/floris_n/tip" target="_blank" rel="noopener" data-i18n="footer_tip">Doneren (Tip)</a></li>
+                    <li><a href="https://solo.to/floris_n" target="_blank" rel="noopener">Solo.to</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
-            <div>&copy; 2026 Floris_N. Alle rechten voorbehouden.</div>
-            <div class="footer-status">
-                <span style="width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; box-shadow: 0 0 8px var(--accent-green);"></span>
-                <span>Server & Systems Online</span>
-            </div>
+            <div>&copy; <span id="year">2026</span> Floris_N. <span data-i18n="footer_rights">Alle rechten voorbehouden.</span></div>
+            <div class="footer-status"><span class="dot dot--gray" id="foot-dot"></span><span id="foot-text">…</span></div>
+            <a class="to-top" href="#home"><i class="fa-solid fa-arrow-up"></i><span data-i18n="footer_top">Naar boven</span></a>
         </div>
     </footer>
 
-    <!-- Chat Prompt Banner -->
+    <!-- ================= CHATBOT ================= -->
     <div class="chat-prompt" id="chat-prompt">
-        <i class="fa-solid fa-comment-dots" style="color: var(--accent-purple);"></i>
-        <span id="prompt-text">Vragen? Stel ze direct aan de assistent!</span>
-        <button class="chat-prompt-close" onclick="closePrompt()">&times;</button>
+        <i class="fa-solid fa-comment-dots" style="color: var(--purple);"></i>
+        <span data-i18n="chat_prompt">Vragen? Stel ze direct aan de assistent!</span>
+        <button type="button" id="prompt-close" aria-label="Sluiten">&times;</button>
     </div>
 
-    <!-- Chatbot Widget -->
-    <button class="chat-toggle-btn" id="chat-toggle-btn" type="button" aria-label="Open chat">
-        <svg class="chat-icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
-        <svg class="chat-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
+    <button class="chat-toggle" id="chat-toggle" type="button" data-i18n-aria="aria_chat_open" aria-label="Open chat" aria-expanded="false" aria-controls="chat-window">
+        <svg class="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <svg class="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
 
-    <div class="chat-window" id="chat-window">
-        <div class="chat-header">
+    <div class="chat-window" id="chat-window" role="dialog" aria-label="Floris_N Assistent">
+        <div class="chat-head">
             <div class="chat-avatar">F</div>
-            <div class="chat-header-info">
+            <div class="chat-head-info">
                 <h4>Floris_N Assistent</h4>
-                <span><span class="chat-status-dot"></span> <span id="chat-status-text">Online — reageert direct</span></span>
+                <span><span class="dot dot--green"></span><span data-i18n="chat_status">Online — reageert direct</span></span>
             </div>
-            <button class="chat-close-btn" id="chat-close-btn" type="button" aria-label="Sluit chat">&times;</button>
+            <button class="chat-close" id="chat-close" type="button" data-i18n-aria="aria_chat_close" aria-label="Sluit chat">&times;</button>
         </div>
-        <div class="chat-messages" id="chat-messages"></div>
-        <div class="chat-quick-replies" id="chat-quick-replies"></div>
-        <div class="chat-input-area">
-            <input type="text" class="chat-input" id="chat-input" placeholder="Typ je vraag..." autocomplete="off">
-            <button class="chat-send-btn" id="chat-send-btn" type="button" aria-label="Verstuur">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="22" y1="2" x2="11" y2="13"/>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                </svg>
+        <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
+        <div class="quick" id="chat-quick"></div>
+        <div class="chat-input-row">
+            <input type="text" class="chat-input" id="chat-input" data-i18n-ph="chat_placeholder" placeholder="Typ je vraag..." autocomplete="off">
+            <button class="chat-send" id="chat-send" type="button" data-i18n-aria="aria_chat_send" aria-label="Verstuur">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             </button>
         </div>
     </div>
 
-    <script>
-        let currentLang = 'nl';
+    <div class="toast" id="toast" role="status"><i class="fa-solid fa-circle-check"></i><span id="toast-text"></span></div>
 
-        const i18n = {
+    <!-- ================= TEKSTEN (NL / EN) ================= -->
+    <script>
+        window.I18N = {
             nl: {
-                nav_stream: "Live Stream",
-                nav_mc: "Minecraft SMP",
-                nav_faq: "Veelgestelde Vragen",
-                nav_alerts: "Stream Alerts",
-                head_stream: "Live Stream",
-                head_smp: "Minecraft Community SMP",
-                head_faq: "Veelgestelde Vragen",
-                head_socials: "Officiële Socials",
-                socials_sub: "Blijf op de hoogte via al onze kanalen!",
-                goal_title: "Live Stream Sub Goal",
-                activity_title: "Latest Activity",
-                hero_desc: "De centrale plek voor de livestream, de hechte SMP-community en al je in-game statistieken.",
-                btn_channel: "Bekijk Kanaal",
-                btn_copy_ip: "Kopieer IP: play.florisn.nl",
-                ip_copied: "IP Gekopieerd!",
-                stream_sub: "Volg de livestream live met interactieve chat en unieke content!",
-                smp_sub: "Stap in de wereld, bouw mee met de community en volg je prestaties op de voet.",
-                card1_title: "Gezellige Survival",
-                card1_desc: "Een unieke SMP server waar bouwen, avontuur en samenwerken met de stream-community centraal staan.",
-                card2_title: "Simple Voice Chat",
-                card2_desc: "Proximity voice-chat geïntegreerd. Praat direct in-game met spelers die om je heen staan.",
-                card3_title: "Speler Statistieken",
-                card3_desc: "Houd je speeltijd, kills, deaths en ranglijsten live bij op ons uitgebreide speler-dashboard.",
-                card3_link: "Bekijk Statistieken",
-                faq_sub: "Direct antwoord op vragen over de Minecraft server & livestream.",
-                faq1_q: "Hoe kan ik meedoen op de Minecraft server?",
-                faq1_a: "Start Minecraft Java Edition en voeg het serveradres <strong>play.florisn.nl</strong> toe in je serverlijst!",
-                faq2_q: "Wanneer is Floris_N meestal live?",
-                faq2_a: "Het exacte schema staat in de Discord, maar Floris gaat vooral live zodra hij er zin in heeft! Zorg dat je notificaties op Twitch aanstaan.",
-                faq3_q: "Hoe werkt de Simple Voice Chat mod?",
-                faq3_a: "Download en installeer de Simple Voice Chat mod in je Minecraft client om in-game direct te praten met spelers die dichtbij je staan.",
-                faq4_q: "Waar vind ik alle Socials & Discord?",
-                faq4_a: "Alle officiële links en de Discord-community vind je via onze verzamelpagina op <a href='https://solo.to/floris_n' target='_blank' style='color: var(--accent-purple); font-weight:600;'>solo.to/floris_n</a>!",
-                footer_desc: "De officiële ontmoetingsplek voor de Floris_N livestream, de gezellige Minecraft SMP community en al onze custom projecten.",
-                footer_nav: "Navigatie",
-                footer_community: "Community",
-                chat_prompt: "Vragen? Stel ze direct aan de assistent!",
-                chat_placeholder: "Typ je vraag...",
-                chat_status: "Online — reageert direct",
-                chat_welcome: "Hoi! 👋 Ik ben de Floris_N assistent. Vraag me gerust alles over de stream, het schema, de Minecraft SMP of de socials!",
-                chat_not_found: "Daar heb ik zo direct geen specifiek antwoord op, maar stel je vraag gerust in de Twitch chat of op onze Discord!"
+                nav_stream: 'Live Stream', nav_mc: 'Minecraft SMP', nav_comm: 'Community', nav_faq: 'FAQ', nav_alerts: 'Stream Alerts',
+                hero_prefix: 'Alles over',
+                typed: ['de livestream', 'de Minecraft SMP', 'speler-statistieken', 'de community'],
+                hero_desc: 'De centrale plek voor de livestream, de hechte SMP-community en al je in-game statistieken.',
+                btn_channel: 'Bekijk Kanaal', btn_copy_ip: 'Kopieer IP: play.florisn.nl', btn_copy: 'Kopieer IP',
+                ip_copied: 'IP gekopieerd!', btn_discord: 'Join de Discord', btn_stats: 'Bekijk statistieken',
+                tw_live: 'Nu live', tw_off: 'Offline', mc_players: 'MC Spelers', mc_loading: 'MC laden…',
+                status_online: 'Online', status_offline: 'Offline', status_unknown: 'Onbekend',
+                eb_stream: 'Livestream', eb_mc: 'Minecraft', eb_comm: 'Community', eb_faq: 'Support',
+                head_stream: 'Live Stream',
+                stream_sub: 'Volg de livestream live met interactieve chat en unieke content!',
+                act_follow: 'Volg op Twitch', act_tip: 'Steun met een tip', act_chat: 'Open chat',
+                goal_title: 'Live Stream Sub Goal', activity_title: 'Latest Activity',
+                head_smp: 'Minecraft Community SMP',
+                smp_sub: 'Stap in de wereld, bouw mee met de community en volg je prestaties op de voet.',
+                srv_label: 'Server IP', srv_title: 'Spring in de wereld',
+                srv_help: 'Open Minecraft Java Edition → Multiplayer → Server toevoegen → plak het IP-adres.',
+                srv_status: 'Status', srv_players: 'Spelers online', srv_version: 'Versie',
+                card1_title: 'Gezellige Survival',
+                card1_desc: 'Een unieke SMP server waar bouwen, avontuur en samenwerken met de stream-community centraal staan.',
+                card2_title: 'Simple Voice Chat',
+                card2_desc: 'Proximity voice-chat geïntegreerd. Praat direct in-game met spelers die om je heen staan.',
+                card3_title: 'Speler Statistieken',
+                card3_desc: 'Houd je speeltijd, kills, deaths en ranglijsten bij op ons uitgebreide speler-dashboard.',
+                card3_link: 'Bekijk Statistieken',
+                lb_title: 'Top 5 speeltijd', lb_sub: 'Uit de dagelijkse statistieken van de server.', lb_link: 'Alle statistieken',
+                unit_d: 'd', unit_h: 'u', unit_m: 'm',
+                head_socials: 'Officiële Socials', socials_sub: 'Blijf op de hoogte via al onze kanalen!',
+                soc_discord: 'Praat mee met de community', soc_twitch: 'Volg de livestreams',
+                soc_youtube: 'Clips & highlights', soc_solo: 'Alle links op één plek',
+                head_faq: 'Veelgestelde Vragen',
+                faq_sub: 'Direct antwoord op vragen over de Minecraft server & livestream.',
+                faq1_q: 'Hoe kan ik meedoen op de Minecraft server?',
+                faq1_a: 'Start Minecraft Java Edition en voeg het serveradres <strong>play.florisn.nl</strong> toe in je serverlijst!',
+                faq2_q: 'Wanneer is Floris_N meestal live?',
+                faq2_a: 'Het exacte schema staat in de Discord, maar Floris gaat vooral live zodra hij er zin in heeft! Zorg dat je notificaties op Twitch aanstaan.',
+                faq3_q: 'Hoe werkt de Simple Voice Chat mod?',
+                faq3_a: 'Download en installeer de Simple Voice Chat mod in je Minecraft client om in-game direct te praten met spelers die dichtbij je staan.',
+                faq4_q: 'Waar vind ik alle Socials & Discord?',
+                faq4_a: 'Alle officiële links en de Discord-community vind je via onze verzamelpagina op <a class="link" href="https://solo.to/floris_n" target="_blank" rel="noopener">solo.to/floris_n</a>!',
+                faq5_q: 'Waar vind ik de speler-statistieken?',
+                faq5_a: 'Op de <a class="link" href="statistieken.html">statistiekenpagina</a>. Die worden handmatig bijgewerkt, standaard 1x per dag.',
+                cta_title: 'Klaar om mee te doen?',
+                cta_desc: 'Pak het server-IP, hop in de Discord en bouw mee aan de SMP.',
+                footer_desc: 'De officiële ontmoetingsplek voor de Floris_N livestream, de gezellige Minecraft SMP community en al onze custom projecten.',
+                footer_nav: 'Navigatie', footer_community: 'Community', footer_stats: 'Statistieken', footer_tip: 'Doneren (Tip)',
+                footer_rights: 'Alle rechten voorbehouden.', footer_top: 'Naar boven',
+                footer_srv_online: 'Server online', footer_srv_offline: 'Server offline', footer_srv_unknown: 'Serverstatus onbekend',
+                chat_prompt: 'Vragen? Stel ze direct aan de assistent!', chat_placeholder: 'Typ je vraag...',
+                chat_status: 'Online — reageert direct',
+                chat_welcome: 'Hoi! 👋 Ik ben de Floris_N assistent. Vraag me gerust alles over de stream, het schema, de Minecraft SMP of de socials!',
+                chat_not_found: 'Daar heb ik zo direct geen specifiek antwoord op, maar stel je vraag gerust in de Twitch chat of op onze Discord!',
+                chat_quick: ['Stream schema?', 'Socials & Discord?', 'Minecraft IP?', 'Statistieken?'],
+                aria_chat_open: 'Open chat', aria_chat_close: 'Sluit chat', aria_chat_send: 'Verstuur', aria_scroll: 'Scroll naar beneden'
             },
             en: {
-                nav_stream: "Live Stream",
-                nav_mc: "Minecraft SMP",
-                nav_faq: "FAQ",
-                nav_alerts: "Stream Alerts",
-                head_stream: "Live Stream",
-                head_smp: "Minecraft Community SMP",
-                head_faq: "Frequently Asked Questions",
-                head_socials: "Official Socials",
-                socials_sub: "Stay updated through all our channels!",
-                goal_title: "Live Stream Sub Goal",
-                activity_title: "Latest Activity",
-                hero_desc: "The central hub for the livestream, the tight-knit SMP community, and all your in-game statistics.",
-                btn_channel: "Watch Channel",
-                btn_copy_ip: "Copy IP: play.florisn.nl",
-                ip_copied: "IP Copied!",
-                stream_sub: "Watch the stream live with interactive chat and unique content!",
-                smp_sub: "Jump into the world, build with the community, and track your stats live.",
-                card1_title: "Cozy Survival",
-                card1_desc: "A unique SMP server centered around building, adventure, and collaborating with the stream community.",
-                card2_title: "Simple Voice Chat",
-                card2_desc: "Integrated proximity voice chat. Talk directly in-game with players standing around you.",
-                card3_title: "Player Statistics",
-                card3_desc: "Track your playtime, kills, deaths, and leaderboards live on our player dashboard.",
-                card3_link: "View Statistics",
-                faq_sub: "Direct answers to questions regarding the Minecraft server & livestream.",
-                faq1_q: "How can I join the Minecraft server?",
-                faq1_a: "Launch Minecraft Java Edition and add the server address <strong>play.florisn.nl</strong> to your server list!",
-                faq2_q: "When is Floris_N usually streaming?",
-                faq2_a: "The exact schedule is posted in Discord, but Floris goes live whenever he feels like it! Make sure your Twitch notifications are enabled.",
-                faq3_q: "How does the Simple Voice Chat mod work?",
-                faq3_a: "Download and install the Simple Voice Chat mod in your Minecraft client to speak directly in-game with nearby players.",
-                faq4_q: "Where can I find all Socials & Discord?",
-                faq4_a: "All official links and the Discord community can be found via our page at <a href='https://solo.to/floris_n' target='_blank' style='color: var(--accent-purple); font-weight:600;'>solo.to/floris_n</a>!",
-                footer_desc: "The official hub for the Floris_N livestream, the cozy Minecraft SMP community, and all our custom projects.",
-                footer_nav: "Navigation",
-                footer_community: "Community",
-                chat_prompt: "Questions? Ask our assistant right here!",
-                chat_placeholder: "Type your question...",
-                chat_status: "Online — replies instantly",
+                nav_stream: 'Live Stream', nav_mc: 'Minecraft SMP', nav_comm: 'Community', nav_faq: 'FAQ', nav_alerts: 'Stream Alerts',
+                hero_prefix: 'Everything about',
+                typed: ['the livestream', 'the Minecraft SMP', 'player statistics', 'the community'],
+                hero_desc: 'The central hub for the livestream, the tight-knit SMP community, and all your in-game statistics.',
+                btn_channel: 'Watch Channel', btn_copy_ip: 'Copy IP: play.florisn.nl', btn_copy: 'Copy IP',
+                ip_copied: 'IP copied!', btn_discord: 'Join the Discord', btn_stats: 'View statistics',
+                tw_live: 'Live now', tw_off: 'Offline', mc_players: 'MC Players', mc_loading: 'Loading MC…',
+                status_online: 'Online', status_offline: 'Offline', status_unknown: 'Unknown',
+                eb_stream: 'Livestream', eb_mc: 'Minecraft', eb_comm: 'Community', eb_faq: 'Support',
+                head_stream: 'Live Stream',
+                stream_sub: 'Watch the stream live with interactive chat and unique content!',
+                act_follow: 'Follow on Twitch', act_tip: 'Support with a tip', act_chat: 'Open chat',
+                goal_title: 'Live Stream Sub Goal', activity_title: 'Latest Activity',
+                head_smp: 'Minecraft Community SMP',
+                smp_sub: 'Jump into the world, build with the community, and track your stats.',
+                srv_label: 'Server IP', srv_title: 'Jump into the world',
+                srv_help: 'Open Minecraft Java Edition → Multiplayer → Add Server → paste the IP address.',
+                srv_status: 'Status', srv_players: 'Players online', srv_version: 'Version',
+                card1_title: 'Cozy Survival',
+                card1_desc: 'A unique SMP server centered around building, adventure, and collaborating with the stream community.',
+                card2_title: 'Simple Voice Chat',
+                card2_desc: 'Integrated proximity voice chat. Talk directly in-game with players standing around you.',
+                card3_title: 'Player Statistics',
+                card3_desc: 'Track your playtime, kills, deaths, and leaderboards on our player dashboard.',
+                card3_link: 'View Statistics',
+                lb_title: 'Top 5 playtime', lb_sub: "From the server's daily statistics.", lb_link: 'All statistics',
+                unit_d: 'd', unit_h: 'h', unit_m: 'm',
+                head_socials: 'Official Socials', socials_sub: 'Stay updated through all our channels!',
+                soc_discord: 'Chat with the community', soc_twitch: 'Follow the livestreams',
+                soc_youtube: 'Clips & highlights', soc_solo: 'All links in one place',
+                head_faq: 'Frequently Asked Questions',
+                faq_sub: 'Direct answers to questions regarding the Minecraft server & livestream.',
+                faq1_q: 'How can I join the Minecraft server?',
+                faq1_a: 'Launch Minecraft Java Edition and add the server address <strong>play.florisn.nl</strong> to your server list!',
+                faq2_q: 'When is Floris_N usually streaming?',
+                faq2_a: 'The exact schedule is posted in Discord, but Floris goes live whenever he feels like it! Make sure your Twitch notifications are enabled.',
+                faq3_q: 'How does the Simple Voice Chat mod work?',
+                faq3_a: 'Download and install the Simple Voice Chat mod in your Minecraft client to speak directly in-game with nearby players.',
+                faq4_q: 'Where can I find all Socials & Discord?',
+                faq4_a: 'All official links and the Discord community can be found via our page at <a class="link" href="https://solo.to/floris_n" target="_blank" rel="noopener">solo.to/floris_n</a>!',
+                faq5_q: 'Where can I find the player statistics?',
+                faq5_a: 'On the <a class="link" href="statistieken.html">statistics page</a>. They are updated manually, by default once a day.',
+                cta_title: 'Ready to join?',
+                cta_desc: 'Grab the server IP, hop into the Discord and help build the SMP.',
+                footer_desc: 'The official hub for the Floris_N livestream, the cozy Minecraft SMP community, and all our custom projects.',
+                footer_nav: 'Navigation', footer_community: 'Community', footer_stats: 'Statistics', footer_tip: 'Donate (Tip)',
+                footer_rights: 'All rights reserved.', footer_top: 'Back to top',
+                footer_srv_online: 'Server online', footer_srv_offline: 'Server offline', footer_srv_unknown: 'Server status unknown',
+                chat_prompt: 'Questions? Ask our assistant right here!', chat_placeholder: 'Type your question...',
+                chat_status: 'Online — replies instantly',
                 chat_welcome: "Hi! 👋 I'm the Floris_N assistant. Feel free to ask me anything about the stream, schedule, Minecraft SMP, or socials!",
-                chat_not_found: "I don't have a specific answer for that yet, but feel free to ask in the Twitch chat or on our Discord!"
+                chat_not_found: "I don't have a specific answer for that yet, but feel free to ask in the Twitch chat or on our Discord!",
+                chat_quick: ['Stream schedule?', 'Socials & Discord?', 'Minecraft IP?', 'Statistics?'],
+                aria_chat_open: 'Open chat', aria_chat_close: 'Close chat', aria_chat_send: 'Send', aria_scroll: 'Scroll down'
             }
         };
 
-        function setLanguage(lang) {
-            currentLang = lang;
-            document.getElementById('btn-lang-nl').classList.toggle('active', lang === 'nl');
-            document.getElementById('btn-lang-en').classList.toggle('active', lang === 'en');
-
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (i18n[lang][key]) {
-                    el.innerHTML = i18n[lang][key];
-                }
-            });
-
-            document.getElementById('prompt-text').innerText = i18n[lang].chat_prompt;
-            document.getElementById('chat-input').placeholder = i18n[lang].chat_placeholder;
-            document.getElementById('chat-status-text').innerText = i18n[lang].chat_status;
-
-            if (chatInitialized) {
-                renderQuickReplies(getQuickReplies());
-            }
-        }
-
-        // SMART HIDING NAVBAR LOGICA
-        let lastScrollTop = 0;
-        const navWrapper = document.getElementById('nav-wrapper');
-
-        window.addEventListener('scroll', () => {
-            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            if (scrollTop > lastScrollTop && scrollTop > 100) {
-                navWrapper.classList.add('nav-hidden');
-            } else {
-                navWrapper.classList.remove('nav-hidden');
-            }
-            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-        });
-
-        function switchCategory(targetId) {
-            document.querySelectorAll('.nav-link-btn').forEach(btn => btn.classList.remove('active'));
-            const activeBtn = document.getElementById(`nav-${targetId.replace('-info', '')}`);
-            if (activeBtn) activeBtn.classList.add('active');
-
-            const overlay = document.getElementById('page-transition');
-            overlay.classList.add('active');
-
-            setTimeout(() => {
-                if (targetId === 'stats-page') {
-                    window.location.href = 'smp.html';
-                } else {
-                    const el = document.getElementById(targetId);
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }
-            }, 350);
-
-            setTimeout(() => { overlay.classList.remove('active'); }, 750);
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-            }, 1200);
-
-            setTimeout(() => {
-                const prompt = document.getElementById('chat-prompt');
-                if (!chatWindow.classList.contains('open')) {
-                    prompt.classList.add('visible');
-                }
-            }, 4000);
-        });
-
-        function closePrompt() {
-            document.getElementById('chat-prompt').classList.remove('visible');
-        }
-
-        function copyIP() {
-            navigator.clipboard.writeText("play.florisn.nl").then(() => {
-                const btnText = document.getElementById("ip-btn-text");
-                btnText.innerText = i18n[currentLang].ip_copied;
-                setTimeout(() => {
-                    btnText.innerText = i18n[currentLang].btn_copy_ip;
-                }, 2000);
-            });
-        }
-
-        async function fetchPlayers() {
-            try {
-                const response = await fetch('https://mcapi.us/server/status?ip=node1.herculhosting.nl&port=30312');
-                const data = await response.json();
-                const countElement = document.getElementById('player-count');
-                
-                if (data.online) {
-                    countElement.innerText = `${data.players.now} / ${data.players.max} MC Spelers`;
-                } else {
-                    countElement.innerText = "MC Server Online";
-                }
-            } catch (error) {
-                document.getElementById('player-count').innerText = "play.florisn.nl";
-            }
-        }
-
-        fetchPlayers();
-        setInterval(fetchPlayers, 30000);
-
-        document.querySelectorAll('.faq-question').forEach(item => {
-            item.addEventListener('click', () => {
-                const parent = item.parentElement;
-                document.querySelectorAll('.faq-item').forEach(other => {
-                    if (other !== parent) other.classList.remove('active');
-                });
-                parent.classList.toggle('active');
-            });
-        });
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // CHATBOT LOGICA
-        const chatKnowledgeBase = [
-            {
-                keywords: ['schema', 'rooster', 'tijden', 'wanneer live', 'streamtijd', 'schedule', 'when live', 'time'],
-                nl: "Het stream-schema staat in de Discord, maar Floris gaat vooral live **wanneer hij er zin in heeft**! 🔔 Zorg dus dat je notificaties op Twitch aanstaan.",
-                en: "The exact stream schedule is posted in Discord, but Floris mostly goes live **whenever he feels like it**! 🔔 Make sure your Twitch notifications are turned on."
-            },
-            {
-                keywords: ['socials', 'social', 'links', 'discord', 'instagram', 'tiktok'],
-                nl: "Alle officiële links en de Discord vind je overzichtelijk bij elkaar op: **https://solo.to/floris_n** 🔗",
-                en: "All official links and the Discord community can be found directly at: **https://solo.to/floris_n** 🔗"
-            },
-            {
-                keywords: ['twitch', 'kanaal', 'stream', 'kijken', 'channel', 'watch'],
-                nl: "De livestreams kun je bekijken op het officiële Twitch kanaal: **https://twitch.tv/floris_n** 💜",
-                en: "You can watch the livestreams on the official Twitch channel: **https://twitch.tv/floris_n** 💜"
-            },
-            {
-                keywords: ['ip', 'server', 'meedoen', 'join', 'adres', 'spelen'],
-                nl: "Je kunt meedoen op de Minecraft SMP via Java Edition met het IP-adres: **play.florisn.nl**! 🎮",
-                en: "You can join the Minecraft SMP via Java Edition using the server IP: **play.florisn.nl**! 🎮"
-            },
-            {
-                keywords: ['hoi', 'hey', 'hallo', 'hi', 'hello'],
-                nl: "Hey! 👋 Vraag me gerust alles over de livestreams, het schema, het Minecraft IP of onze socials!",
-                en: "Hello! 👋 Feel free to ask me anything about the streams, schedule, Minecraft IP, or socials!"
-            }
+        // Chatbot-kennis. Korte trefwoorden (≤3 letters) moeten een heel woord zijn.
+        window.CHAT_KB = [
+            { k: ['schema', 'rooster', 'tijden', 'wanneer live', 'streamtijd', 'schedule', 'when live', 'time'],
+              nl: 'Het stream-schema staat in de Discord, maar Floris gaat vooral live **wanneer hij er zin in heeft**! 🔔 Zorg dus dat je notificaties op Twitch aanstaan.',
+              en: 'The exact stream schedule is posted in Discord, but Floris mostly goes live **whenever he feels like it**! 🔔 Make sure your Twitch notifications are turned on.' },
+            { k: ['statistiek', 'statistic', 'stats', 'speeltijd', 'playtime', 'ranglijst', 'leaderboard'],
+              nl: 'Alle speler-statistieken staan op de <a href="statistieken.html">statistiekenpagina</a> 📊 Die worden handmatig bijgewerkt, standaard 1x per dag.',
+              en: 'All player statistics are on the <a href="statistieken.html">statistics page</a> 📊 They are updated manually, by default once a day.' },
+            { k: ['voice', 'spraak', 'praten', 'proximity', 'mod'],
+              nl: 'De server gebruikt **Simple Voice Chat**. Installeer de mod in je client en praat in-game met spelers die dichtbij je staan 🎧',
+              en: 'The server uses **Simple Voice Chat**. Install the mod in your client and talk in-game with nearby players 🎧' },
+            { k: ['doneer', 'donatie', 'donate', 'tip', 'steun', 'support'],
+              nl: 'Wil je de stream steunen? Dat kan via **https://streamelements.com/floris_n/tip** 💜 Bedankt!',
+              en: 'Want to support the stream? You can do that via **https://streamelements.com/floris_n/tip** 💜 Thank you!' },
+            { k: ['socials', 'social', 'links', 'discord', 'instagram', 'tiktok'],
+              nl: 'Alle officiële links en de Discord vind je overzichtelijk bij elkaar op: **https://solo.to/floris_n** 🔗',
+              en: 'All official links and the Discord community can be found directly at: **https://solo.to/floris_n** 🔗' },
+            { k: ['ip', 'server', 'meedoen', 'join', 'adres', 'spelen'],
+              nl: 'Je kunt meedoen op de Minecraft SMP via Java Edition met het IP-adres: **play.florisn.nl**! 🎮',
+              en: 'You can join the Minecraft SMP via Java Edition using the server IP: **play.florisn.nl**! 🎮' },
+            { k: ['twitch', 'kanaal', 'stream', 'kijken', 'channel', 'watch'],
+              nl: 'De livestreams kun je bekijken op het officiële Twitch kanaal: **https://twitch.tv/floris_n** 💜',
+              en: 'You can watch the livestreams on the official Twitch channel: **https://twitch.tv/floris_n** 💜' },
+            { k: ['hoi', 'hey', 'hallo', 'hi', 'hello'],
+              nl: 'Hey! 👋 Vraag me gerust alles over de livestreams, het schema, het Minecraft IP of onze socials!',
+              en: 'Hello! 👋 Feel free to ask me anything about the streams, schedule, Minecraft IP, or socials!' }
         ];
+    </script>
 
-        function getQuickReplies() {
-            return currentLang === 'nl' 
-                ? ['Stream schema?', 'Socials & Discord?', 'Minecraft IP?']
-                : ['Stream schedule?', 'Socials & Discord?', 'Minecraft IP?'];
+    <!-- ================= LOGICA ================= -->
+    <script>
+    (() => {
+        'use strict';
+
+        const $  = (s, r = document) => r.querySelector(s);
+        const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+        const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+        const store = {
+            get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+            set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+        };
+        const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+        // ----- Instellingen -----
+        const IP = 'play.florisn.nl';
+        const TWITCH = 'floris_n';
+        const MC_HOST = 'node1.herculhosting.nl';
+        const MC_PORT = 30312;
+
+        const L = window.I18N;
+        const KB = window.CHAT_KB;
+        let lang = store.get('lang') === 'en' ? 'en' : 'nl';
+        const t = k => (L[lang] && L[lang][k] !== undefined) ? L[lang][k] : k;
+        const state = { mc: undefined, tw: null, top: null };
+
+        /* ------------------------------------------------------------
+           Taal
+           ------------------------------------------------------------ */
+        function applyLang(next) {
+            lang = next;
+            store.set('lang', lang);
+            document.documentElement.lang = lang;
+            $$('[data-i18n]').forEach(el => { const v = L[lang][el.dataset.i18n]; if (typeof v === 'string') el.innerHTML = v; });
+            $$('[data-i18n-ph]').forEach(el => { el.placeholder = L[lang][el.dataset.i18nPh] || ''; });
+            $$('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', L[lang][el.dataset.i18nAria] || ''); });
+            $$('.lang-btn').forEach(b => {
+                const on = b.dataset.lang === lang;
+                b.classList.toggle('active', on);
+                b.setAttribute('aria-pressed', on ? 'true' : 'false');
+            });
+            startTyped();
+            renderStatus();
+            renderTop();
+            if (chatReady) renderQuick();
+            requestAnimationFrame(moveIndicator);
+        }
+        $$('.lang-btn').forEach(b => b.addEventListener('click', () => applyLang(b.dataset.lang)));
+
+        /* ------------------------------------------------------------
+           Loader, scrollvoortgang, slimme navigatie, scrollspy
+           ------------------------------------------------------------ */
+        setTimeout(() => {
+            $('#loader').classList.add('hidden');
+            document.documentElement.classList.add('ready');
+        }, 1100);
+
+        const progress = $('#progress');
+        const navWrap = $('#nav-wrap');
+        let lastY = 0, ticking = false;
+        function onScroll() {
+            const y = window.pageYOffset || document.documentElement.scrollTop;
+            const max = document.documentElement.scrollHeight - innerHeight;
+            progress.style.setProperty('--p', max > 0 ? (y / max).toFixed(4) : 0);
+            navWrap.classList.toggle('hide', y > lastY && y > 120);
+            lastY = Math.max(0, y);
+        }
+        addEventListener('scroll', () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => { onScroll(); ticking = false; });
+        }, { passive: true });
+
+        function moveIndicator() {
+            const ind = $('#nav-ind');
+            const link = $('.nav-link.active');
+            if (!link) { ind.style.opacity = 0; return; }
+            ind.style.opacity = 1;
+            ind.style.width = link.offsetWidth + 'px';
+            ind.style.transform = 'translateX(' + link.offsetLeft + 'px)';
+            const box = link.parentElement;
+            if (box.scrollWidth > box.clientWidth) {
+                box.scrollTo({ left: link.offsetLeft - box.clientWidth / 2 + link.offsetWidth / 2, behavior: 'smooth' });
+            }
+        }
+        function setActive(id) {
+            $$('.nav-link[data-spy]').forEach(a => a.classList.toggle('active', a.dataset.spy === id));
+            moveIndicator();
+        }
+        const spy = new IntersectionObserver(entries => {
+            entries.forEach(en => { if (en.isIntersecting) setActive(en.target.id === 'home' ? '' : en.target.id); });
+        }, { rootMargin: '-45% 0px -50% 0px' });
+        ['home', 'stream', 'minecraft', 'community', 'faq'].forEach(id => { const el = document.getElementById(id); if (el) spy.observe(el); });
+        addEventListener('resize', moveIndicator);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(moveIndicator);
+
+        /* ------------------------------------------------------------
+           Reveal-animaties (met trapsgewijze vertraging)
+           ------------------------------------------------------------ */
+        const reveal = new IntersectionObserver(entries => {
+            entries.forEach(en => {
+                if (en.isIntersecting) { en.target.classList.add('visible'); reveal.unobserve(en.target); }
+            });
+        }, { threshold: 0.06, rootMargin: '0px 0px -4% 0px' });
+        $$('[data-stagger]').forEach(box => [...box.children].forEach((c, i) => {
+            c.classList.add('reveal');
+            c.style.setProperty('--d', i);
+        }));
+        $$('.reveal').forEach(el => reveal.observe(el));
+
+        /* ------------------------------------------------------------
+           Typmachine in de hero
+           ------------------------------------------------------------ */
+        let typedTimer;
+        function startTyped() {
+            clearTimeout(typedTimer);
+            const el = $('#typed');
+            const words = L[lang].typed;
+            if (reduce) { el.textContent = words[0]; return; }
+            let w = 0, i = 0, del = false;
+            (function tick() {
+                const word = words[w];
+                el.textContent = word.slice(0, i);
+                let delay = del ? 35 : 75;
+                if (!del && i === word.length) { del = true; delay = 1700; }
+                else if (del && i === 0) { del = false; w = (w + 1) % words.length; delay = 350; }
+                else { i += del ? -1 : 1; }
+                typedTimer = setTimeout(tick, delay);
+            })();
         }
 
-        const chatToggleBtn = document.getElementById('chat-toggle-btn');
-        const chatWindow = document.getElementById('chat-window');
-        const chatCloseBtn = document.getElementById('chat-close-btn');
-        const chatMessages = document.getElementById('chat-messages');
-        const chatInput = document.getElementById('chat-input');
-        const chatSendBtn = document.getElementById('chat-send-btn');
-        const chatQuickReplies = document.getElementById('chat-quick-replies');
+        /* ------------------------------------------------------------
+           Beweging: parallax-blokken, cursor-gloed, spotlight, tilt, magnetische knoppen
+           ------------------------------------------------------------ */
+        if (!reduce && finePointer) {
+            const hero = $('#home');
+            const cubes = $$('.fc');
+            let tx = 0, ty = 0, cx = 0, cy = 0, heroVisible = true;
+            new IntersectionObserver(e => { heroVisible = e[0].isIntersecting; }).observe(hero);
+            hero.addEventListener('mousemove', e => {
+                const r = hero.getBoundingClientRect();
+                tx = (e.clientX - r.left) / r.width - 0.5;
+                ty = (e.clientY - r.top) / r.height - 0.5;
+            });
+            hero.addEventListener('mouseleave', () => { tx = 0; ty = 0; });
+            (function loop() {
+                if (heroVisible) {
+                    cx += (tx - cx) * 0.06;
+                    cy += (ty - cy) * 0.06;
+                    cubes.forEach(c => {
+                        const d = +c.dataset.depth || 20;
+                        c.style.transform = 'translate3d(' + (cx * d).toFixed(2) + 'px,' + (cy * d).toFixed(2) + 'px,0)';
+                    });
+                }
+                requestAnimationFrame(loop);
+            })();
 
-        let chatInitialized = false;
+            const glow = $('#glow');
+            addEventListener('mousemove', e => { glow.style.transform = 'translate3d(' + e.clientX + 'px,' + e.clientY + 'px,0)'; }, { passive: true });
 
-        chatToggleBtn.addEventListener('click', () => {
-            closePrompt();
-            chatWindow.classList.toggle('open');
-            chatToggleBtn.classList.toggle('open');
-            
-            if (chatWindow.classList.contains('open') && !chatInitialized) {
-                chatInitialized = true;
-                setTimeout(() => {
-                    addBotMessage(i18n[currentLang].chat_welcome);
-                    renderQuickReplies(getQuickReplies());
-                }, 300);
+            document.addEventListener('pointermove', e => {
+                const el = e.target.closest && e.target.closest('.spot');
+                if (!el) return;
+                const r = el.getBoundingClientRect();
+                const x = e.clientX - r.left, y = e.clientY - r.top;
+                el.style.setProperty('--mx', x + 'px');
+                el.style.setProperty('--my', y + 'px');
+                if (el.hasAttribute('data-tilt')) {
+                    el.style.setProperty('--ry', ((x / r.width - 0.5) * 8).toFixed(2) + 'deg');
+                    el.style.setProperty('--rx', ((0.5 - y / r.height) * 8).toFixed(2) + 'deg');
+                }
+            });
+            document.addEventListener('pointerout', e => {
+                const el = e.target.closest && e.target.closest('[data-tilt]');
+                if (el && !el.contains(e.relatedTarget)) { el.style.setProperty('--rx', '0deg'); el.style.setProperty('--ry', '0deg'); }
+            });
+
+            $$('[data-magnet]').forEach(b => {
+                b.addEventListener('pointermove', e => {
+                    const r = b.getBoundingClientRect();
+                    b.style.setProperty('--tx', ((e.clientX - r.left - r.width / 2) * 0.18).toFixed(1) + 'px');
+                    b.style.setProperty('--ty', ((e.clientY - r.top - r.height / 2) * 0.28).toFixed(1) + 'px');
+                });
+                b.addEventListener('pointerleave', () => { b.style.setProperty('--tx', '0px'); b.style.setProperty('--ty', '0px'); });
+            });
+        }
+
+        /* ------------------------------------------------------------
+           Paginawissel naar andere pagina's
+           ------------------------------------------------------------ */
+        $$('a[data-page]').forEach(a => a.addEventListener('click', e => {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+            e.preventDefault();
+            const href = a.href;
+            $('#wipe').classList.add('in');
+            setTimeout(() => { location.href = href; }, reduce ? 0 : 450);
+        }));
+        addEventListener('pageshow', e => { if (e.persisted) $('#wipe').classList.remove('in'); });
+
+        /* ------------------------------------------------------------
+           Toast + confetti + IP kopiëren
+           ------------------------------------------------------------ */
+        let toastTimer;
+        function toast(msg) {
+            $('#toast-text').textContent = msg;
+            $('#toast').classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => $('#toast').classList.remove('show'), 2200);
+        }
+        function burst(x, y) {
+            if (reduce) return;
+            const colors = ['#9146ff', '#22c55e', '#06b6d4', '#f59e0b', '#ffffff'];
+            for (let i = 0; i < 20; i++) {
+                const p = document.createElement('span');
+                p.className = 'px';
+                p.style.left = x + 'px';
+                p.style.top = y + 'px';
+                p.style.background = colors[i % colors.length];
+                document.body.appendChild(p);
+                const a = Math.random() * Math.PI * 2;
+                const d = 50 + Math.random() * 90;
+                const dx = Math.cos(a) * d, dy = Math.sin(a) * d + 30;
+                const anim = p.animate([
+                    { transform: 'translate(-50%,-50%) scale(1) rotate(0deg)', opacity: 1 },
+                    { transform: 'translate(calc(-50% + ' + dx + 'px), calc(-50% + ' + dy + 'px)) scale(0.2) rotate(' + (Math.random() * 540) + 'deg)', opacity: 0 }
+                ], { duration: 700 + Math.random() * 400, easing: 'cubic-bezier(0.2,0.8,0.3,1)' });
+                anim.onfinish = () => p.remove();
             }
-        });
+        }
+        async function copyIP(btn) {
+            try { await navigator.clipboard.writeText(IP); }
+            catch (e) {
+                const ta = document.createElement('textarea');
+                ta.value = IP; ta.style.position = 'fixed'; ta.style.opacity = '0';
+                document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); } catch (_) {}
+                ta.remove();
+            }
+            toast(t('ip_copied'));
+            const r = btn.getBoundingClientRect();
+            burst(r.left + r.width / 2, r.top + r.height / 2);
+            const lab = $('[data-i18n]', btn);
+            if (lab) {
+                const key = lab.dataset.i18n;
+                lab.textContent = t('ip_copied');
+                setTimeout(() => { lab.innerHTML = t(key); }, 2000);
+            }
+        }
+        $$('[data-copy]').forEach(b => b.addEventListener('click', () => copyIP(b)));
 
-        chatCloseBtn.addEventListener('click', () => {
-            chatWindow.classList.remove('open');
-            chatToggleBtn.classList.remove('open');
-        });
+        /* ------------------------------------------------------------
+           FAQ
+           ------------------------------------------------------------ */
+        $$('.faq-q').forEach(btn => btn.addEventListener('click', () => {
+            const item = btn.closest('.faq-item');
+            const open = !item.classList.contains('open');
+            $$('.faq-item.open').forEach(o => {
+                if (o !== item) { o.classList.remove('open'); $('.faq-q', o).setAttribute('aria-expanded', 'false'); }
+            });
+            item.classList.toggle('open', open);
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }));
+        (() => { const first = $('.faq-item'); if (first) { first.classList.add('open'); $('.faq-q', first).setAttribute('aria-expanded', 'true'); } })();
 
-        chatSendBtn.addEventListener('click', sendUserMessage);
-        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendUserMessage(); });
+        /* ------------------------------------------------------------
+           Twitch embed (laadt pas als de sectie in de buurt komt)
+           ------------------------------------------------------------ */
+        (() => {
+            const hosts = [...new Set([location.hostname, 'florisn.nl', 'www.florisn.nl', 'localhost'].filter(Boolean))];
+            const parents = hosts.map(h => 'parent=' + encodeURIComponent(h)).join('&');
+            let done = false;
+            const mount = () => {
+                if (done) return; done = true;
+                $('#tw-player').src = 'https://player.twitch.tv/?channel=' + TWITCH + '&' + parents;
+                $('#tw-chat').src = 'https://www.twitch.tv/embed/' + TWITCH + '/chat?' + parents + '&darkpopout';
+            };
+            const io = new IntersectionObserver(e => { if (e[0].isIntersecting) { mount(); io.disconnect(); } }, { rootMargin: '500px 0px' });
+            io.observe($('#stream'));
+        })();
 
-        function sendUserMessage() {
+        /* ------------------------------------------------------------
+           Live status: Twitch + Minecraft
+           ------------------------------------------------------------ */
+        function countUp(el, to) {
+            const from = el._v === undefined ? 0 : el._v;
+            if (from === to) { el.textContent = to; el._v = to; return; }
+            el._v = to;
+            if (reduce) { el.textContent = to; return; }
+            cancelAnimationFrame(el._raf);
+            const start = performance.now(), dur = 900;
+            (function step(now) {
+                const p = Math.min(1, (now - start) / dur);
+                const e = 1 - Math.pow(1 - p, 3);
+                el.textContent = Math.round(from + (to - from) * e);
+                if (p < 1) el._raf = requestAnimationFrame(step);
+            })(start);
+        }
+        function fmtUptime(txt) {
+            const d = /(\d+)\s*day/i.exec(txt), h = /(\d+)\s*hour/i.exec(txt), m = /(\d+)\s*minute/i.exec(txt);
+            const out = [];
+            if (d) out.push(d[1] + t('unit_d'));
+            if (h) out.push(h[1] + t('unit_h'));
+            if (m) out.push(m[1] + t('unit_m'));
+            return out.join(' ');
+        }
+        function renderStatus() {
+            const mc = state.mc, tw = state.tw;
+
+            // Twitch-badge
+            $('#tw-dot').className = 'dot ' + (tw ? (tw.live ? 'dot--red' : 'dot--gray') : 'dot--purple');
+            let twHtml = 'Twitch: <strong>Floris_N</strong>';
+            if (tw) {
+                twHtml += ' · ' + (tw.live ? t('tw_live') + (fmtUptime(tw.uptime || '') ? ' (' + fmtUptime(tw.uptime) + ')' : '') : t('tw_off'));
+            }
+            $('#tw-text').innerHTML = twHtml;
+
+            // Minecraft-badge
+            const mcDot = $('#mc-dot'), mcText = $('#mc-text');
+            if (mc === undefined) {
+                mcDot.className = 'dot dot--gray'; mcText.textContent = t('mc_loading');
+            } else if (mc === null) {
+                mcDot.className = 'dot dot--gray'; mcText.textContent = IP;
+            } else if (mc.online) {
+                mcDot.className = 'dot dot--green'; mcText.textContent = mc.now + ' / ' + mc.max + ' ' + t('mc_players');
+            } else {
+                mcDot.className = 'dot dot--red'; mcText.textContent = 'MC ' + t('status_offline');
+            }
+
+            // Serverkaart
+            const pill = $('#srv-status');
+            if (mc === undefined) { pill.textContent = '…'; pill.className = 'status-pill unk'; }
+            else if (mc === null) { pill.textContent = t('status_unknown'); pill.className = 'status-pill unk'; }
+            else { pill.textContent = mc.online ? t('status_online') : t('status_offline'); pill.className = 'status-pill ' + (mc.online ? 'ok' : 'bad'); }
+            const online = !!(mc && mc.online);
+            countUp($('#srv-now'), online ? mc.now : 0);
+            $('#srv-max').textContent = online ? mc.max : '–';
+            $('#srv-version').textContent = (mc && mc.version) ? mc.version : '–';
+            $('#srv-meter').style.width = (online && mc.max) ? Math.min(100, mc.now / mc.max * 100) + '%' : '0%';
+
+            // Footer
+            const fd = $('#foot-dot'), ft = $('#foot-text');
+            if (mc && mc.online) { fd.className = 'dot dot--green'; ft.textContent = t('footer_srv_online'); }
+            else if (mc) { fd.className = 'dot dot--red'; ft.textContent = t('footer_srv_offline'); }
+            else { fd.className = 'dot dot--gray'; ft.textContent = mc === undefined ? '…' : t('footer_srv_unknown'); }
+        }
+
+        async function fetchMC() {
+            let res = null;
+            try {
+                const r = await fetch('https://mcapi.us/server/status?ip=' + MC_HOST + '&port=' + MC_PORT);
+                const d = await r.json();
+                if (d && typeof d.online === 'boolean') {
+                    res = { online: d.online, now: (d.players && d.players.now) || 0, max: (d.players && d.players.max) || 0, version: (d.server && d.server.name) || '' };
+                }
+            } catch (e) {}
+            if (!res) {
+                try {
+                    const r = await fetch('https://api.mcsrvstat.us/3/' + MC_HOST + ':' + MC_PORT);
+                    const d = await r.json();
+                    if (d && typeof d.online === 'boolean') {
+                        res = { online: d.online, now: (d.players && d.players.online) || 0, max: (d.players && d.players.max) || 0, version: d.version || '' };
+                    }
+                } catch (e) {}
+            }
+            state.mc = res;
+            renderStatus();
+        }
+        async function fetchTwitch() {
+            try {
+                const r = await fetch('https://decapi.me/twitch/uptime/' + TWITCH, { cache: 'no-store' });
+                const txt = (await r.text()).trim();
+                if (/offline/i.test(txt)) state.tw = { live: false };
+                else if (/\d+\s*(second|minute|hour|day)/i.test(txt)) state.tw = { live: true, uptime: txt };
+                else state.tw = null;
+            } catch (e) { state.tw = null; }
+            renderStatus();
+        }
+
+        /* ------------------------------------------------------------
+           Top 5 speeltijd (uit data/usercache.json + stats-bestanden)
+           ------------------------------------------------------------ */
+        async function loadTop() {
+            const card = $('#lb-card');
+            try {
+                const r = await fetch('data/usercache.json', { cache: 'no-cache' });
+                if (!r.ok) throw new Error('geen usercache');
+                const cache = await r.json();
+                const uniq = new Map();
+                cache.forEach(p => uniq.set(p.uuid, p.name));
+                const rows = (await Promise.all([...uniq].map(async ([uuid, name]) => {
+                    try {
+                        const x = await fetch('data/' + uuid + '.json', { cache: 'no-cache' });
+                        if (!x.ok) return null;
+                        const j = await x.json();
+                        const c = (j.stats || {})['minecraft:custom'] || {};
+                        const ticks = c['minecraft:play_time'] !== undefined ? c['minecraft:play_time'] : (c['minecraft:play_one_minute'] || 0);
+                        return { uuid, name, ticks };
+                    } catch (e) { return null; }
+                }))).filter(p => p && p.ticks > 0).sort((a, b) => b.ticks - a.ticks).slice(0, 5);
+                if (!rows.length) throw new Error('geen data');
+                state.top = rows;
+                renderTop();
+            } catch (e) {
+                card.remove();   // geen data? dan verdwijnt het blok gewoon
+            }
+        }
+        function renderTop() {
+            const list = $('#lb-list');
+            if (!list || !state.top) return;
+            const max = state.top[0].ticks;
+            list.innerHTML = state.top.map((p, i) => {
+                const mins = Math.floor(p.ticks / 1200), h = Math.floor(mins / 60), m = mins % 60;
+                const val = (h ? h.toLocaleString(lang === 'nl' ? 'nl-NL' : 'en-GB') + t('unit_h') + ' ' : '') + m + t('unit_m');
+                return '<li class="lb-row" style="--w:' + (p.ticks / max * 100).toFixed(1) + '%;--i:' + i + '">' +
+                    '<span class="lb-rank r' + (i + 1) + '">' + (i + 1) + '</span>' +
+                    '<img class="lb-avatar" src="https://mc-heads.net/avatar/' + esc(p.uuid) + '/40" alt="" width="40" height="40" loading="lazy">' +
+                    '<div class="lb-info"><div class="lb-name">' + esc(p.name) + '</div><div class="lb-bar"><i></i></div></div>' +
+                    '<span class="lb-val">' + esc(val) + '</span></li>';
+            }).join('');
+        }
+
+        /* ------------------------------------------------------------
+           Chatbot
+           ------------------------------------------------------------ */
+        const chatToggle = $('#chat-toggle');
+        const chatWindow = $('#chat-window');
+        const chatMessages = $('#chat-messages');
+        const chatInput = $('#chat-input');
+        const chatQuick = $('#chat-quick');
+        let chatReady = false;
+        let promptTimer;
+
+        function fmt(s) {
+            return s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+        }
+        function matches(q, kw) {
+            if (kw.length <= 3) return new RegExp('\\b' + kw + '\\b').test(q);
+            return q.indexOf(kw) !== -1;
+        }
+        function botReply(input) {
+            const q = input.toLowerCase();
+            for (const item of KB) if (item.k.some(kw => matches(q, kw))) return item[lang];
+            return t('chat_not_found');
+        }
+        function scrollChat() { chatMessages.scrollTop = chatMessages.scrollHeight; }
+        function addMsg(html, who) {
+            const d = document.createElement('div');
+            d.className = 'msg ' + who;
+            if (who === 'user') d.textContent = html; else d.innerHTML = fmt(html);
+            chatMessages.appendChild(d);
+            scrollChat();
+            return d;
+        }
+        function renderQuick() {
+            chatQuick.innerHTML = '';
+            t('chat_quick').forEach(txt => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.textContent = txt;
+                b.addEventListener('click', () => { chatInput.value = txt; sendMsg(); });
+                chatQuick.appendChild(b);
+            });
+        }
+        function sendMsg() {
             const text = chatInput.value.trim();
             if (!text) return;
-
-            addUserMessage(text);
+            addMsg(text, 'user');
             chatInput.value = '';
-            chatQuickReplies.innerHTML = '';
-
+            chatQuick.innerHTML = '';
+            const typing = document.createElement('div');
+            typing.className = 'msg bot typing';
+            typing.innerHTML = '<i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i>';
+            chatMessages.appendChild(typing);
+            scrollChat();
             setTimeout(() => {
-                const reply = getBotReply(text);
-                addBotMessage(reply);
-                renderQuickReplies(getQuickReplies());
-            }, 600);
+                typing.remove();
+                addMsg(botReply(text), 'bot');
+                renderQuick();
+            }, 750);
         }
-
-        function getBotReply(input) {
-            const query = input.toLowerCase();
-            for (let item of chatKnowledgeBase) {
-                if (item.keywords.some(kw => query.includes(kw))) {
-                    return item[currentLang];
+        function setChat(open) {
+            chatWindow.classList.toggle('open', open);
+            chatToggle.classList.toggle('open', open);
+            chatToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (open) {
+                closePrompt();
+                if (!chatReady) {
+                    chatReady = true;
+                    setTimeout(() => { addMsg(t('chat_welcome'), 'bot'); renderQuick(); }, 300);
                 }
+                setTimeout(() => chatInput.focus(), 350);
             }
-            return i18n[currentLang].chat_not_found;
         }
+        function closePrompt() { clearTimeout(promptTimer); $('#chat-prompt').classList.remove('visible'); }
+        chatToggle.addEventListener('click', () => setChat(!chatWindow.classList.contains('open')));
+        $('#chat-close').addEventListener('click', () => setChat(false));
+        $('#chat-send').addEventListener('click', sendMsg);
+        chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMsg(); });
+        $('#prompt-close').addEventListener('click', closePrompt);
+        addEventListener('keydown', e => { if (e.key === 'Escape' && chatWindow.classList.contains('open')) setChat(false); });
+        setTimeout(() => {
+            if (!chatWindow.classList.contains('open')) {
+                $('#chat-prompt').classList.add('visible');
+                promptTimer = setTimeout(closePrompt, 12000);
+            }
+        }, 5000);
 
-        function addBotMessage(text) {
-            const div = document.createElement('div');
-            div.className = 'chat-message bot';
-            div.innerHTML = text;
-            chatMessages.appendChild(div);
-            scrollToBottom();
-        }
-
-        function addUserMessage(text) {
-            const div = document.createElement('div');
-            div.className = 'chat-message user';
-            div.textContent = text;
-            chatMessages.appendChild(div);
-            scrollToBottom();
-        }
-
-        function renderQuickReplies(items) {
-            chatQuickReplies.innerHTML = '';
-            items.forEach(item => {
-                const btn = document.createElement('button');
-                btn.className = 'quick-reply-btn';
-                btn.textContent = item;
-                btn.addEventListener('click', () => {
-                    chatInput.value = item;
-                    sendUserMessage();
-                });
-                chatQuickReplies.appendChild(btn);
-            });
-        }
-
-        function scrollToBottom() {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
+        /* ------------------------------------------------------------
+           Start
+           ------------------------------------------------------------ */
+        $('#year').textContent = new Date().getFullYear();
+        applyLang(lang);
+        onScroll();
+        fetchMC();
+        fetchTwitch();
+        loadTop();
+        setInterval(fetchMC, 30000);
+        setInterval(fetchTwitch, 60000);
+    })();
     </script>
 </body>
 </html>
