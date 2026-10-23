@@ -20,13 +20,12 @@
            DESIGN SYSTEM
            Kleur per sectie (--sec):  stream = paars, minecraft = groen,
            community = cyaan, faq = amber.
-           Radii:  surfaces 24px · inner blokken 18px · knoppen/controls 14px · badges/nav = pill
            ===================================================== */
         :root {
             --bg: #05070c;
             --bg-solid: #0a0e18;
-            --surface: rgba(13, 19, 32, 0.62);
-            --surface-2: rgba(22, 32, 54, 0.85);
+            --surface: rgba(13, 19, 32, 0.72);
+            --surface-2: rgba(22, 32, 54, 0.9);
             --line: rgba(255, 255, 255, 0.08);
             --line-strong: rgba(255, 255, 255, 0.16);
             --text: #f8fafc;
@@ -67,34 +66,31 @@
         .link { color: var(--purple); font-weight: 700; text-decoration: none; }
         .link:hover { text-decoration: underline; }
 
-        /* ---------- Achtergrond ---------- */
+        /* ---------- Achtergrond (statisch, één layer) ---------- */
+        body::before {
+            content: '';
+            position: fixed; inset: 0; z-index: -2; pointer-events: none;
+            background:
+                radial-gradient(600px 400px at 30% -5%, rgba(145,70,255,0.32), transparent 70%),
+                radial-gradient(520px 520px at 98% 92%, rgba(6,182,212,0.24), transparent 70%),
+                radial-gradient(460px 460px at -5% 45%, rgba(34,197,94,0.2), transparent 70%);
+        }
         body::after {
             content: '';
             position: fixed; inset: 0;
-            background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
+            background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
             background-size: 32px 32px;
             z-index: -2; pointer-events: none;
-        }
-        .orb {
-            position: fixed; border-radius: 50%;
-            filter: blur(140px); z-index: -1; pointer-events: none;
-            opacity: 0.8; animation: orb 14s ease-in-out infinite alternate;
-        }
-        .orb-1 { top: -150px; left: 30%; width: 700px; height: 500px; background: radial-gradient(circle, rgba(145,70,255,0.45), transparent 70%); }
-        .orb-2 { bottom: 10%; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(6,182,212,0.35), transparent 70%); animation-delay: -4s; }
-        .orb-3 { top: 40%; left: -150px; width: 550px; height: 550px; background: radial-gradient(circle, rgba(34,197,94,0.32), transparent 70%); animation-delay: -8s; }
-        @keyframes orb {
-            from { transform: translateY(0) scale(1) rotate(0deg); }
-            to   { transform: translateY(40px) scale(1.15) rotate(15deg); }
         }
 
         .cursor-glow {
             position: fixed; left: 0; top: 0;
-            width: 460px; height: 460px; margin: -230px 0 0 -230px;
+            width: 420px; height: 420px; margin: -210px 0 0 -210px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(145,70,255,0.13), transparent 65%);
+            background: radial-gradient(circle, rgba(145,70,255,0.1), transparent 65%);
             pointer-events: none; z-index: -1;
             transform: translate3d(-999px, -999px, 0);
+            will-change: transform;
         }
         @media (hover: none) { .cursor-glow { display: none; } }
 
@@ -142,24 +138,24 @@
             width: 100%; max-width: 1150px;
             display: flex; align-items: center; justify-content: space-between; gap: 1rem;
             padding: 0.55rem 0.6rem 0.55rem 1rem;
-            background: rgba(10,14,24,0.78);
-            backdrop-filter: blur(24px) saturate(1.4); -webkit-backdrop-filter: blur(24px) saturate(1.4);
+            background: rgba(10,14,24,0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--line); border-radius: var(--pill);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.08);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
         }
         .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
         .brand-mark {
             width: 36px; height: 36px; border-radius: 12px; flex-shrink: 0;
             display: grid; place-items: center; font-size: 0.95rem; color: #fff;
             background: linear-gradient(135deg, var(--purple), var(--cyan));
-            box-shadow: 0 0 18px rgba(145,70,255,0.45);
+            box-shadow: 0 0 18px rgba(145,70,255,0.4);
             transition: transform 0.5s var(--ease);
         }
         .brand:hover .brand-mark { transform: rotate(-12deg) scale(1.08); }
         .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
         .brand-title { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; }
         .brand-title span { color: var(--purple); }
-        .brand-sub { font-size: 0.64rem; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+        .brand-sub { font-size: 0.64rem; font-weight: 700; color: var(--muted); letter-spacing: 1px; }
 
         .nav-center {
             position: relative; display: flex; gap: 2px; padding: 4px;
@@ -188,7 +184,7 @@
             background: transparent; border: 0; padding: 0.35rem 0.75rem; border-radius: var(--pill);
             font-size: 0.74rem; font-weight: 800; color: var(--muted); cursor: pointer; transition: all 0.25s;
         }
-        .lang-btn.active { background: var(--purple); color: #fff; box-shadow: 0 0 12px rgba(145,70,255,0.45); }
+        .lang-btn.active { background: var(--purple); color: #fff; box-shadow: 0 0 12px rgba(145,70,255,0.4); }
 
         /* ---------- Herbruikbare onderdelen ---------- */
         .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
@@ -197,17 +193,16 @@
         .surface {
             position: relative; isolation: isolate; overflow: hidden;
             background: var(--surface);
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--line); border-radius: var(--r-lg);
             transition: border-color 0.3s, background 0.3s, box-shadow 0.3s, transform 0.25s ease-out;
         }
         .surface::before {
             content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
             pointer-events: none; opacity: 0; transition: opacity 0.3s;
-            background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--sec) 22%, transparent), transparent 45%);
+            background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--sec) 20%, transparent), transparent 45%);
         }
         .spot:hover::before { opacity: 1; }
-        .spot:hover { border-color: color-mix(in srgb, var(--sec) 45%, transparent); background: var(--surface-2); box-shadow: 0 18px 40px rgba(0,0,0,0.35); }
+        .spot:hover { border-color: color-mix(in srgb, var(--sec) 45%, transparent); background: var(--surface-2); box-shadow: 0 18px 40px rgba(0,0,0,0.3); }
 
         .section-head { text-align: center; margin-bottom: 2.5rem; }
         .eyebrow {
@@ -244,13 +239,13 @@
         }
         .btn:hover { translate: 0 -3px; }
         .btn:hover::after { left: 130%; }
-        .btn-purple { background: var(--purple); color: #fff; box-shadow: 0 6px 20px rgba(145,70,255,0.45); }
-        .btn-purple:hover { box-shadow: 0 10px 30px rgba(145,70,255,0.55); }
+        .btn-purple { background: var(--purple); color: #fff; box-shadow: 0 6px 20px rgba(145,70,255,0.4); }
+        .btn-purple:hover { box-shadow: 0 10px 30px rgba(145,70,255,0.5); }
         .btn-green { background: rgba(34,197,94,0.1); color: #4ade80; border-color: rgba(34,197,94,0.3); }
-        .btn-green:hover { background: rgba(34,197,94,0.18); border-color: var(--green); box-shadow: 0 8px 25px rgba(34,197,94,0.2); }
+        .btn-green:hover { background: rgba(34,197,94,0.18); border-color: var(--green); box-shadow: 0 8px 25px rgba(34,197,94,0.18); }
         .btn-ghost { background: rgba(255,255,255,0.04); border-color: var(--line-strong); }
         .btn-ghost:hover { background: rgba(255,255,255,0.09); }
-        .btn-discord { background: var(--discord); color: #fff; box-shadow: 0 6px 20px rgba(88,101,242,0.4); }
+        .btn-discord { background: var(--discord); color: #fff; box-shadow: 0 6px 20px rgba(88,101,242,0.35); }
 
         .chip {
             display: inline-flex; align-items: center; gap: 0.5rem;
@@ -288,16 +283,16 @@
             display: inline-flex; align-items: center; gap: 9px;
             padding: 0.5rem 1.15rem; border-radius: var(--pill);
             background: var(--surface); border: 1px solid var(--line);
-            font-size: 0.82rem; font-weight: 600; backdrop-filter: blur(10px);
+            font-size: 0.82rem; font-weight: 600;
         }
         .hero h1 { font-size: clamp(2.4rem, 7vw, 4.6rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; }
         .h1-a { background: linear-gradient(180deg, #fff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         .grad {
-            background: linear-gradient(100deg, var(--purple), var(--cyan), var(--green), var(--purple));
-            background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-            animation: gradMove 8s linear infinite;
+            background: linear-gradient(100deg, var(--purple), var(--cyan), var(--purple));
+            background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+            animation: gradMove 10s linear infinite;
         }
-        @keyframes gradMove { to { background-position: 300% 0; } }
+        @keyframes gradMove { to { background-position: 200% 0; } }
         .lead { font-size: clamp(1.05rem, 2.4vw, 1.35rem); font-weight: 700; color: #e2e8f0; min-height: 1.8em; }
         .typed { color: var(--cyan); }
         .caret { display: inline-block; width: 2px; height: 1.1em; margin-left: 3px; vertical-align: -0.15em; background: var(--cyan); animation: blink 1s steps(1) infinite; }
@@ -315,13 +310,12 @@
         }
         @keyframes wheel { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(14px); } }
 
-        /* Zwevende 3D-blokken */
+        /* Zwevende 3D-blokken (geen spin meer, alleen parallax + bob) */
         .cubes { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-        .fc { position: absolute; width: var(--s); height: var(--s); will-change: transform; filter: drop-shadow(0 14px 22px rgba(0,0,0,0.5)); }
+        .fc { position: absolute; width: var(--s); height: var(--s); filter: drop-shadow(0 14px 22px rgba(0,0,0,0.45)); }
         .bob { width: 100%; height: 100%; perspective: 700px; animation: bob var(--bd, 6s) ease-in-out infinite alternate; }
         @keyframes bob { from { transform: translateY(0); } to { transform: translateY(-18px); } }
-        .cube { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; animation: spin var(--dur, 22s) linear infinite; }
-        @keyframes spin { from { transform: rotateX(-24deg) rotateY(0deg); } to { transform: rotateX(-24deg) rotateY(360deg); } }
+        .cube { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transform: rotateX(-24deg) rotateY(24deg); }
         .cube .f {
             position: absolute; inset: 0; border: 1px solid rgba(0,0,0,0.25);
             background-image: linear-gradient(var(--top) 0 24%, var(--body) 24% 100%), repeating-conic-gradient(rgba(0,0,0,0.12) 0 25%, rgba(255,255,255,0.05) 0 50%);
@@ -351,10 +345,10 @@
         .mq-group { display: flex; }
         .mq-group span {
             display: inline-flex; align-items: center; gap: 1.2rem; padding-right: 1.2rem;
-            font-size: 0.82rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
+            font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em;
             color: var(--muted); white-space: nowrap;
         }
-        .mq-group span::after { content: '✦'; color: var(--purple); }
+        .mq-group span::after { content: '·'; color: var(--purple); font-weight: 800; }
         @keyframes marquee { to { transform: translateX(-50%); } }
 
         /* ---------- Stream ---------- */
@@ -439,12 +433,6 @@
             font-size: 0.9rem; font-weight: 700; color: var(--sec); text-decoration: none; transition: gap 0.2s;
         }
         .card-link:hover { gap: 11px; }
-        .deco { display: flex; align-items: flex-end; gap: 4px; height: 28px; margin-top: 1.1rem; }
-        .deco i { display: block; width: 5px; height: 100%; border-radius: 4px; background: var(--sec); transform-origin: bottom; animation: bars 1.2s ease-in-out infinite; animation-delay: calc(var(--i) * 0.13s); }
-        .deco.mid i { transform-origin: center; }
-        @keyframes bars { 0%,100% { transform: scaleY(0.25); } 50% { transform: scaleY(1); } }
-        .deco.blocks i { width: 16px; height: 16px; border-radius: 4px; opacity: 0; transform-origin: center; animation: pop 3.2s ease-in-out infinite; animation-delay: calc(var(--i) * 0.3s); }
-        @keyframes pop { 0%,12% { opacity: 0; transform: scale(0.3) translateY(8px); } 22%,70% { opacity: 1; transform: scale(1) translateY(0); } 90%,100% { opacity: 0; transform: scale(1) translateY(0); } }
 
         .lb-card { padding: 1.8rem 2rem; }
         .lb-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 0.8rem; margin-bottom: 1.2rem; }
@@ -504,7 +492,7 @@
             border: 2px solid transparent;
             background: linear-gradient(var(--bg-solid), var(--bg-solid)) padding-box,
                         conic-gradient(from var(--angle), var(--purple), var(--cyan), var(--green), var(--purple)) border-box;
-            animation: angle 6s linear infinite;
+            animation: angle 8s linear infinite;
         }
         @keyframes angle { to { --angle: 360deg; } }
         .cta-box h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.03em; }
@@ -550,8 +538,8 @@
             position: fixed; bottom: 6.2rem; right: 2rem; z-index: 9995;
             display: flex; align-items: center; gap: 10px; padding: 0.75rem 1.1rem; border-radius: var(--r-sm);
             background: rgba(15,22,36,0.95); border: 1px solid var(--purple);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(145,70,255,0.4);
-            font-size: 0.82rem; font-weight: 600; backdrop-filter: blur(12px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(145,70,255,0.35);
+            font-size: 0.82rem; font-weight: 600;
             opacity: 0; transform: translateY(10px) scale(0.95); pointer-events: none;
             transition: all 0.4s var(--ease);
         }
@@ -561,11 +549,9 @@
             position: fixed; bottom: 2rem; right: 2rem; z-index: 9997;
             width: 56px; height: 56px; border-radius: 50%; border: 0; cursor: pointer;
             display: grid; place-items: center; color: #fff; background: var(--purple);
-            box-shadow: 0 10px 30px rgba(145,70,255,0.4); transition: transform 0.3s var(--ease);
-            animation: ring 3s ease-in-out infinite;
+            box-shadow: 0 10px 30px rgba(145,70,255,0.35); transition: transform 0.3s var(--ease), box-shadow 0.3s;
         }
-        @keyframes ring { 0%,100% { box-shadow: 0 10px 30px rgba(145,70,255,0.4), 0 0 0 0 rgba(145,70,255,0.45); } 50% { box-shadow: 0 10px 30px rgba(145,70,255,0.4), 0 0 0 14px rgba(145,70,255,0); } }
-        .chat-toggle:hover { transform: translateY(-3px) scale(1.06); }
+        .chat-toggle:hover { transform: translateY(-3px) scale(1.06); box-shadow: 0 14px 36px rgba(145,70,255,0.5); }
         .chat-toggle svg { width: 22px; height: 22px; }
         .chat-toggle .i-close { display: none; }
         .chat-toggle.open .i-chat { display: none; }
@@ -575,13 +561,13 @@
             width: 360px; max-width: calc(100% - 3rem); height: 500px; max-height: calc(100vh - 7rem);
             display: flex; flex-direction: column; overflow: hidden;
             background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-lg);
-            backdrop-filter: blur(20px); box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
             opacity: 0; visibility: hidden; transform: translateY(15px) scale(0.96); transform-origin: bottom right;
             transition: all 0.35s var(--ease);
         }
         .chat-window.open { opacity: 1; visibility: visible; transform: none; }
         .chat-head { display: flex; align-items: center; gap: 0.8rem; padding: 1.1rem 1.3rem; background: rgba(15,22,36,0.95); border-bottom: 1px solid var(--line); }
-        .chat-avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 0.9rem; color: #fff; background: var(--purple); box-shadow: 0 0 15px rgba(145,70,255,0.45); }
+        .chat-avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 0.9rem; color: #fff; background: var(--purple); box-shadow: 0 0 15px rgba(145,70,255,0.4); }
         .chat-head-info { flex: 1; }
         .chat-head-info h4 { font-size: 0.9rem; font-weight: 700; }
         .chat-head-info span { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--muted); }
@@ -636,15 +622,13 @@
         @media (prefers-reduced-motion: reduce) {
             html { scroll-behavior: auto; }
             *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+            .bob, .grad, .mq-track { animation: none !important; }
         }
     </style>
 </head>
 <body>
 
     <div class="progress" id="progress"></div>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
     <div class="cursor-glow" id="glow"></div>
 
     <div class="loader" id="loader">
@@ -686,16 +670,16 @@
         <header class="hero" id="home">
             <div class="cubes" aria-hidden="true">
                 <div class="fc" data-depth="46" style="--s:78px; left:7%; top:20%;">
-                    <div class="bob" style="--bd:6s"><div class="cube grass" style="--dur:22s"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
+                    <div class="bob" style="--bd:6s"><div class="cube grass"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
                 </div>
                 <div class="fc" data-depth="30" style="--s:56px; right:9%; top:14%;">
-                    <div class="bob" style="--bd:7.5s"><div class="cube amethyst" style="--dur:17s"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
+                    <div class="bob" style="--bd:7.5s"><div class="cube amethyst"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
                 </div>
                 <div class="fc" data-depth="62" style="--s:42px; right:16%; bottom:20%;">
-                    <div class="bob" style="--bd:5s"><div class="cube ice" style="--dur:26s"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
+                    <div class="bob" style="--bd:5s"><div class="cube ice"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
                 </div>
                 <div class="fc" data-depth="22" style="--s:34px; left:17%; bottom:16%;">
-                    <div class="bob" style="--bd:8s"><div class="cube amethyst" style="--dur:30s"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
+                    <div class="bob" style="--bd:8s"><div class="cube amethyst"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
                 </div>
             </div>
 
@@ -722,7 +706,7 @@
         </header>
 
         <div class="marquee" aria-hidden="true">
-            <div class="mq-track">
+            <div class="mq-track" id="mq-track">
                 <div class="mq-group"><span>Livestream</span><span>Minecraft SMP</span><span>Voice Chat</span><span>Community</span><span>Statistieken</span><span>play.florisn.nl</span></div>
                 <div class="mq-group"><span>Livestream</span><span>Minecraft SMP</span><span>Voice Chat</span><span>Community</span><span>Statistieken</span><span>play.florisn.nl</span></div>
             </div>
@@ -755,7 +739,7 @@
                             <span><i class="fa-solid fa-trophy"></i><span data-i18n="goal_title">Live Stream Sub Goal</span></span>
                             <span class="live-tag"><span class="dot dot--green"></span>Live</span>
                         </div>
-                        <iframe class="se-goal-iframe" loading="lazy" title="Sub goal" src="https://streamelements.com/overlay/69611270b73f9c3ca9abe7a2/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
+                        <iframe class="se-goal-iframe" loading="lazy" title="Sub goal" data-src="https://streamelements.com/overlay/69611270b73f9c3ca9abe7a2/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
                     </div>
 
                     <div class="surface panel reveal" style="--d:1">
@@ -766,19 +750,19 @@
                         <div class="se-act-grid">
                             <div class="se-act follow">
                                 <div class="se-label"><i class="fa-solid fa-user-plus"></i> Follow</div>
-                                <div class="se-frame"><iframe loading="lazy" title="Laatste follow" src="https://streamelements.com/overlay/6ad978fd5f959abf17778661/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
+                                <div class="se-frame"><iframe loading="lazy" title="Laatste follow" data-src="https://streamelements.com/overlay/6ad978fd5f959abf17778661/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
                             </div>
                             <div class="se-act sub">
                                 <div class="se-label"><i class="fa-solid fa-star"></i> Sub</div>
-                                <div class="se-frame"><iframe loading="lazy" title="Laatste sub" src="https://streamelements.com/overlay/6ad97a6de6390eb5d96535fa/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
+                                <div class="se-frame"><iframe loading="lazy" title="Laatste sub" data-src="https://streamelements.com/overlay/6ad97a6de6390eb5d96535fa/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
                             </div>
                             <div class="se-act bits">
                                 <div class="se-label"><i class="fa-solid fa-gem"></i> Bits</div>
-                                <div class="se-frame"><iframe loading="lazy" title="Laatste bits" src="https://streamelements.com/overlay/6ad97a94503dd55613ff53eb/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
+                                <div class="se-frame"><iframe loading="lazy" title="Laatste bits" data-src="https://streamelements.com/overlay/6ad97a94503dd55613ff53eb/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
                             </div>
                             <div class="se-act donate">
                                 <div class="se-label"><i class="fa-solid fa-euro-sign"></i> Donatie</div>
-                                <div class="se-frame"><iframe loading="lazy" title="Laatste donatie" src="https://streamelements.com/overlay/6ad97ab9e6390eb5d9654000/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
+                                <div class="se-frame"><iframe loading="lazy" title="Laatste donatie" data-src="https://streamelements.com/overlay/6ad97ab9e6390eb5d9654000/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
                             </div>
                         </div>
                     </div>
@@ -820,13 +804,11 @@
                         <div class="card-icon"><i class="fa-solid fa-users"></i></div>
                         <h3 data-i18n="card1_title">Gezellige Survival</h3>
                         <p data-i18n="card1_desc">Een unieke SMP server waar bouwen, avontuur en samenwerken met de stream-community centraal staan.</p>
-                        <div class="deco blocks" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>
                     </div>
                     <div class="surface card spot" data-tilt>
                         <div class="card-icon"><i class="fa-solid fa-headset"></i></div>
                         <h3 data-i18n="card2_title">Simple Voice Chat</h3>
                         <p data-i18n="card2_desc">Proximity voice-chat geïntegreerd. Praat direct in-game met spelers die om je heen staan.</p>
-                        <div class="deco mid" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i></div>
                     </div>
                     <div class="surface card spot" data-tilt>
                         <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
@@ -1277,55 +1259,96 @@
            Beweging: parallax-blokken, cursor-gloed, spotlight, tilt, magnetische knoppen
            ------------------------------------------------------------ */
         if (!reduce && finePointer) {
+            // Hero-parallax: geen oneindige rAF meer
             const hero = $('#home');
             const cubes = $$('.fc');
-            let tx = 0, ty = 0, cx = 0, cy = 0, heroVisible = true;
-            new IntersectionObserver(e => { heroVisible = e[0].isIntersecting; }).observe(hero);
+            let tx = 0, ty = 0, cx = 0, cy = 0, rafId = null;
+
+            function heroTick() {
+                cx += (tx - cx) * 0.08;
+                cy += (ty - cy) * 0.08;
+                cubes.forEach(c => {
+                    const d = +c.dataset.depth || 20;
+                    c.style.transform = 'translate3d(' + (cx * d).toFixed(1) + 'px,' + (cy * d).toFixed(1) + 'px,0)';
+                });
+                // Stop als bijna stil en muis weg
+                if (Math.abs(tx - cx) < 0.001 && Math.abs(ty - cy) < 0.001 && tx === 0 && ty === 0) {
+                    rafId = null;
+                    return;
+                }
+                rafId = requestAnimationFrame(heroTick);
+            }
+            function heroKick() { if (rafId === null) rafId = requestAnimationFrame(heroTick); }
+
             hero.addEventListener('mousemove', e => {
                 const r = hero.getBoundingClientRect();
                 tx = (e.clientX - r.left) / r.width - 0.5;
                 ty = (e.clientY - r.top) / r.height - 0.5;
+                heroKick();
             });
-            hero.addEventListener('mouseleave', () => { tx = 0; ty = 0; });
-            (function loop() {
-                if (heroVisible) {
-                    cx += (tx - cx) * 0.06;
-                    cy += (ty - cy) * 0.06;
-                    cubes.forEach(c => {
-                        const d = +c.dataset.depth || 20;
-                        c.style.transform = 'translate3d(' + (cx * d).toFixed(2) + 'px,' + (cy * d).toFixed(2) + 'px,0)';
-                    });
-                }
-                requestAnimationFrame(loop);
-            })();
+            hero.addEventListener('mouseleave', () => { tx = 0; ty = 0; heroKick(); });
+            // Stop volledig als hero uit beeld is
+            new IntersectionObserver(([e]) => {
+                if (!e.isIntersecting && rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+            }).observe(hero);
 
+            // Cursor-gloed: rAF-throttle
             const glow = $('#glow');
-            addEventListener('mousemove', e => { glow.style.transform = 'translate3d(' + e.clientX + 'px,' + e.clientY + 'px,0)'; }, { passive: true });
-
-            document.addEventListener('pointermove', e => {
-                const el = e.target.closest && e.target.closest('.spot');
-                if (!el) return;
-                const r = el.getBoundingClientRect();
-                const x = e.clientX - r.left, y = e.clientY - r.top;
-                el.style.setProperty('--mx', x + 'px');
-                el.style.setProperty('--my', y + 'px');
-                if (el.hasAttribute('data-tilt')) {
-                    el.style.setProperty('--ry', ((x / r.width - 0.5) * 8).toFixed(2) + 'deg');
-                    el.style.setProperty('--rx', ((0.5 - y / r.height) * 8).toFixed(2) + 'deg');
-                }
-            });
-            document.addEventListener('pointerout', e => {
-                const el = e.target.closest && e.target.closest('[data-tilt]');
-                if (el && !el.contains(e.relatedTarget)) { el.style.setProperty('--rx', '0deg'); el.style.setProperty('--ry', '0deg'); }
-            });
-
-            $$('[data-magnet]').forEach(b => {
-                b.addEventListener('pointermove', e => {
-                    const r = b.getBoundingClientRect();
-                    b.style.setProperty('--tx', ((e.clientX - r.left - r.width / 2) * 0.18).toFixed(1) + 'px');
-                    b.style.setProperty('--ty', ((e.clientY - r.top - r.height / 2) * 0.28).toFixed(1) + 'px');
+            let gx = 0, gy = 0, gRaf = null;
+            addEventListener('pointermove', e => {
+                gx = e.clientX; gy = e.clientY;
+                if (gRaf !== null) return;
+                gRaf = requestAnimationFrame(() => {
+                    glow.style.transform = 'translate3d(' + gx + 'px,' + gy + 'px,0)';
+                    gRaf = null;
                 });
-                b.addEventListener('pointerleave', () => { b.style.setProperty('--tx', '0px'); b.style.setProperty('--ty', '0px'); });
+            }, { passive: true });
+
+            // Spotlight + tilt: alleen op .spot, met rAF-throttle
+            $$('.spot').forEach(el => {
+                let pending = false, px = 0, py = 0;
+                el.addEventListener('pointermove', e => {
+                    px = e.clientX; py = e.clientY;
+                    if (pending) return;
+                    pending = true;
+                    requestAnimationFrame(() => {
+                        pending = false;
+                        const r = el.getBoundingClientRect();
+                        const x = px - r.left, y = py - r.top;
+                        el.style.setProperty('--mx', x + 'px');
+                        el.style.setProperty('--my', y + 'px');
+                        if (el.hasAttribute('data-tilt')) {
+                            el.style.setProperty('--ry', ((x / r.width - 0.5) * 8).toFixed(2) + 'deg');
+                            el.style.setProperty('--rx', ((0.5 - y / r.height) * 8).toFixed(2) + 'deg');
+                        }
+                    });
+                });
+                el.addEventListener('pointerleave', () => {
+                    if (el.hasAttribute('data-tilt')) {
+                        el.style.setProperty('--rx', '0deg');
+                        el.style.setProperty('--ry', '0deg');
+                    }
+                });
+            });
+
+            // Magnetische knoppen: rAF-throttle
+            $$('[data-magnet]').forEach(b => {
+                let mPending = false, mx = 0, my = 0;
+                b.addEventListener('pointermove', e => {
+                    mx = e.clientX; my = e.clientY;
+                    if (mPending) return;
+                    mPending = true;
+                    requestAnimationFrame(() => {
+                        mPending = false;
+                        const r = b.getBoundingClientRect();
+                        b.style.setProperty('--tx', ((mx - r.left - r.width / 2) * 0.18).toFixed(1) + 'px');
+                        b.style.setProperty('--ty', ((my - r.top - r.height / 2) * 0.28).toFixed(1) + 'px');
+                    });
+                });
+                b.addEventListener('pointerleave', () => {
+                    b.style.setProperty('--tx', '0px');
+                    b.style.setProperty('--ty', '0px');
+                });
             });
         }
 
@@ -1407,7 +1430,7 @@
         (() => { const first = $('.faq-item'); if (first) { first.classList.add('open'); $('.faq-q', first).setAttribute('aria-expanded', 'true'); } })();
 
         /* ------------------------------------------------------------
-           Twitch embed (laadt pas als de sectie in de buurt komt)
+           Twitch embed + StreamElements overlays (lazy)
            ------------------------------------------------------------ */
         (() => {
             const hosts = [...new Set([location.hostname, 'florisn.nl', 'www.florisn.nl', 'localhost'].filter(Boolean))];
@@ -1417,8 +1440,10 @@
                 if (done) return; done = true;
                 $('#tw-player').src = 'https://player.twitch.tv/?channel=' + TWITCH + '&' + parents;
                 $('#tw-chat').src = 'https://www.twitch.tv/embed/' + TWITCH + '/chat?' + parents + '&darkpopout';
+                // StreamElements-iframes pas nu laden
+                $$('iframe[data-src]').forEach(f => { f.src = f.dataset.src; f.removeAttribute('data-src'); });
             };
-            const io = new IntersectionObserver(e => { if (e[0].isIntersecting) { mount(); io.disconnect(); } }, { rootMargin: '500px 0px' });
+            const io = new IntersectionObserver(e => { if (e[0].isIntersecting) { mount(); io.disconnect(); } }, { rootMargin: '400px 0px' });
             io.observe($('#stream'));
         })();
 
@@ -1450,7 +1475,6 @@
         function renderStatus() {
             const mc = state.mc, tw = state.tw;
 
-            // Twitch-badge
             $('#tw-dot').className = 'dot ' + (tw ? (tw.live ? 'dot--red' : 'dot--gray') : 'dot--purple');
             let twHtml = 'Twitch: <strong>Floris_N</strong>';
             if (tw) {
@@ -1458,7 +1482,6 @@
             }
             $('#tw-text').innerHTML = twHtml;
 
-            // Minecraft-badge
             const mcDot = $('#mc-dot'), mcText = $('#mc-text');
             if (mc === undefined) {
                 mcDot.className = 'dot dot--gray'; mcText.textContent = t('mc_loading');
@@ -1470,7 +1493,6 @@
                 mcDot.className = 'dot dot--red'; mcText.textContent = 'MC ' + t('status_offline');
             }
 
-            // Serverkaart
             const pill = $('#srv-status');
             if (mc === undefined) { pill.textContent = '…'; pill.className = 'status-pill unk'; }
             else if (mc === null) { pill.textContent = t('status_unknown'); pill.className = 'status-pill unk'; }
@@ -1481,7 +1503,6 @@
             $('#srv-version').textContent = (mc && mc.version) ? mc.version : '–';
             $('#srv-meter').style.width = (online && mc.max) ? Math.min(100, mc.now / mc.max * 100) + '%' : '0%';
 
-            // Footer
             const fd = $('#foot-dot'), ft = $('#foot-text');
             if (mc && mc.online) { fd.className = 'dot dot--green'; ft.textContent = t('footer_srv_online'); }
             else if (mc) { fd.className = 'dot dot--red'; ft.textContent = t('footer_srv_offline'); }
@@ -1521,8 +1542,15 @@
         }
 
         /* ------------------------------------------------------------
-           Top 5 speeltijd (uit data/usercache.json + stats-bestanden)
+           Top 5 speeltijd (met gepoolde requests)
            ------------------------------------------------------------ */
+        async function pool(items, fn, limit = 5) {
+            const out = []; let i = 0;
+            await Promise.all(Array.from({ length: Math.min(limit, items.length) }, async () => {
+                while (i < items.length) { const idx = i++; out[idx] = await fn(items[idx]); }
+            }));
+            return out;
+        }
         async function loadTop() {
             const card = $('#lb-card');
             try {
@@ -1531,7 +1559,8 @@
                 const cache = await r.json();
                 const uniq = new Map();
                 cache.forEach(p => uniq.set(p.uuid, p.name));
-                const rows = (await Promise.all([...uniq].map(async ([uuid, name]) => {
+                const entries = [...uniq];
+                const rows = (await pool(entries, async ([uuid, name]) => {
                     try {
                         const x = await fetch('data/' + uuid + '.json', { cache: 'no-cache' });
                         if (!x.ok) return null;
@@ -1540,12 +1569,12 @@
                         const ticks = c['minecraft:play_time'] !== undefined ? c['minecraft:play_time'] : (c['minecraft:play_one_minute'] || 0);
                         return { uuid, name, ticks };
                     } catch (e) { return null; }
-                }))).filter(p => p && p.ticks > 0).sort((a, b) => b.ticks - a.ticks).slice(0, 5);
+                }, 5)).filter(p => p && p.ticks > 0).sort((a, b) => b.ticks - a.ticks).slice(0, 5);
                 if (!rows.length) throw new Error('geen data');
                 state.top = rows;
                 renderTop();
             } catch (e) {
-                card.remove();   // geen data? dan verdwijnt het blok gewoon
+                card.remove();
             }
         }
         function renderTop() {
@@ -1562,6 +1591,18 @@
                     '<span class="lb-val">' + esc(val) + '</span></li>';
             }).join('');
         }
+
+        /* ------------------------------------------------------------
+           Marquee pauzeren buiten beeld
+           ------------------------------------------------------------ */
+        (() => {
+            const mq = $('#mq-track');
+            const box = $('.marquee');
+            if (!mq || !box) return;
+            new IntersectionObserver(([e]) => {
+                mq.style.animationPlayState = e.isIntersecting ? 'running' : 'paused';
+            }).observe(box);
+        })();
 
         /* ------------------------------------------------------------
            Chatbot
