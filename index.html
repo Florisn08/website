@@ -360,26 +360,6 @@
         iframe { width: 100%; height: 100%; border: 0; display: block; }
         .stream-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin: 1.2rem 0 1.25rem; }
 
-        .se-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-        .panel { padding: 1rem 1.2rem; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-        .panel-head { display: flex; align-items: center; justify-content: space-between; font-weight: 800; font-size: 0.9rem; }
-        .panel-head > span:first-child i { color: var(--sec); margin-right: 8px; }
-        .live-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 0.7rem; font-weight: 700; color: var(--green); }
-        .se-goal-iframe { width: 100%; height: 60px; border-radius: 12px; pointer-events: none; background: transparent; }
-        .se-act-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .se-act {
-            --ac: var(--purple);
-            display: flex; flex-direction: column; gap: 4px; padding: 6px; border-radius: 12px;
-            background: linear-gradient(180deg, color-mix(in srgb, var(--ac) 8%, transparent), rgba(255,255,255,0.02));
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-        .se-act.follow { --ac: #3b82f6; } .se-act.sub { --ac: var(--purple); } .se-act.bits { --ac: var(--amber); } .se-act.donate { --ac: var(--green); }
-        .se-label { display: flex; align-items: center; gap: 5px; padding-left: 2px; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); }
-        .se-label i { color: var(--ac); font-size: 0.6rem; }
-        .se-frame { position: relative; height: 64px; border-radius: 8px; overflow: hidden; background: rgba(0,0,0,0.2); }
-        .se-frame iframe { pointer-events: none; background: transparent; }
-        .se-frame::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 14px; background: linear-gradient(180deg, transparent, rgba(13,19,32,0.9)); pointer-events: none; }
-
         /* ---------- Minecraft ---------- */
         .server-card { display: grid; grid-template-columns: 1.35fr 1fr; margin-bottom: 1.25rem; }
         .server-main { padding: 2.2rem; display: flex; flex-direction: column; align-items: flex-start; gap: 0.9rem; }
@@ -597,7 +577,6 @@
         @media (max-width: 900px) {
             .stream-grid { grid-template-columns: 1fr; }
             .stream-chat { display: none; }
-            .se-grid { grid-template-columns: 1fr; }
             .server-card { grid-template-columns: 1fr; }
             .server-live { border-left: 0; border-top: 1px solid var(--line); }
             .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
@@ -731,41 +710,6 @@
                     <a class="chip" href="https://twitch.tv/Floris_N" target="_blank" rel="noopener"><i class="fa-brands fa-twitch"></i><span data-i18n="act_follow">Volg op Twitch</span></a>
                     <a class="chip" href="https://streamelements.com/floris_n/tip" target="_blank" rel="noopener"><i class="fa-solid fa-heart"></i><span data-i18n="act_tip">Steun met een tip</span></a>
                     <a class="chip" href="https://www.twitch.tv/popout/floris_n/chat?popout=" target="_blank" rel="noopener"><i class="fa-solid fa-comments"></i><span data-i18n="act_chat">Open chat</span></a>
-                </div>
-
-                <div class="se-grid">
-                    <div class="surface panel reveal" style="--d:0">
-                        <div class="panel-head">
-                            <span><i class="fa-solid fa-trophy"></i><span data-i18n="goal_title">Live Stream Sub Goal</span></span>
-                            <span class="live-tag"><span class="dot dot--green"></span>Live</span>
-                        </div>
-                        <iframe class="se-goal-iframe" loading="lazy" title="Sub goal" data-src="https://streamelements.com/overlay/69611270b73f9c3ca9abe7a2/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe>
-                    </div>
-
-                    <div class="surface panel reveal" style="--d:1">
-                        <div class="panel-head">
-                            <span><i class="fa-solid fa-bolt"></i><span data-i18n="activity_title">Latest Activity</span></span>
-                            <span class="live-tag"><span class="dot dot--green"></span>Live</span>
-                        </div>
-                        <div class="se-act-grid">
-                            <div class="se-act follow">
-                                <div class="se-label"><i class="fa-solid fa-user-plus"></i> Follow</div>
-                                <div class="se-frame"><iframe loading="lazy" title="Laatste follow" data-src="https://streamelements.com/overlay/6ad978fd5f959abf17778661/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
-                            </div>
-                            <div class="se-act sub">
-                                <div class="se-label"><i class="fa-solid fa-star"></i> Sub</div>
-                                <div class="se-frame"><iframe loading="lazy" title="Laatste sub" data-src="https://streamelements.com/overlay/6ad97a6de6390eb5d96535fa/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
-                            </div>
-                            <div class="se-act bits">
-                                <div class="se-label"><i class="fa-solid fa-gem"></i> Bits</div>
-                                <div class="se-frame"><iframe loading="lazy" title="Laatste bits" data-src="https://streamelements.com/overlay/6ad97a94503dd55613ff53eb/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
-                            </div>
-                            <div class="se-act donate">
-                                <div class="se-label"><i class="fa-solid fa-euro-sign"></i> Donatie</div>
-                                <div class="se-frame"><iframe loading="lazy" title="Laatste donatie" data-src="https://streamelements.com/overlay/6ad97ab9e6390eb5d9654000/g0kqwKDStMqt-_26TmnIYkBcfpOc2XFZwAxFuzLxceOp98go"></iframe></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
 
@@ -993,7 +937,6 @@
                 head_stream: 'Live Stream',
                 stream_sub: 'Volg de livestream live met interactieve chat en unieke content!',
                 act_follow: 'Volg op Twitch', act_tip: 'Steun met een tip', act_chat: 'Open chat',
-                goal_title: 'Live Stream Sub Goal', activity_title: 'Latest Activity',
                 head_smp: 'Minecraft Community SMP',
                 smp_sub: 'Stap in de wereld, bouw mee met de community en volg je prestaties op de voet.',
                 srv_label: 'Server IP', srv_title: 'Spring in de wereld',
@@ -1049,7 +992,6 @@
                 head_stream: 'Live Stream',
                 stream_sub: 'Watch the stream live with interactive chat and unique content!',
                 act_follow: 'Follow on Twitch', act_tip: 'Support with a tip', act_chat: 'Open chat',
-                goal_title: 'Live Stream Sub Goal', activity_title: 'Latest Activity',
                 head_smp: 'Minecraft Community SMP',
                 smp_sub: 'Jump into the world, build with the community, and track your stats.',
                 srv_label: 'Server IP', srv_title: 'Jump into the world',
@@ -1271,7 +1213,6 @@
                     const d = +c.dataset.depth || 20;
                     c.style.transform = 'translate3d(' + (cx * d).toFixed(1) + 'px,' + (cy * d).toFixed(1) + 'px,0)';
                 });
-                // Stop als bijna stil en muis weg
                 if (Math.abs(tx - cx) < 0.001 && Math.abs(ty - cy) < 0.001 && tx === 0 && ty === 0) {
                     rafId = null;
                     return;
@@ -1287,7 +1228,6 @@
                 heroKick();
             });
             hero.addEventListener('mouseleave', () => { tx = 0; ty = 0; heroKick(); });
-            // Stop volledig als hero uit beeld is
             new IntersectionObserver(([e]) => {
                 if (!e.isIntersecting && rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
             }).observe(hero);
@@ -1430,7 +1370,7 @@
         (() => { const first = $('.faq-item'); if (first) { first.classList.add('open'); $('.faq-q', first).setAttribute('aria-expanded', 'true'); } })();
 
         /* ------------------------------------------------------------
-           Twitch embed + StreamElements overlays (lazy)
+           Twitch embed (lazy)
            ------------------------------------------------------------ */
         (() => {
             const hosts = [...new Set([location.hostname, 'florisn.nl', 'www.florisn.nl', 'localhost'].filter(Boolean))];
@@ -1440,8 +1380,6 @@
                 if (done) return; done = true;
                 $('#tw-player').src = 'https://player.twitch.tv/?channel=' + TWITCH + '&' + parents;
                 $('#tw-chat').src = 'https://www.twitch.tv/embed/' + TWITCH + '/chat?' + parents + '&darkpopout';
-                // StreamElements-iframes pas nu laden
-                $$('iframe[data-src]').forEach(f => { f.src = f.dataset.src; f.removeAttribute('data-src'); });
             };
             const io = new IntersectionObserver(e => { if (e[0].isIntersecting) { mount(); io.disconnect(); } }, { rootMargin: '400px 0px' });
             io.observe($('#stream'));
@@ -1509,30 +1447,57 @@
             else { fd.className = 'dot dot--gray'; ft.textContent = mc === undefined ? '…' : t('footer_srv_unknown'); }
         }
 
+        // Fetch met timeout, zodat een hangende API de UI niet blokkeert
+        function fetchJSON(url, ms = 6000) {
+            const ctrl = new AbortController();
+            const timer = setTimeout(() => ctrl.abort(), ms);
+            return fetch(url, { cache: 'no-store', signal: ctrl.signal })
+                .then(r => r.json())
+                .finally(() => clearTimeout(timer));
+        }
+
         async function fetchMC() {
-            let res = null;
+            // Primair: mcsrvstat.us (snel & betrouwbaar)
             try {
-                const r = await fetch('https://mcapi.us/server/status?ip=' + MC_HOST + '&port=' + MC_PORT);
-                const d = await r.json();
+                const d = await fetchJSON('https://api.mcsrvstat.us/3/' + MC_HOST + ':' + MC_PORT, 6000);
                 if (d && typeof d.online === 'boolean') {
-                    res = { online: d.online, now: (d.players && d.players.now) || 0, max: (d.players && d.players.max) || 0, version: (d.server && d.server.name) || '' };
+                    state.mc = {
+                        online: d.online,
+                        now: (d.players && d.players.online) || 0,
+                        max: (d.players && d.players.max) || 0,
+                        version: d.version || ''
+                    };
+                    renderStatus();
+                    return;
                 }
             } catch (e) {}
-            if (!res) {
-                try {
-                    const r = await fetch('https://api.mcsrvstat.us/3/' + MC_HOST + ':' + MC_PORT);
-                    const d = await r.json();
-                    if (d && typeof d.online === 'boolean') {
-                        res = { online: d.online, now: (d.players && d.players.online) || 0, max: (d.players && d.players.max) || 0, version: d.version || '' };
-                    }
-                } catch (e) {}
-            }
-            state.mc = res;
+
+            // Fallback: mcapi.us
+            try {
+                const d = await fetchJSON('https://mcapi.us/server/status?ip=' + MC_HOST + '&port=' + MC_PORT, 6000);
+                if (d && typeof d.online === 'boolean') {
+                    state.mc = {
+                        online: d.online,
+                        now: (d.players && d.players.now) || 0,
+                        max: (d.players && d.players.max) || 0,
+                        version: (d.server && d.server.name) || ''
+                    };
+                    renderStatus();
+                    return;
+                }
+            } catch (e) {}
+
+            // Beide mislukt: onbekend
+            state.mc = null;
             renderStatus();
         }
+
         async function fetchTwitch() {
             try {
-                const r = await fetch('https://decapi.me/twitch/uptime/' + TWITCH, { cache: 'no-store' });
+                const ctrl = new AbortController();
+                const timer = setTimeout(() => ctrl.abort(), 5000);
+                const r = await fetch('https://decapi.me/twitch/uptime/' + TWITCH, { cache: 'no-store', signal: ctrl.signal });
+                clearTimeout(timer);
                 const txt = (await r.text()).trim();
                 if (/offline/i.test(txt)) state.tw = { live: false };
                 else if (/\d+\s*(second|minute|hour|day)/i.test(txt)) state.tw = { live: true, uptime: txt };
