@@ -14,6 +14,7 @@
             --accent-orange: #f97316;
             --accent-purple: #9146ff;
             --accent-green: #22c55e;
+            --accent-blue: #38bdf8;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: rgba(255, 255, 255, 0.08);
@@ -44,7 +45,24 @@
 
         .container { max-width: 1200px; margin: 0 auto; padding: 2.5rem 8% 4rem; width: 100%; }
 
-        .stats-title { font-size: 2.8rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 1.5rem; font-family: monospace; }
+        .stats-title { font-size: 2.8rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 1.2rem; font-family: monospace; }
+
+        /* Info-balk over de handmatige dagelijkse update */
+        .info-box {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            border-radius: 12px;
+            padding: 0.9rem 1.1rem;
+            margin-bottom: 1.2rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+        .info-box i { color: var(--accent-blue); margin-top: 3px; }
+        .info-box strong { color: #fff; }
 
         .controls-bar {
             background: rgba(20, 27, 44, 0.6);
@@ -55,9 +73,10 @@
             gap: 12px;
             margin-bottom: 0.8rem;
             flex-wrap: wrap;
+            align-items: center;
         }
 
-        select, input {
+        select, input[type="text"] {
             background: var(--bg-input);
             border: 1px solid var(--border-color);
             color: #fff;
@@ -69,10 +88,14 @@
         }
 
         select { cursor: pointer; min-width: 180px; max-width: 100%; }
-        input { flex: 1; min-width: 220px; }
-        input:focus, select:focus { border-color: var(--accent-purple); }
+        input[type="text"] { flex: 1; min-width: 220px; }
+        input[type="text"]:focus, select:focus { border-color: var(--accent-purple); }
 
-        .last-updated { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.8rem; }
+        .toggle { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 0.88rem; cursor: pointer; user-select: none; white-space: nowrap; }
+        .toggle input { accent-color: var(--accent-purple); width: 16px; height: 16px; cursor: pointer; }
+
+        .meta-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 20px; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.8rem; }
+        .meta-row strong { color: #e2e8f0; font-weight: 600; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.2rem; }
 
@@ -88,6 +111,9 @@
 
         .player-card:hover { transform: translateY(-3px); border-color: rgba(145, 70, 255, 0.4); }
         .player-card.leeg { opacity: 0.5; }
+        .player-card.top1 { border-color: rgba(251, 191, 36, 0.55); box-shadow: 0 0 22px rgba(251, 191, 36, 0.12); }
+        .player-card.top2 { border-color: rgba(203, 213, 225, 0.4); }
+        .player-card.top3 { border-color: rgba(217, 119, 6, 0.4); }
 
         .rank-badge {
             position: absolute; top: 10px; left: 10px;
@@ -100,7 +126,7 @@
         .rank-badge.brons { background: rgba(217, 119, 6, 0.2); color: #d97706; border-color: rgba(217, 119, 6, 0.4); }
         .rank-badge.overig { background: rgba(148, 163, 184, 0.12); color: var(--text-muted); border-color: var(--border-color); }
 
-        .player-avatar { width: 64px; height: 64px; border-radius: 10px; margin: 0.4rem 0 0.6rem; image-rendering: pixelated; }
+        .player-avatar { width: 64px; height: 64px; border-radius: 10px; margin: 0.4rem 0 0.6rem; image-rendering: pixelated; background: var(--bg-input); }
         .player-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .stat-value { color: var(--accent-orange); font-weight: 800; font-size: 0.95rem; }
         .loading-text { text-align: center; grid-column: 1 / -1; padding: 3rem; color: var(--text-muted); }
@@ -111,6 +137,7 @@
             .container { padding: 1.5rem 5% 3rem; }
             .stats-title { font-size: 2rem; }
             select { width: 100%; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
         }
     </style>
 </head>
@@ -124,13 +151,25 @@
     <div class="container">
         <h1 class="stats-title">Statistieken</h1>
 
-        <div class="controls-bar">
-            <select id="cat-filter"></select>
-            <select id="stat-filter"></select>
-            <input type="text" id="search-input" placeholder="Zoek een speler...">
+        <div class="info-box">
+            <i class="fa-solid fa-circle-info"></i>
+            <div>
+                <strong>Let op: deze statistieken worden handmatig bijgewerkt, standaard 1x per dag.</strong>
+                Ze zijn dus niet live. Heb je vandaag net gespeeld, dan staat dat er mogelijk nog niet in.
+            </div>
         </div>
 
-        <div class="last-updated">Laatst bijgewerkt: <span id="current-date">--</span></div>
+        <div class="controls-bar">
+            <select id="cat-filter" aria-label="Categorie"></select>
+            <select id="stat-filter" aria-label="Statistiek"></select>
+            <input type="text" id="search-input" placeholder="Zoek een speler..." aria-label="Zoek een speler">
+            <label class="toggle"><input type="checkbox" id="hide-zero"> Verberg spelers met 0</label>
+        </div>
+
+        <div class="meta-row">
+            <div>Laatst bijgewerkt: <strong id="current-date">--</strong></div>
+            <div id="samenvatting"></div>
+        </div>
 
         <div class="stats-grid" id="players-list">
             <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> Gegevens inlezen...</div>
@@ -183,25 +222,65 @@
             return t.charAt(0).toUpperCase() + t.slice(1);
         }
 
+        function isTijd(k) {
+            return ['play_time', 'play_one_minute', 'total_world_time', 'sneak_time'].includes(k) || k.startsWith('time_since');
+        }
+
         function formatteer(catId, sleutel, waarde) {
             if (catId === 'custom') {
                 const k = sleutel.replace('minecraft:', '');
-                if (['play_time', 'play_one_minute', 'total_world_time', 'sneak_time'].includes(k) || k.startsWith('time_since')) {
+                if (isTijd(k)) {
                     const totMin = Math.floor(waarde / 1200);
                     const u = Math.floor(totMin / 60), m = totMin % 60;
-                    return u + 'u ' + m + 'm';
+                    return u.toLocaleString('nl-NL') + 'u ' + m + 'm';
                 }
                 if (k.endsWith('_one_cm')) {
-                    return (waarde / 100000).toLocaleString('nl-NL', { maximumFractionDigits: 1 }) + ' km';
+                    const meter = waarde / 100;
+                    return meter >= 1000
+                        ? (meter / 1000).toLocaleString('nl-NL', { maximumFractionDigits: 1 }) + ' km'
+                        : Math.round(meter).toLocaleString('nl-NL') + ' m';
+                }
+                if (k.startsWith('damage_')) {
+                    // Minecraft telt schade in tienden van halve harten
+                    return Math.round(waarde / 20).toLocaleString('nl-NL') + ' \u2665';
                 }
             }
             return waarde.toLocaleString('nl-NL');
         }
 
+        function toonDatum(v) {
+            if (!v) return 'onbekend';
+            let d;
+            if (v instanceof Date) d = v;
+            else if (/^\d{4}-\d{2}-\d{2}$/.test(v)) d = new Date(v + 'T12:00:00');
+            else d = new Date(v);
+            if (isNaN(d)) return 'onbekend';
+            return /^\d{4}-\d{2}-\d{2}$/.test(v)
+                ? d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' })
+                : d.toLocaleString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Optioneel: data/info.json  ->  { "bijgewerkt": "2026-10-23" }
+        async function haalBijgewerkt(res) {
+            try {
+                const r = await fetch('data/info.json', { cache: 'no-cache' });
+                if (r.ok) {
+                    const j = await r.json();
+                    if (j.bijgewerkt) return j.bijgewerkt;
+                }
+            } catch (e) {}
+            const lm = res.headers.get('Last-Modified');
+            if (lm) {
+                const d = new Date(lm);
+                if (!isNaN(d) && d.getFullYear() > 2000) return d;
+            }
+            return null;
+        }
+
         async function loadServerData() {
             const lijst = document.getElementById('players-list');
             try {
-                const res = await fetch('data/usercache.json');
+                const res = await fetch('data/usercache.json', { cache: 'no-cache' });
                 if (!res.ok) throw new Error('usercache.json niet gevonden');
                 const cache = await res.json();
 
@@ -210,7 +289,7 @@
 
                 const resultaten = await Promise.all([...uniek].map(async ([uuid, naam]) => {
                     try {
-                        const r = await fetch('data/' + uuid + '.json');
+                        const r = await fetch('data/' + uuid + '.json', { cache: 'no-cache' });
                         if (!r.ok) return null;
                         const json = await r.json();
                         return { naam, uuid, stats: json.stats || {} };
@@ -223,8 +302,7 @@
                     return;
                 }
 
-                const lm = res.headers.get('Last-Modified');
-                document.getElementById('current-date').innerText = (lm ? new Date(lm) : new Date()).toLocaleString('nl-NL');
+                document.getElementById('current-date').textContent = toonDatum(await haalBijgewerkt(res));
 
                 bouwCategorieen();
                 bouwStatSelect();
@@ -276,6 +354,7 @@
 
         function renderPlayers() {
             const zoek = document.getElementById('search-input').value.toLowerCase();
+            const verbergNul = document.getElementById('hide-zero').checked;
             const lijst = document.getElementById('players-list');
             const key = CATEGORIEEN[cat].key;
 
@@ -289,6 +368,15 @@
             }).sort((a, b) => b.waarde - a.waarde || a.naam.localeCompare(b.naam));
             alle.forEach((p, i) => p.rang = i + 1);
 
+            // Samenvatting: aantal spelers en totaal van alle spelers
+            const metScore = alle.filter(p => p.waarde > 0).length;
+            const totaal = alle.reduce((a, p) => a + p.waarde, 0);
+            const sam = document.getElementById('samenvatting');
+            const kort = (stat || '').replace('minecraft:', '');
+            const toonTotaal = !(cat === 'custom' && kort.startsWith('time_since'));
+            sam.innerHTML = '<strong>' + metScore + '</strong> van ' + alle.length + ' spelers met een score' +
+                (toonTotaal ? ' &middot; Totaal: <strong>' + esc(formatteer(cat, stat, totaal)) + '</strong>' : '');
+
             // URL bijwerken zodat je de pagina kunt delen
             try {
                 const u = new URL(location.href);
@@ -297,28 +385,39 @@
                 history.replaceState(null, '', u);
             } catch (e) {}
 
-            const gefilterd = alle.filter(p => p.naam.toLowerCase().includes(zoek));
+            const gefilterd = alle.filter(p =>
+                p.naam.toLowerCase().includes(zoek) && !(verbergNul && p.waarde === 0));
             lijst.innerHTML = '';
 
             if (!gefilterd.length) {
-                lijst.innerHTML = '<div class="loading-text">Geen spelers gevonden voor "' + esc(zoek) + '"</div>';
+                lijst.innerHTML = zoek
+                    ? '<div class="loading-text">Geen spelers gevonden voor "' + esc(zoek) + '"</div>'
+                    : '<div class="loading-text">Niemand heeft hier een score voor.</div>';
                 return;
             }
 
             gefilterd.forEach(p => {
                 const badgeKlasse = p.rang === 2 ? 'zilver' : p.rang === 3 ? 'brons' : p.rang > 3 ? 'overig' : '';
+                const kaartKlasse = p.waarde === 0 ? ' leeg' : (p.rang <= 3 ? ' top' + p.rang : '');
                 const card = document.createElement('div');
-                card.className = 'player-card' + (p.waarde === 0 ? ' leeg' : '');
+                card.className = 'player-card' + kaartKlasse;
                 card.innerHTML =
                     '<div class="rank-badge ' + badgeKlasse + '">' + p.rang + '</div>' +
                     '<img class="player-avatar" src="https://mc-heads.net/avatar/' + esc(p.uuid) + '/64" alt="' + esc(p.naam) + '" loading="lazy">' +
-                    '<div class="player-name">' + esc(p.naam) + '</div>' +
+                    '<div class="player-name" title="' + esc(p.naam) + '">' + esc(p.naam) + '</div>' +
                     '<div class="stat-value">' + esc(formatteer(cat, stat, p.waarde)) + '</div>';
+                // Valt de avatar weg, dan tonen we een standaard Steve-kop
+                const img = card.querySelector('img');
+                img.addEventListener('error', function () {
+                    this.onerror = null;
+                    this.src = 'https://mc-heads.net/avatar/MHF_Steve/64';
+                });
                 lijst.appendChild(card);
             });
         }
 
         document.getElementById('search-input').addEventListener('input', renderPlayers);
+        document.getElementById('hide-zero').addEventListener('change', renderPlayers);
         loadServerData();
     </script>
 </body>
