@@ -19,7 +19,7 @@
         /* =====================================================
            DESIGN SYSTEM
            Kleur per sectie (--sec):  stream = paars, minecraft = groen,
-           community = cyaan, faq = amber.
+           community = cyaan, faq = amber, contact = amber.
            ===================================================== */
         :root {
             --bg: #05070c;
@@ -60,7 +60,7 @@
             position: relative;
         }
         a { color: inherit; }
-        button, input { font-family: inherit; color: inherit; }
+        button, input, textarea { font-family: inherit; color: inherit; }
         section[id], header[id] { scroll-margin-top: 6rem; }
         :focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; border-radius: 6px; }
         .link { color: var(--purple); font-weight: 700; text-decoration: none; }
@@ -246,6 +246,8 @@
         .btn-ghost { background: rgba(255,255,255,0.04); border-color: var(--line-strong); }
         .btn-ghost:hover { background: rgba(255,255,255,0.09); }
         .btn-discord { background: var(--discord); color: #fff; box-shadow: 0 6px 20px rgba(88,101,242,0.35); }
+        .btn-amber { background: var(--amber); color: #1a1206; box-shadow: 0 6px 20px rgba(245,158,11,0.35); }
+        .btn-amber:hover { box-shadow: 0 10px 30px rgba(245,158,11,0.5); }
 
         .chip {
             display: inline-flex; align-items: center; gap: 0.5rem;
@@ -310,7 +312,7 @@
         }
         @keyframes wheel { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(14px); } }
 
-        /* Zwevende 3D-blokken (geen spin meer, alleen parallax + bob) */
+        /* Zwevende 3D-blokken */
         .cubes { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
         .fc { position: absolute; width: var(--s); height: var(--s); filter: drop-shadow(0 14px 22px rgba(0,0,0,0.45)); }
         .bob { width: 100%; height: 100%; perspective: 700px; animation: bob var(--bd, 6s) ease-in-out infinite alternate; }
@@ -464,6 +466,70 @@
         .faq-a > div { overflow: hidden; min-height: 0; }
         .faq-a p { padding: 0 1.4rem 1.2rem; color: var(--muted); font-size: 0.95rem; }
 
+        /* ---------- Contact ---------- */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 1.5rem;
+        }
+        .contact-form {
+            padding: 2.2rem;
+            display: flex; flex-direction: column; gap: 1.2rem;
+        }
+        .form-head { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.2rem; }
+        .form-head i { font-size: 1.4rem; color: var(--amber); }
+        .form-head h3 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; }
+
+        .field { display: flex; flex-direction: column; gap: 0.45rem; }
+        .field label { font-size: 0.82rem; font-weight: 700; color: #cbd5e1; }
+        .field label span { color: var(--amber); }
+        .field input, .field textarea {
+            width: 100%; padding: 0.85rem 1rem;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--line-strong);
+            border-radius: var(--r-sm);
+            font-size: 0.92rem; color: var(--text);
+            transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+            resize: vertical;
+        }
+        .field input::placeholder, .field textarea::placeholder { color: #64748b; }
+        .field input:focus, .field textarea:focus {
+            outline: none; border-color: var(--amber);
+            background: rgba(0,0,0,0.45);
+            box-shadow: 0 0 0 4px rgba(245,158,11,0.15);
+        }
+        .field textarea { min-height: 130px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-note { font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 0.4rem; }
+        .form-note i { color: var(--green); }
+
+        .info-stack { display: flex; flex-direction: column; gap: 1.25rem; }
+        .info-card {
+            padding: 1.8rem; display: flex; flex-direction: column; gap: 0.6rem;
+            text-decoration: none;
+        }
+        .info-card .info-icon {
+            width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center;
+            font-size: 1.15rem; color: var(--sec);
+            background: color-mix(in srgb, var(--sec) 12%, transparent);
+            transition: transform 0.4s var(--ease);
+        }
+        .info-card:hover .info-icon { transform: rotate(-8deg) scale(1.08); }
+        .info-card h3 { font-size: 1rem; font-weight: 800; }
+        .info-card .value { font-size: 0.95rem; color: #e2e8f0; font-weight: 600; word-break: break-all; }
+        .info-card .hint { font-size: 0.8rem; color: var(--muted); }
+        .copy-email {
+            margin-top: 0.4rem; align-self: flex-start;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 0.9rem; border-radius: var(--pill);
+            font-size: 0.78rem; font-weight: 700; cursor: pointer;
+            background: rgba(245,158,11,0.12);
+            border: 1px solid rgba(245,158,11,0.35);
+            color: #fcd34d;
+            transition: background 0.2s, translate 0.2s;
+        }
+        .copy-email:hover { background: rgba(245,158,11,0.22); translate: 0 -2px; }
+
         /* ---------- CTA ---------- */
         @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
         .cta { padding-top: 6rem; }
@@ -585,6 +651,8 @@
             .nav-center { width: 100%; overflow-x: auto; justify-content: flex-start; scrollbar-width: none; }
             .nav-center::-webkit-scrollbar { display: none; }
             .lang { margin-left: auto; margin-right: auto; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .info-stack { order: -1; }
         }
         @media (max-width: 700px) {
             .bob { scale: 0.62; }
@@ -596,6 +664,8 @@
             .chat-prompt { right: 1rem; }
             .chat-toggle { right: 1rem; bottom: 1rem; }
             .chat-window { right: 1rem; bottom: 4.5rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .contact-form { padding: 1.6rem; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -635,6 +705,7 @@
                 <a class="nav-link" href="#community" data-spy="community"><i class="fa-solid fa-users"></i><span data-i18n="nav_comm">Community</span></a>
                 <a class="nav-link" href="#faq" data-spy="faq"><i class="fa-solid fa-circle-question"></i><span data-i18n="nav_faq">FAQ</span></a>
                 <a class="nav-link nav-page" href="alerts.html" data-page><i class="fa-solid fa-bell"></i><span data-i18n="nav_alerts">Stream Alerts</span></a>
+                <a class="nav-link" href="#contact" data-spy="contact"><i class="fa-solid fa-envelope"></i><span data-i18n="nav_contact">Contact</span></a>
             </div>
 
             <div class="lang" role="group" aria-label="Language">
@@ -840,6 +911,80 @@
                 </div>
             </section>
 
+            <!-- ================= 05 CONTACT ================= -->
+            <section class="section" id="contact" style="--sec: var(--amber)">
+                <div class="section-head reveal">
+                    <span class="eyebrow"><span class="num">05</span><i class="fa-solid fa-envelope"></i><span data-i18n="eb_contact">Contact</span></span>
+                    <h2 data-i18n="head_contact">Neem Contact Op</h2>
+                    <p data-i18n="contact_sub">Vragen over de SMP, een samenwerking, of gewoon een hallo? Stuur een bericht!</p>
+                </div>
+
+                <div class="contact-grid">
+                    <!-- Formulier -->
+                    <form class="surface contact-form reveal" id="contact-form" novalidate>
+                        <div class="form-head">
+                            <i class="fa-solid fa-envelope-open-text"></i>
+                            <h3 data-i18n="form_title">Stuur een bericht</h3>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="field">
+                                <label for="cf-name" data-i18n="form_name">Naam <span>*</span></label>
+                                <input type="text" id="cf-name" name="name" placeholder="Jouw naam" required autocomplete="name">
+                            </div>
+                            <div class="field">
+                                <label for="cf-email" data-i18n="form_email">E-mailadres <span>*</span></label>
+                                <input type="email" id="cf-email" name="email" placeholder="jij@voorbeeld.nl" required autocomplete="email">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="cf-subject" data-i18n="form_subject">Onderwerp</label>
+                            <input type="text" id="cf-subject" name="subject" placeholder="Waar gaat je bericht over?">
+                        </div>
+
+                        <div class="field">
+                            <label for="cf-message" data-i18n="form_message">Bericht <span>*</span></label>
+                            <textarea id="cf-message" name="message" placeholder="Typ hier je bericht..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-amber" style="width:100%;">
+                            <i class="fa-solid fa-paper-plane"></i> <span data-i18n="form_send">Verstuur bericht</span>
+                        </button>
+
+                        <p class="form-note"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="form_privacy">Je gegevens worden alleen gebruikt om je bericht te beantwoorden.</span></p>
+                    </form>
+
+                    <!-- Info kaarten -->
+                    <div class="info-stack">
+                        <div class="surface info-card spot reveal" style="--d:1; --sec: var(--amber);">
+                            <span class="info-icon"><i class="fa-solid fa-envelope"></i></span>
+                            <h3 data-i18n="info_email_title">E-mail</h3>
+                            <span class="value">JustFlorisscontact@gmail.com</span>
+                            <span class="hint" data-i18n="info_email_hint">Voor samenwerkingen, support &amp; vragen</span>
+                            <button type="button" class="copy-email" id="copy-email-btn">
+                                <i class="fa-solid fa-copy"></i> <span data-i18n="info_copy_email">Kopieer e-mail</span>
+                            </button>
+                        </div>
+
+                        <a class="surface info-card spot reveal" style="--d:2; --sec: var(--discord);" href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener">
+                            <span class="info-icon"><i class="fa-brands fa-discord"></i></span>
+                            <h3>Discord</h3>
+                            <span class="value" data-i18n="info_discord_value">Join de community</span>
+                            <span class="hint" data-i18n="info_discord_hint">Snelste manier om contact te krijgen</span>
+                            <i class="fa-solid fa-arrow-right" style="margin-top:auto; color:var(--discord);"></i>
+                        </a>
+
+                        <div class="surface info-card spot reveal" style="--d:3; --sec: var(--cyan);">
+                            <span class="info-icon"><i class="fa-solid fa-clock"></i></span>
+                            <h3 data-i18n="info_time_title">Reactietijd</h3>
+                            <span class="value" data-i18n="info_time_value">Meestal binnen 24–48 uur</span>
+                            <span class="hint" data-i18n="info_time_hint">Soms iets langer tijdens streams</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- ================= CTA ================= -->
             <section class="cta">
                 <div class="cta-box reveal">
@@ -869,6 +1014,7 @@
                     <li><a href="smp.html" data-page data-i18n="footer_stats">Statistieken</a></li>
                     <li><a href="alerts.html" data-page data-i18n="nav_alerts">Stream Alerts</a></li>
                     <li><a href="#faq" data-i18n="nav_faq">FAQ</a></li>
+                    <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -925,7 +1071,7 @@
     <script>
         window.I18N = {
             nl: {
-                nav_stream: 'Live Stream', nav_mc: 'Minecraft SMP', nav_comm: 'Community', nav_faq: 'FAQ', nav_alerts: 'Stream Alerts',
+                nav_stream: 'Live Stream', nav_mc: 'Minecraft SMP', nav_comm: 'Community', nav_faq: 'FAQ', nav_alerts: 'Stream Alerts', nav_contact: 'Contact',
                 hero_prefix: 'Alles over',
                 typed: ['de livestream', 'de Minecraft SMP', 'speler-statistieken', 'de community'],
                 hero_desc: 'De centrale plek voor de livestream, de hechte SMP-community en al je in-game statistieken.',
@@ -933,7 +1079,7 @@
                 ip_copied: 'IP gekopieerd!', btn_discord: 'Join de Discord', btn_stats: 'Bekijk statistieken',
                 tw_live: 'Nu live', tw_off: 'Offline', mc_players: 'MC Spelers', mc_loading: 'MC laden…',
                 status_online: 'Online', status_offline: 'Offline', status_unknown: 'Onbekend',
-                eb_stream: 'Livestream', eb_mc: 'Minecraft', eb_comm: 'Community', eb_faq: 'Support',
+                eb_stream: 'Livestream', eb_mc: 'Minecraft', eb_comm: 'Community', eb_faq: 'Support', eb_contact: 'Contact',
                 head_stream: 'Live Stream',
                 stream_sub: 'Volg de livestream live met interactieve chat en unieke content!',
                 act_follow: 'Volg op Twitch', act_tip: 'Steun met een tip', act_chat: 'Open chat',
@@ -966,6 +1112,27 @@
                 faq4_a: 'Alle officiële links en de Discord-community vind je via onze verzamelpagina op <a class="link" href="https://solo.to/floris_n" target="_blank" rel="noopener">solo.to/floris_n</a>!',
                 faq5_q: 'Waar vind ik de speler-statistieken?',
                 faq5_a: 'Op de <a class="link" href="smp.html">statistiekenpagina</a>. Die worden handmatig bijgewerkt, standaard 1x per dag.',
+                head_contact: 'Neem Contact Op',
+                contact_sub: 'Vragen over de SMP, een samenwerking, of gewoon een hallo? Stuur een bericht!',
+                form_title: 'Stuur een bericht',
+                form_name: 'Naam <span>*</span>',
+                form_email: 'E-mailadres <span>*</span>',
+                form_subject: 'Onderwerp',
+                form_message: 'Bericht <span>*</span>',
+                form_send: 'Verstuur bericht',
+                form_privacy: 'Je gegevens worden alleen gebruikt om je bericht te beantwoorden.',
+                info_email_title: 'E-mail',
+                info_email_hint: 'Voor samenwerkingen, support & vragen',
+                info_copy_email: 'Kopieer e-mail',
+                info_discord_value: 'Join de community',
+                info_discord_hint: 'Snelste manier om contact te krijgen',
+                info_time_title: 'Reactietijd',
+                info_time_value: 'Meestal binnen 24–48 uur',
+                info_time_hint: 'Soms iets langer tijdens streams',
+                contact_toast: 'E-mailadres gekopieerd!',
+                contact_fill: 'Vul naam, e-mail en bericht in.',
+                contact_invalid: 'Vul een geldig e-mailadres in.',
+                contact_opening: 'Je e-mailapp wordt geopend…',
                 cta_title: 'Klaar om mee te doen?',
                 cta_desc: 'Pak het server-IP, hop in de Discord en bouw mee aan de SMP.',
                 footer_desc: 'De officiële ontmoetingsplek voor de Floris_N livestream, de gezellige Minecraft SMP community en al onze custom projecten.',
@@ -980,7 +1147,7 @@
                 aria_chat_open: 'Open chat', aria_chat_close: 'Sluit chat', aria_chat_send: 'Verstuur', aria_scroll: 'Scroll naar beneden'
             },
             en: {
-                nav_stream: 'Live Stream', nav_mc: 'Minecraft SMP', nav_comm: 'Community', nav_faq: 'FAQ', nav_alerts: 'Stream Alerts',
+                nav_stream: 'Live Stream', nav_mc: 'Minecraft SMP', nav_comm: 'Community', nav_faq: 'FAQ', nav_alerts: 'Stream Alerts', nav_contact: 'Contact',
                 hero_prefix: 'Everything about',
                 typed: ['the livestream', 'the Minecraft SMP', 'player statistics', 'the community'],
                 hero_desc: 'The central hub for the livestream, the tight-knit SMP community, and all your in-game statistics.',
@@ -988,7 +1155,7 @@
                 ip_copied: 'IP copied!', btn_discord: 'Join the Discord', btn_stats: 'View statistics',
                 tw_live: 'Live now', tw_off: 'Offline', mc_players: 'MC Players', mc_loading: 'Loading MC…',
                 status_online: 'Online', status_offline: 'Offline', status_unknown: 'Unknown',
-                eb_stream: 'Livestream', eb_mc: 'Minecraft', eb_comm: 'Community', eb_faq: 'Support',
+                eb_stream: 'Livestream', eb_mc: 'Minecraft', eb_comm: 'Community', eb_faq: 'Support', eb_contact: 'Contact',
                 head_stream: 'Live Stream',
                 stream_sub: 'Watch the stream live with interactive chat and unique content!',
                 act_follow: 'Follow on Twitch', act_tip: 'Support with a tip', act_chat: 'Open chat',
@@ -1021,6 +1188,27 @@
                 faq4_a: 'All official links and the Discord community can be found via our page at <a class="link" href="https://solo.to/floris_n" target="_blank" rel="noopener">solo.to/floris_n</a>!',
                 faq5_q: 'Where can I find the player statistics?',
                 faq5_a: 'On the <a class="link" href="smp.html">statistics page</a>. They are updated manually, by default once a day.',
+                head_contact: 'Get in Touch',
+                contact_sub: 'Questions about the SMP, a collaboration, or just saying hi? Send a message!',
+                form_title: 'Send a message',
+                form_name: 'Name <span>*</span>',
+                form_email: 'Email address <span>*</span>',
+                form_subject: 'Subject',
+                form_message: 'Message <span>*</span>',
+                form_send: 'Send message',
+                form_privacy: 'Your data is only used to respond to your message.',
+                info_email_title: 'Email',
+                info_email_hint: 'For collaborations, support & questions',
+                info_copy_email: 'Copy email',
+                info_discord_value: 'Join the community',
+                info_discord_hint: 'Fastest way to get in touch',
+                info_time_title: 'Response time',
+                info_time_value: 'Usually within 24–48 hours',
+                info_time_hint: 'Sometimes longer during streams',
+                contact_toast: 'Email address copied!',
+                contact_fill: 'Please fill in name, email and message.',
+                contact_invalid: 'Please enter a valid email address.',
+                contact_opening: 'Opening your email app…',
                 cta_title: 'Ready to join?',
                 cta_desc: 'Grab the server IP, hop into the Discord and help build the SMP.',
                 footer_desc: 'The official hub for the Floris_N livestream, the cozy Minecraft SMP community, and all our custom projects.',
@@ -1059,6 +1247,9 @@
             { k: ['twitch', 'kanaal', 'stream', 'kijken', 'channel', 'watch'],
               nl: 'De livestreams kun je bekijken op het officiële Twitch kanaal: **https://twitch.tv/floris_n** 💜',
               en: 'You can watch the livestreams on the official Twitch channel: **https://twitch.tv/floris_n** 💜' },
+            { k: ['contact', 'email', 'mail', 'bericht', 'message'],
+              nl: 'Je kunt me bereiken via e-mail: **JustFlorisscontact@gmail.com** 📬 Of gebruik het contactformulier op deze pagina!',
+              en: 'You can reach me via email: **JustFlorisscontact@gmail.com** 📬 Or use the contact form on this page!' },
             { k: ['hoi', 'hey', 'hallo', 'hi', 'hello'],
               nl: 'Hey! 👋 Vraag me gerust alles over de livestreams, het schema, het Minecraft IP of onze socials!',
               en: 'Hello! 👋 Feel free to ask me anything about the streams, schedule, Minecraft IP, or socials!' }
@@ -1085,6 +1276,7 @@
         const TWITCH = 'floris_n';
         const MC_HOST = 'node1.herculhosting.nl';
         const MC_PORT = 30312;
+        const CONTACT_EMAIL = 'JustFlorisscontact@gmail.com';
 
         const L = window.I18N;
         const KB = window.CHAT_KB;
@@ -1158,7 +1350,7 @@
         const spy = new IntersectionObserver(entries => {
             entries.forEach(en => { if (en.isIntersecting) setActive(en.target.id === 'home' ? '' : en.target.id); });
         }, { rootMargin: '-45% 0px -50% 0px' });
-        ['home', 'stream', 'minecraft', 'community', 'faq'].forEach(id => { const el = document.getElementById(id); if (el) spy.observe(el); });
+        ['home', 'stream', 'minecraft', 'community', 'faq', 'contact'].forEach(id => { const el = document.getElementById(id); if (el) spy.observe(el); });
         addEventListener('resize', moveIndicator);
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(moveIndicator);
 
@@ -1368,6 +1560,44 @@
             btn.setAttribute('aria-expanded', open ? 'true' : 'false');
         }));
         (() => { const first = $('.faq-item'); if (first) { first.classList.add('open'); $('.faq-q', first).setAttribute('aria-expanded', 'true'); } })();
+
+        /* ------------------------------------------------------------
+           Contact
+           ------------------------------------------------------------ */
+        const copyEmailBtn = $('#copy-email-btn');
+        if (copyEmailBtn) {
+            copyEmailBtn.addEventListener('click', async () => {
+                try { await navigator.clipboard.writeText(CONTACT_EMAIL); }
+                catch (e) {
+                    const ta = document.createElement('textarea');
+                    ta.value = CONTACT_EMAIL; ta.style.position = 'fixed'; ta.style.opacity = '0';
+                    document.body.appendChild(ta); ta.select();
+                    try { document.execCommand('copy'); } catch (_) {}
+                    ta.remove();
+                }
+                toast(t('contact_toast'));
+            });
+        }
+        const contactForm = $('#contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', e => {
+                e.preventDefault();
+                const name = $('#cf-name').value.trim();
+                const email = $('#cf-email').value.trim();
+                const subject = $('#cf-subject').value.trim();
+                const message = $('#cf-message').value.trim();
+
+                if (!name || !email || !message) { toast(t('contact_fill')); return; }
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast(t('contact_invalid')); return; }
+
+                const mailSubject = subject || ('Contact via website — ' + name);
+                const body = 'Naam: ' + name + '\nE-mail: ' + email + '\n\n' + message;
+                window.location.href = 'mailto:' + CONTACT_EMAIL +
+                    '?subject=' + encodeURIComponent(mailSubject) +
+                    '&body=' + encodeURIComponent(body);
+                toast(t('contact_opening'));
+            });
+        }
 
         /* ------------------------------------------------------------
            Twitch embed (lazy)
