@@ -11,21 +11,24 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧊</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>document.documentElement.classList.add('js');</script>
 
     <style>
         /* =====================================================
            DESIGN SYSTEM
-           Kleur per sectie (--sec):  stream = paars, minecraft = groen,
-           community = cyaan, faq = amber, contact = amber.
+           Kleur per sectie (--sec): stream = paars, minecraft = groen,
+           community = cyaan, faq = amber.
+           Radii: surfaces 24 · inner blokken 18 · knoppen 14 · labels/nav = pill
+           Performance: geen blur-filters, geen backdrop-filter, geen oneindige
+           animaties op grote vlakken. Alleen transform/opacity bewegen.
            ===================================================== */
         :root {
             --bg: #05070c;
             --bg-solid: #0a0e18;
-            --surface: rgba(13, 19, 32, 0.72);
-            --surface-2: rgba(22, 32, 54, 0.9);
+            --surface: rgba(13, 19, 32, 0.86);
+            --surface-2: #141c2f;
             --line: rgba(255, 255, 255, 0.08);
             --line-strong: rgba(255, 255, 255, 0.16);
             --text: #f8fafc;
@@ -57,46 +60,29 @@
             min-height: 100vh;
             line-height: 1.5;
             overflow-x: hidden;
-            position: relative;
         }
         a { color: inherit; }
-        button, input, textarea { font-family: inherit; color: inherit; }
+        button, input { font-family: inherit; color: inherit; }
         section[id], header[id] { scroll-margin-top: 6rem; }
         :focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; border-radius: 6px; }
         .link { color: var(--purple); font-weight: 700; text-decoration: none; }
         .link:hover { text-decoration: underline; }
 
-        /* ---------- Achtergrond (statisch, één layer) ---------- */
+        /* Achtergrond: één statische laag (geen blur, geen animatie) */
         body::before {
             content: '';
-            position: fixed; inset: 0; z-index: -2; pointer-events: none;
+            position: fixed; inset: 0; z-index: -1; pointer-events: none;
             background:
-                radial-gradient(600px 400px at 30% -5%, rgba(145,70,255,0.32), transparent 70%),
-                radial-gradient(520px 520px at 98% 92%, rgba(6,182,212,0.24), transparent 70%),
-                radial-gradient(460px 460px at -5% 45%, rgba(34,197,94,0.2), transparent 70%);
+                radial-gradient(640px 420px at 30% -4%, rgba(145,70,255,0.26), transparent 70%),
+                radial-gradient(520px 520px at 100% 78%, rgba(6,182,212,0.16), transparent 70%),
+                radial-gradient(520px 520px at -6% 46%, rgba(34,197,94,0.14), transparent 70%),
+                radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px) 0 0 / 32px 32px;
+            transform: translateZ(0);
         }
-        body::after {
-            content: '';
-            position: fixed; inset: 0;
-            background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 32px 32px;
-            z-index: -2; pointer-events: none;
-        }
-
-        .cursor-glow {
-            position: fixed; left: 0; top: 0;
-            width: 420px; height: 420px; margin: -210px 0 0 -210px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(145,70,255,0.1), transparent 65%);
-            pointer-events: none; z-index: -1;
-            transform: translate3d(-999px, -999px, 0);
-            will-change: transform;
-        }
-        @media (hover: none) { .cursor-glow { display: none; } }
 
         .progress {
             position: fixed; top: 0; left: 0; width: 100%; height: 3px;
-            transform-origin: 0 50%; transform: scaleX(var(--p, 0));
+            transform-origin: 0 50%; transform: scaleX(0);
             background: linear-gradient(90deg, var(--purple), var(--cyan), var(--green));
             z-index: 1100; pointer-events: none;
         }
@@ -104,26 +90,25 @@
         /* ---------- Loader & paginawissel ---------- */
         .loader {
             position: fixed; inset: 0; background: var(--bg); z-index: 999999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.4rem;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
         .loader.hidden { opacity: 0; visibility: hidden; }
-        .loader-logo { font-size: 2.8rem; font-weight: 800; letter-spacing: -1px; }
+        .loader-logo { font-size: 2.6rem; font-weight: 800; letter-spacing: -1px; }
         .loader-logo span { color: var(--purple); }
-        .loader-bar { width: 180px; height: 3px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
+        .loader-bar { width: 160px; height: 3px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
         .loader-bar i {
-            display: block; height: 100%; width: 0;
+            display: block; height: 100%; width: 100%; transform: scaleX(0); transform-origin: left;
             background: linear-gradient(90deg, var(--purple), var(--green));
-            box-shadow: 0 0 15px var(--purple);
-            animation: fill 1.05s var(--ease) forwards;
+            animation: fill 0.6s var(--ease) forwards;
         }
-        @keyframes fill { to { width: 100%; } }
+        @keyframes fill { to { transform: scaleX(1); } }
 
         .wipe {
             position: fixed; inset: 0; background: var(--bg); z-index: 99998;
             display: flex; align-items: center; justify-content: center;
             transform: translateY(100%); pointer-events: none;
-            transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
+            transition: transform 0.35s cubic-bezier(0.76, 0, 0.24, 1);
         }
         .wipe.in { transform: translateY(0); pointer-events: auto; }
 
@@ -137,25 +122,22 @@
         nav {
             width: 100%; max-width: 1150px;
             display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-            padding: 0.55rem 0.6rem 0.55rem 1rem;
-            background: rgba(10,14,24,0.85);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 0.5rem 0.55rem 0.5rem 1rem;
+            background: rgba(10,14,24,0.94);
             border: 1px solid var(--line); border-radius: var(--pill);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+            box-shadow: 0 16px 36px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+            user-select: none; -webkit-user-select: none;
         }
         .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
         .brand-mark {
             width: 36px; height: 36px; border-radius: 12px; flex-shrink: 0;
             display: grid; place-items: center; font-size: 0.95rem; color: #fff;
             background: linear-gradient(135deg, var(--purple), var(--cyan));
-            box-shadow: 0 0 18px rgba(145,70,255,0.4);
-            transition: transform 0.5s var(--ease);
         }
-        .brand:hover .brand-mark { transform: rotate(-12deg) scale(1.08); }
         .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
         .brand-title { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; }
         .brand-title span { color: var(--purple); }
-        .brand-sub { font-size: 0.64rem; font-weight: 700; color: var(--muted); letter-spacing: 1px; }
+        .brand-sub { font-size: 0.64rem; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
 
         .nav-center {
             position: relative; display: flex; gap: 2px; padding: 4px;
@@ -164,202 +146,145 @@
         .nav-ind {
             position: absolute; top: 4px; bottom: 4px; left: 0; width: 0; opacity: 0;
             border-radius: var(--pill); background: rgba(255,255,255,0.1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-            transition: transform 0.45s var(--ease), width 0.45s var(--ease), opacity 0.3s;
-            z-index: 0;
+            transition: transform 0.4s var(--ease), width 0.4s var(--ease), opacity 0.3s;
         }
         .nav-link {
             position: relative; z-index: 1;
             display: inline-flex; align-items: center; gap: 7px;
-            padding: 0.5rem 1rem; border-radius: var(--pill);
+            padding: 0.5rem 0.95rem; border-radius: var(--pill);
             font-size: 0.82rem; font-weight: 700; color: var(--muted);
-            text-decoration: none; white-space: nowrap; transition: color 0.25s;
+            text-decoration: none; white-space: nowrap; transition: color 0.2s;
         }
         .nav-link i { font-size: 0.78rem; }
         .nav-link:hover, .nav-link.active { color: #fff; }
-        .nav-link.nav-page i { color: var(--purple); }
+        .nav-link.nav-page i { color: var(--green); }
 
+        .nav-end { display: flex; align-items: center; gap: 8px; }
+        .online-pill {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 0.45rem 0.85rem; border-radius: var(--pill);
+            font-size: 0.78rem; font-weight: 700; text-decoration: none; white-space: nowrap;
+            background: rgba(255,255,255,0.04); border: 1px solid var(--line);
+            transition: border-color 0.25s, background-color 0.25s;
+        }
+        .online-pill:hover { border-color: rgba(34,197,94,0.5); background: rgba(34,197,94,0.08); }
         .lang { display: flex; gap: 2px; padding: 3px; background: rgba(255,255,255,0.04); border: 1px solid var(--line); border-radius: var(--pill); }
         .lang-btn {
             background: transparent; border: 0; padding: 0.35rem 0.75rem; border-radius: var(--pill);
-            font-size: 0.74rem; font-weight: 800; color: var(--muted); cursor: pointer; transition: all 0.25s;
+            font-size: 0.74rem; font-weight: 800; color: var(--muted); cursor: pointer; transition: background-color 0.25s, color 0.25s;
         }
-        .lang-btn.active { background: var(--purple); color: #fff; box-shadow: 0 0 12px rgba(145,70,255,0.4); }
+        .lang-btn.active { background: var(--purple); color: #fff; }
 
         /* ---------- Herbruikbare onderdelen ---------- */
         .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
         .section { padding-top: 6rem; }
 
         .surface {
-            position: relative; isolation: isolate; overflow: hidden;
+            position: relative; overflow: hidden;
             background: var(--surface);
             border: 1px solid var(--line); border-radius: var(--r-lg);
-            transition: border-color 0.3s, background 0.3s, box-shadow 0.3s, transform 0.25s ease-out;
+            transition: border-color 0.25s, background-color 0.25s, transform 0.25s var(--ease);
         }
-        .surface::before {
-            content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
-            pointer-events: none; opacity: 0; transition: opacity 0.3s;
-            background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--sec) 20%, transparent), transparent 45%);
-        }
-        .spot:hover::before { opacity: 1; }
-        .spot:hover { border-color: color-mix(in srgb, var(--sec) 45%, transparent); background: var(--surface-2); box-shadow: 0 18px 40px rgba(0,0,0,0.3); }
+        .hoverable:hover { border-color: color-mix(in srgb, var(--sec) 50%, transparent); background: var(--surface-2); transform: translateY(-3px); }
 
         .section-head { text-align: center; margin-bottom: 2.5rem; }
         .eyebrow {
-            display: inline-flex; align-items: center; gap: 0.55rem;
-            padding: 0.35rem 0.9rem; border-radius: var(--pill);
-            font-size: 0.72rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase;
-            color: var(--sec);
-            background: color-mix(in srgb, var(--sec) 12%, transparent);
-            border: 1px solid color-mix(in srgb, var(--sec) 28%, transparent);
+            display: inline-flex; align-items: center; gap: 0.7rem;
+            font-size: 0.74rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sec);
         }
-        .eyebrow .num { opacity: 0.6; }
-        .section-head h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; letter-spacing: -0.03em; margin: 0.9rem 0 0.4rem; }
+        .eyebrow::before, .eyebrow::after { content: ''; width: 22px; height: 1px; background: currentColor; opacity: 0.55; }
+        .eyebrow .num { opacity: 0.55; }
+        .section-head h2 { font-size: clamp(1.7rem, 3.6vw, 2.3rem); font-weight: 800; letter-spacing: -0.03em; margin: 0.7rem 0 0.4rem; }
         .section-head p { color: var(--muted); max-width: 560px; margin: 0 auto; font-size: 0.98rem; }
-        .js .section-head h2::after {
-            content: ''; display: block; width: 56px; height: 4px; margin: 0.8rem auto 0;
-            border-radius: 4px; background: var(--sec); transform: scaleX(0);
-            transition: transform 0.9s var(--ease) 0.35s;
-        }
-        .js .section-head.visible h2::after { transform: scaleX(1); }
 
         .btn {
-            position: relative; overflow: hidden; cursor: pointer;
-            display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+            cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
             padding: 0.85rem 1.5rem; border-radius: var(--r-sm);
-            font-weight: 800; font-size: 0.92rem; text-decoration: none;
-            border: 1px solid transparent;
-            transform: translate(var(--tx, 0px), var(--ty, 0px));
-            transition: translate 0.3s var(--ease), box-shadow 0.3s, background 0.3s, border-color 0.3s, transform 0.2s ease-out;
+            font-weight: 800; font-size: 0.92rem; text-decoration: none; border: 1px solid transparent;
+            transition: transform 0.25s var(--ease), background-color 0.25s, border-color 0.25s, box-shadow 0.25s;
         }
-        .btn::after {
-            content: ''; position: absolute; top: -50%; left: -60%; width: 50%; height: 200%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-            transform: rotate(30deg); transition: left 0.6s ease;
-        }
-        .btn:hover { translate: 0 -3px; }
-        .btn:hover::after { left: 130%; }
-        .btn-purple { background: var(--purple); color: #fff; box-shadow: 0 6px 20px rgba(145,70,255,0.4); }
-        .btn-purple:hover { box-shadow: 0 10px 30px rgba(145,70,255,0.5); }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:active { transform: translateY(0) scale(0.98); }
+        .btn-purple { background: var(--purple); color: #fff; box-shadow: 0 6px 20px rgba(145,70,255,0.35); }
+        .btn-purple:hover { box-shadow: 0 10px 26px rgba(145,70,255,0.5); }
         .btn-green { background: rgba(34,197,94,0.1); color: #4ade80; border-color: rgba(34,197,94,0.3); }
-        .btn-green:hover { background: rgba(34,197,94,0.18); border-color: var(--green); box-shadow: 0 8px 25px rgba(34,197,94,0.18); }
+        .btn-green:hover { background: rgba(34,197,94,0.18); border-color: var(--green); }
         .btn-ghost { background: rgba(255,255,255,0.04); border-color: var(--line-strong); }
         .btn-ghost:hover { background: rgba(255,255,255,0.09); }
         .btn-discord { background: var(--discord); color: #fff; box-shadow: 0 6px 20px rgba(88,101,242,0.35); }
-        .btn-amber { background: var(--amber); color: #1a1206; box-shadow: 0 6px 20px rgba(245,158,11,0.35); }
-        .btn-amber:hover { box-shadow: 0 10px 30px rgba(245,158,11,0.5); }
 
         .chip {
             display: inline-flex; align-items: center; gap: 0.5rem;
             padding: 0.55rem 1rem; border-radius: var(--pill);
             border: 1px solid var(--line); background: var(--surface);
             font-size: 0.84rem; font-weight: 700; text-decoration: none; cursor: pointer;
-            transition: border-color 0.25s, translate 0.25s var(--ease), background 0.25s;
+            transition: border-color 0.25s, background-color 0.25s, transform 0.25s var(--ease);
         }
-        .chip:hover { translate: 0 -2px; border-color: color-mix(in srgb, var(--sec) 55%, transparent); background: var(--surface-2); }
+        .chip:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--sec) 55%, transparent); background: var(--surface-2); }
         .chip i { color: var(--sec); }
 
         .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
-        .dot--green { background: var(--green); box-shadow: 0 0 10px var(--green); animation: pulse 2s infinite; }
-        .dot--red { background: #ef4444; box-shadow: 0 0 10px #ef4444; animation: pulse 1.4s infinite; }
-        .dot--purple { background: var(--purple); box-shadow: 0 0 10px var(--purple); }
+        .dot--green { background: var(--green); animation: pulse 2s ease-in-out infinite; }
+        .dot--red { background: #ef4444; animation: pulse 1.4s ease-in-out infinite; }
+        .dot--purple { background: var(--purple); }
         .dot--gray { background: #64748b; }
-        @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.45; transform: scale(0.8); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
-        /* ---------- Reveal-animaties ---------- */
-        @keyframes rise { from { opacity: 0; translate: 0 32px; } to { opacity: 1; translate: 0 0; } }
+        /* ---------- Reveal ---------- */
+        @keyframes rise { from { opacity: 0; translate: 0 24px; } }
         .js .reveal { opacity: 0; }
-        .js .reveal.visible { opacity: 1; animation: rise 0.85s var(--ease) both; animation-delay: calc(var(--d, 0) * 90ms); }
+        .js .reveal.visible { opacity: 1; animation: rise 0.7s var(--ease) backwards; animation-delay: calc(var(--d, 0) * 80ms); }
         .js .rise { opacity: 0; }
-        .js.ready .rise { opacity: 1; animation: rise 0.95s var(--ease) both; animation-delay: calc(var(--d, 0) * 110ms + 0.1s); }
+        .js.ready .rise { opacity: 1; animation: rise 0.8s var(--ease) backwards; animation-delay: calc(var(--d, 0) * 90ms + 0.05s); }
 
         /* ---------- Hero ---------- */
         .hero {
             position: relative; text-align: center;
-            padding: clamp(4rem, 11vh, 7rem) 1.5rem 4.5rem;
+            padding: clamp(4.5rem, 12vh, 7.5rem) 1.5rem 3rem;
             display: flex; flex-direction: column; align-items: center; gap: 1.4rem;
         }
-        .hero-inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 1.4rem; }
-        .badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+        .badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
         .badge {
             display: inline-flex; align-items: center; gap: 9px;
-            padding: 0.5rem 1.15rem; border-radius: var(--pill);
+            padding: 0.45rem 1rem; border-radius: var(--pill);
             background: var(--surface); border: 1px solid var(--line);
-            font-size: 0.82rem; font-weight: 600;
+            font-size: 0.8rem; font-weight: 600;
         }
-        .hero h1 { font-size: clamp(2.4rem, 7vw, 4.6rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; }
+        .stack { display: inline-flex; margin-left: 2px; }
+        .stack img { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--bg-solid); margin-left: -8px; image-rendering: pixelated; background: var(--bg-solid); }
+        .stack img:first-child { margin-left: 0; }
+        .hero h1 { font-size: clamp(2.4rem, 6.5vw, 4.2rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; }
         .h1-a { background: linear-gradient(180deg, #fff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-        .grad {
-            background: linear-gradient(100deg, var(--purple), var(--cyan), var(--purple));
-            background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-            animation: gradMove 10s linear infinite;
-        }
-        @keyframes gradMove { to { background-position: 200% 0; } }
-        .lead { font-size: clamp(1.05rem, 2.4vw, 1.35rem); font-weight: 700; color: #e2e8f0; min-height: 1.8em; }
+        .grad { background: linear-gradient(100deg, var(--purple), var(--cyan), var(--green)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .lead { font-size: clamp(1.05rem, 2.3vw, 1.3rem); font-weight: 700; color: #e2e8f0; min-height: 1.8em; }
         .typed { color: var(--cyan); }
-        .caret { display: inline-block; width: 2px; height: 1.1em; margin-left: 3px; vertical-align: -0.15em; background: var(--cyan); animation: blink 1s steps(1) infinite; }
+        .caret { display: inline-block; width: 2px; height: 1.05em; margin-left: 3px; vertical-align: -0.15em; background: var(--cyan); animation: blink 1s steps(1) infinite; }
         @keyframes blink { 50% { opacity: 0; } }
-        .hero-desc { color: var(--muted); max-width: 620px; font-size: 1.05rem; }
-        .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 0.4rem; }
-
-        .scroll-cue {
-            margin-top: 1.2rem; width: 26px; height: 42px; border-radius: 14px;
-            border: 2px solid var(--line-strong); display: block; position: relative;
-        }
-        .scroll-cue::after {
-            content: ''; position: absolute; left: 50%; top: 8px; width: 4px; height: 8px; margin-left: -2px;
-            border-radius: 4px; background: var(--muted); animation: wheel 1.8s ease-in-out infinite;
-        }
-        @keyframes wheel { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(14px); } }
-
-        /* Zwevende 3D-blokken */
-        .cubes { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-        .fc { position: absolute; width: var(--s); height: var(--s); filter: drop-shadow(0 14px 22px rgba(0,0,0,0.45)); }
-        .bob { width: 100%; height: 100%; perspective: 700px; animation: bob var(--bd, 6s) ease-in-out infinite alternate; }
-        @keyframes bob { from { transform: translateY(0); } to { transform: translateY(-18px); } }
-        .cube { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transform: rotateX(-24deg) rotateY(24deg); }
-        .cube .f {
-            position: absolute; inset: 0; border: 1px solid rgba(0,0,0,0.25);
-            background-image: linear-gradient(var(--top) 0 24%, var(--body) 24% 100%), repeating-conic-gradient(rgba(0,0,0,0.12) 0 25%, rgba(255,255,255,0.05) 0 50%);
-            background-size: 100% 100%, 25% 25%;
-        }
-        .cube .ft, .cube .fb { background-image: linear-gradient(var(--top), var(--top)), repeating-conic-gradient(rgba(0,0,0,0.12) 0 25%, rgba(255,255,255,0.05) 0 50%); }
-        .cube .fb { background-image: linear-gradient(var(--body), var(--body)), repeating-conic-gradient(rgba(0,0,0,0.12) 0 25%, rgba(255,255,255,0.05) 0 50%); }
-        .cube .f1 { transform: translateZ(calc(var(--s) / 2)); }
-        .cube .f2 { transform: rotateY(90deg) translateZ(calc(var(--s) / 2)); }
-        .cube .f3 { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
-        .cube .f4 { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); }
-        .cube .ft { transform: rotateX(90deg) translateZ(calc(var(--s) / 2)); }
-        .cube .fb { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); }
-        .cube.grass { --top: #4ade80; --body: #8b5a2b; }
-        .cube.amethyst { --top: #c4a1ff; --body: #6d34d9; }
-        .cube.ice { --top: #67e8f9; --body: #0e7490; }
-
-        /* ---------- Marquee ---------- */
-        .marquee {
-            overflow: hidden; padding: 0.9rem 0;
-            border-block: 1px solid var(--line); background: rgba(255,255,255,0.02);
-            -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-        }
-        .mq-track { display: flex; width: max-content; animation: marquee 34s linear infinite; }
-        .marquee:hover .mq-track { animation-play-state: paused; }
-        .mq-group { display: flex; }
-        .mq-group span {
-            display: inline-flex; align-items: center; gap: 1.2rem; padding-right: 1.2rem;
-            font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em;
-            color: var(--muted); white-space: nowrap;
-        }
-        .mq-group span::after { content: '·'; color: var(--purple); font-weight: 800; }
-        @keyframes marquee { to { transform: translateX(-50%); } }
+        .hero-desc { color: var(--muted); max-width: 600px; font-size: 1.02rem; }
+        .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 0.4rem; }
 
         /* ---------- Stream ---------- */
         .stream-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 0.75rem; padding: 0.75rem; }
-        .stream-grid:hover { border-color: color-mix(in srgb, var(--sec) 35%, transparent); }
-        .stream-player { aspect-ratio: 16 / 9; border-radius: var(--r-md); overflow: hidden; background: #000; }
-        .stream-chat { position: relative; min-height: 420px; border-radius: var(--r-md); overflow: hidden; background: #0e0e10; }
-        .stream-chat iframe { position: absolute; inset: 0; }
-        iframe { width: 100%; height: 100%; border: 0; display: block; }
+        .stream-player { position: relative; aspect-ratio: 16 / 9; border-radius: var(--r-md); overflow: hidden; background: #06080e; }
+        .stream-chat { position: relative; min-height: 420px; border-radius: var(--r-md); overflow: hidden; background: #0e0e10; display: grid; place-items: center; color: var(--muted); font-size: 0.85rem; font-weight: 600; }
+        .stream-chat span i { margin-right: 8px; color: var(--purple); }
+        .stream-player iframe, .stream-chat iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: none; }
+        .on iframe { display: block; }
+        .facade {
+            position: absolute; inset: 0; width: 100%; cursor: pointer; border: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem;
+            background: radial-gradient(circle at 50% 42%, rgba(145,70,255,0.22), transparent 62%), #0a0e18;
+        }
+        .on .facade { display: none; }
+        .facade-play {
+            width: 68px; height: 68px; border-radius: 50%; display: grid; place-items: center; font-size: 1.25rem; padding-left: 4px;
+            background: var(--purple); box-shadow: 0 8px 26px rgba(145,70,255,0.45);
+            transition: transform 0.3s var(--ease);
+        }
+        .facade:hover .facade-play { transform: scale(1.1); }
+        .facade-title { font-weight: 800; font-size: 1.1rem; margin-top: 0.4rem; }
+        .facade-sub { color: var(--muted); font-size: 0.84rem; }
+
         .stream-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin: 1.2rem 0 1.25rem; }
 
         /* ---------- Minecraft ---------- */
@@ -369,10 +294,11 @@
         .ip-text {
             font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
             font-size: clamp(1.4rem, 3.6vw, 2.1rem); font-weight: 700;
-            padding: 0.55rem 1rem; border-radius: var(--r-sm);
-            background: rgba(0,0,0,0.35); border: 1px dashed color-mix(in srgb, var(--sec) 45%, transparent);
-            color: #86efac; word-break: break-all;
+            padding: 0.55rem 1rem; border-radius: var(--r-sm); cursor: pointer; border: 1px dashed color-mix(in srgb, var(--sec) 45%, transparent);
+            background: rgba(0,0,0,0.35); color: #86efac; word-break: break-all;
+            transition: background-color 0.25s, border-color 0.25s;
         }
+        .ip-text:hover { background: rgba(34,197,94,0.1); border-color: var(--green); }
         .server-main p { color: var(--muted); font-size: 0.93rem; max-width: 460px; }
         .server-live {
             padding: 2.2rem; display: flex; flex-direction: column; gap: 0.9rem; justify-content: center;
@@ -387,27 +313,41 @@
         .big-number { font-size: 3.2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
         .big-number small { font-size: 1.1rem; font-weight: 700; color: var(--muted); letter-spacing: 0; }
         .big-label { font-size: 0.78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-        .meter { height: 8px; border-radius: 99px; background: rgba(255,255,255,0.07); overflow: hidden; }
-        .meter i {
-            display: block; height: 100%; width: 0; border-radius: inherit;
-            background: linear-gradient(90deg, var(--green), #86efac, var(--green)); background-size: 200% 100%;
-            animation: shimmer 2.4s linear infinite; transition: width 1s var(--ease);
+        .meter { height: 6px; border-radius: 99px; background: rgba(255,255,255,0.07); overflow: hidden; }
+        .meter i { display: block; width: 100%; height: 100%; background: var(--green); transform: scaleX(0); transform-origin: left; transition: transform 0.9s var(--ease); }
+
+        /* Nu online */
+        .online-card { padding: 1.6rem 1.8rem; margin-bottom: 1.25rem; scroll-margin-top: 6rem; }
+        .online-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 0.8rem; margin-bottom: 1.2rem; }
+        .online-head h3 { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px; }
+        .online-head p { color: var(--muted); font-size: 0.85rem; margin-top: 2px; }
+        .count-pill { padding: 0.3rem 0.85rem; border-radius: var(--pill); font-size: 0.82rem; font-weight: 800; font-variant-numeric: tabular-nums; color: #4ade80; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.28); }
+        .players { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.7rem; }
+        .player {
+            display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem 0.8rem; border-radius: var(--r-sm);
+            background: rgba(255,255,255,0.03); border: 1px solid var(--line); text-decoration: none; min-width: 0;
+            animation: rise 0.55s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 60ms);
+            transition: border-color 0.25s, background-color 0.25s, transform 0.25s var(--ease);
         }
-        @keyframes shimmer { to { background-position: -200% 0; } }
+        .player:hover { border-color: rgba(34,197,94,0.5); background: rgba(34,197,94,0.06); transform: translateY(-2px); }
+        .p-head { position: relative; flex-shrink: 0; width: 40px; height: 40px; }
+        .p-head img { width: 40px; height: 40px; border-radius: 8px; image-rendering: pixelated; background: var(--bg-solid); display: block; }
+        .p-dot { position: absolute; right: -3px; bottom: -3px; width: 11px; height: 11px; border-radius: 50%; background: var(--green); border: 2px solid #0d1320; }
+        .p-text { min-width: 0; }
+        .p-name { display: block; font-weight: 700; font-size: 0.92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .p-sub { display: block; font-size: 0.72rem; color: var(--muted); font-weight: 600; }
+        .player.more { justify-content: center; color: var(--muted); font-weight: 700; font-size: 0.88rem; }
+        .player.sk { height: 62px; animation: skpulse 1.4s ease-in-out infinite; }
+        @keyframes skpulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+        .online-empty { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.2rem; color: var(--muted); font-size: 0.93rem; padding: 0.4rem 0; }
 
         .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 1.25rem; }
-        .card {
-            padding: 2rem; display: flex; flex-direction: column;
-            transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
-        }
-        .card:hover { --lift: -4px; }
+        .card { padding: 2rem; display: flex; flex-direction: column; }
         .card-icon {
-            width: 50px; height: 50px; border-radius: 14px; display: grid; place-items: center;
+            width: 50px; height: 50px; border-radius: var(--r-sm); display: grid; place-items: center;
             font-size: 1.3rem; margin-bottom: 1.1rem; color: var(--sec);
             background: color-mix(in srgb, var(--sec) 12%, transparent);
-            transition: transform 0.4s var(--ease);
         }
-        .card:hover .card-icon { transform: rotate(-8deg) scale(1.1); }
         .card h3 { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.45rem; }
         .card p { color: var(--muted); font-size: 0.93rem; }
         .card-link {
@@ -422,31 +362,32 @@
         .lb-head h3 i { color: var(--amber); margin-right: 8px; }
         .lb-head p { color: var(--muted); font-size: 0.85rem; }
         .lb-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
-        .lb-row { display: grid; grid-template-columns: 30px 40px 1fr auto; gap: 0.8rem; align-items: center; padding: 0.55rem 0.8rem; border-radius: var(--r-sm); background: rgba(255,255,255,0.03); border: 1px solid transparent; transition: border-color 0.25s, background 0.25s, translate 0.25s var(--ease); }
-        .lb-row:hover { border-color: rgba(34,197,94,0.35); background: rgba(34,197,94,0.05); translate: 4px 0; }
+        .lb-row { display: grid; grid-template-columns: 30px 40px 1fr auto; gap: 0.8rem; align-items: center; padding: 0.55rem 0.8rem; border-radius: var(--r-sm); background: rgba(255,255,255,0.03); border: 1px solid transparent; transition: border-color 0.25s, background-color 0.25s; }
+        .lb-row:hover { border-color: rgba(34,197,94,0.35); background: rgba(34,197,94,0.05); }
         .lb-rank { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 0.76rem; font-weight: 800; color: var(--muted); background: rgba(148,163,184,0.12); }
-        .lb-rank.r1 { color: #fbbf24; background: rgba(251,191,36,0.2); box-shadow: 0 0 14px rgba(251,191,36,0.25); }
+        .lb-rank.r1 { color: #fbbf24; background: rgba(251,191,36,0.2); }
         .lb-rank.r2 { color: #cbd5e1; background: rgba(203,213,225,0.18); }
         .lb-rank.r3 { color: #d97706; background: rgba(217,119,6,0.2); }
         .lb-avatar { width: 40px; height: 40px; border-radius: 8px; image-rendering: pixelated; background: var(--bg-solid); }
         .lb-info { min-width: 0; }
         .lb-name { font-weight: 700; font-size: 0.93rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .lb-bar { height: 6px; margin-top: 6px; border-radius: 6px; background: rgba(255,255,255,0.06); overflow: hidden; }
-        .lb-bar i { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--green), var(--cyan)); transition: width 1.2s var(--ease) calc(var(--i, 0) * 0.12s + 0.25s); }
-        .visible .lb-bar i { width: var(--w); }
+        .lb-bar i { display: block; width: 100%; height: 100%; background: linear-gradient(90deg, var(--green), var(--cyan)); transform: scaleX(0); transform-origin: left; transition: transform 1s var(--ease) calc(var(--i, 0) * 0.1s + 0.2s); }
+        .visible .lb-bar i { transform: scaleX(var(--w)); }
         .lb-val { font-weight: 800; font-size: 0.9rem; color: var(--amber); font-variant-numeric: tabular-nums; }
-        .lb-row.sk { height: 58px; border: 0; background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.08), rgba(255,255,255,0.03)); background-size: 200% 100%; animation: shimmer 1.6s linear infinite; }
+        .lb-row.sk { height: 58px; border: 0; animation: skpulse 1.4s ease-in-out infinite; }
 
         /* ---------- Community ---------- */
         .socials { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
         .social { padding: 1.6rem 1.4rem; display: flex; flex-direction: column; gap: 0.9rem; text-decoration: none; }
         .social-icon {
-            width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; font-size: 1.5rem; color: var(--sec);
-            background: color-mix(in srgb, var(--sec) 14%, transparent); transition: transform 0.4s var(--ease);
+            width: 52px; height: 52px; border-radius: var(--r-sm); display: grid; place-items: center; font-size: 1.5rem; color: var(--sec);
+            background: color-mix(in srgb, var(--sec) 14%, transparent);
         }
-        .social:hover .social-icon { transform: translateY(-4px) rotate(-6deg) scale(1.08); }
         .social h3 { font-size: 1.05rem; font-weight: 800; }
         .social p { color: var(--muted); font-size: 0.86rem; }
+        .dc-live { display: flex; align-items: center; gap: 7px; margin-top: 6px; font-size: 0.78rem; font-weight: 700; color: #cbd5e1; }
+        .dc-live[hidden] { display: none; }
         .social .arrow { margin-top: auto; color: var(--sec); font-size: 0.95rem; transition: transform 0.3s var(--ease); }
         .social:hover .arrow { transform: translateX(6px); }
 
@@ -461,87 +402,19 @@
         }
         .faq-q i { color: var(--sec); font-size: 0.85rem; transition: transform 0.35s var(--ease); }
         .faq-item.open .faq-q i { transform: rotate(180deg); }
-        .faq-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s var(--ease); }
+        .faq-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.35s var(--ease); }
         .faq-item.open .faq-a { grid-template-rows: 1fr; }
         .faq-a > div { overflow: hidden; min-height: 0; }
         .faq-a p { padding: 0 1.4rem 1.2rem; color: var(--muted); font-size: 0.95rem; }
 
-        /* ---------- Contact ---------- */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1.15fr 0.85fr;
-            gap: 1.5rem;
-        }
-        .contact-form {
-            padding: 2.2rem;
-            display: flex; flex-direction: column; gap: 1.2rem;
-        }
-        .form-head { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.2rem; }
-        .form-head i { font-size: 1.4rem; color: var(--amber); }
-        .form-head h3 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; }
-
-        .field { display: flex; flex-direction: column; gap: 0.45rem; }
-        .field label { font-size: 0.82rem; font-weight: 700; color: #cbd5e1; }
-        .field label span { color: var(--amber); }
-        .field input, .field textarea {
-            width: 100%; padding: 0.85rem 1rem;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--line-strong);
-            border-radius: var(--r-sm);
-            font-size: 0.92rem; color: var(--text);
-            transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
-            resize: vertical;
-        }
-        .field input::placeholder, .field textarea::placeholder { color: #64748b; }
-        .field input:focus, .field textarea:focus {
-            outline: none; border-color: var(--amber);
-            background: rgba(0,0,0,0.45);
-            box-shadow: 0 0 0 4px rgba(245,158,11,0.15);
-        }
-        .field textarea { min-height: 130px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .form-note { font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 0.4rem; }
-        .form-note i { color: var(--green); }
-
-        .info-stack { display: flex; flex-direction: column; gap: 1.25rem; }
-        .info-card {
-            padding: 1.8rem; display: flex; flex-direction: column; gap: 0.6rem;
-            text-decoration: none;
-        }
-        .info-card .info-icon {
-            width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center;
-            font-size: 1.15rem; color: var(--sec);
-            background: color-mix(in srgb, var(--sec) 12%, transparent);
-            transition: transform 0.4s var(--ease);
-        }
-        .info-card:hover .info-icon { transform: rotate(-8deg) scale(1.08); }
-        .info-card h3 { font-size: 1rem; font-weight: 800; }
-        .info-card .value { font-size: 0.95rem; color: #e2e8f0; font-weight: 600; word-break: break-all; }
-        .info-card .hint { font-size: 0.8rem; color: var(--muted); }
-        .copy-email {
-            margin-top: 0.4rem; align-self: flex-start;
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            padding: 0.5rem 0.9rem; border-radius: var(--pill);
-            font-size: 0.78rem; font-weight: 700; cursor: pointer;
-            background: rgba(245,158,11,0.12);
-            border: 1px solid rgba(245,158,11,0.35);
-            color: #fcd34d;
-            transition: background 0.2s, translate 0.2s;
-        }
-        .copy-email:hover { background: rgba(245,158,11,0.22); translate: 0 -2px; }
-
         /* ---------- CTA ---------- */
-        @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
         .cta { padding-top: 6rem; }
         .cta-box {
-            position: relative; text-align: center; padding: 3.5rem 2rem; border-radius: var(--r-lg);
-            border: 2px solid transparent;
-            background: linear-gradient(var(--bg-solid), var(--bg-solid)) padding-box,
-                        conic-gradient(from var(--angle), var(--purple), var(--cyan), var(--green), var(--purple)) border-box;
-            animation: angle 8s linear infinite;
+            text-align: center; padding: 3.2rem 2rem; border-radius: var(--r-lg);
+            border: 1px solid color-mix(in srgb, var(--purple) 35%, transparent);
+            background: linear-gradient(135deg, rgba(145,70,255,0.14), rgba(6,182,212,0.06) 60%, rgba(34,197,94,0.1)), var(--bg-solid);
         }
-        @keyframes angle { to { --angle: 360deg; } }
-        .cta-box h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.03em; }
+        .cta-box h2 { font-size: clamp(1.7rem, 3.6vw, 2.4rem); font-weight: 800; letter-spacing: -0.03em; }
         .cta-box p { color: var(--muted); margin: 0.6rem auto 1.8rem; max-width: 520px; }
 
         /* ---------- Footer ---------- */
@@ -550,10 +423,10 @@
         .footer-brand h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.6rem; }
         .footer-brand h3 span { color: var(--purple); }
         .footer-brand p { color: var(--muted); font-size: 0.9rem; max-width: 380px; }
-        .footer-col h4 { font-size: 0.82rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1rem; }
+        .footer-col h4 { font-size: 0.8rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1rem; }
         .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-        .footer-col a { color: var(--muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s, padding 0.2s; }
-        .footer-col a:hover { color: var(--purple); padding-left: 4px; }
+        .footer-col a { color: var(--muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+        .footer-col a:hover { color: var(--purple); }
         .footer-bottom {
             max-width: 1100px; margin: 0 auto; padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,0.05);
             display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;
@@ -562,32 +435,28 @@
         .footer-status { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
         .to-top { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); text-decoration: none; font-weight: 700; transition: color 0.2s; }
         .to-top:hover { color: #fff; }
-        .to-top i { animation: nudge 1.8s ease-in-out infinite; }
-        @keyframes nudge { 50% { transform: translateY(-4px); } }
 
-        /* ---------- Toast + confetti ---------- */
+        /* ---------- Toast ---------- */
         .toast {
             position: fixed; left: 50%; bottom: 2rem; z-index: 9999;
             display: inline-flex; align-items: center; gap: 8px;
             padding: 0.75rem 1.3rem; border-radius: var(--pill);
-            background: rgba(15,22,36,0.96); border: 1px solid rgba(34,197,94,0.5);
+            background: #0f1624; border: 1px solid rgba(34,197,94,0.5);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-size: 0.88rem; font-weight: 700;
             transform: translate(-50%, 30px); opacity: 0; pointer-events: none;
             transition: transform 0.4s var(--ease), opacity 0.3s;
         }
         .toast i { color: var(--green); }
         .toast.show { transform: translate(-50%, 0); opacity: 1; }
-        .px { position: fixed; width: 8px; height: 8px; z-index: 100000; pointer-events: none; }
 
         /* ---------- Chatbot ---------- */
         .chat-prompt {
             position: fixed; bottom: 6.2rem; right: 2rem; z-index: 9995;
             display: flex; align-items: center; gap: 10px; padding: 0.75rem 1.1rem; border-radius: var(--r-sm);
-            background: rgba(15,22,36,0.95); border: 1px solid var(--purple);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(145,70,255,0.35);
+            background: #0f1624; border: 1px solid var(--purple); box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             font-size: 0.82rem; font-weight: 600;
-            opacity: 0; transform: translateY(10px) scale(0.95); pointer-events: none;
-            transition: all 0.4s var(--ease);
+            opacity: 0; transform: translateY(10px); pointer-events: none;
+            transition: opacity 0.35s, transform 0.35s var(--ease);
         }
         .chat-prompt.visible { opacity: 1; transform: none; pointer-events: auto; }
         .chat-prompt button { background: none; border: 0; font-size: 1.2rem; line-height: 1; cursor: pointer; padding: 0 4px; }
@@ -595,9 +464,9 @@
             position: fixed; bottom: 2rem; right: 2rem; z-index: 9997;
             width: 56px; height: 56px; border-radius: 50%; border: 0; cursor: pointer;
             display: grid; place-items: center; color: #fff; background: var(--purple);
-            box-shadow: 0 10px 30px rgba(145,70,255,0.35); transition: transform 0.3s var(--ease), box-shadow 0.3s;
+            box-shadow: 0 10px 28px rgba(145,70,255,0.4); transition: transform 0.3s var(--ease);
         }
-        .chat-toggle:hover { transform: translateY(-3px) scale(1.06); box-shadow: 0 14px 36px rgba(145,70,255,0.5); }
+        .chat-toggle:hover { transform: translateY(-3px) scale(1.06); }
         .chat-toggle svg { width: 22px; height: 22px; }
         .chat-toggle .i-close { display: none; }
         .chat-toggle.open .i-chat { display: none; }
@@ -606,30 +475,30 @@
             position: fixed; bottom: 5.5rem; right: 2rem; z-index: 9996;
             width: 360px; max-width: calc(100% - 3rem); height: 500px; max-height: calc(100vh - 7rem);
             display: flex; flex-direction: column; overflow: hidden;
-            background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-lg);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            opacity: 0; visibility: hidden; transform: translateY(15px) scale(0.96); transform-origin: bottom right;
-            transition: all 0.35s var(--ease);
+            background: #0d1320; border: 1px solid var(--line); border-radius: var(--r-lg);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+            opacity: 0; visibility: hidden; transform: translateY(15px) scale(0.97); transform-origin: bottom right;
+            transition: opacity 0.3s, transform 0.3s var(--ease), visibility 0.3s;
         }
         .chat-window.open { opacity: 1; visibility: visible; transform: none; }
-        .chat-head { display: flex; align-items: center; gap: 0.8rem; padding: 1.1rem 1.3rem; background: rgba(15,22,36,0.95); border-bottom: 1px solid var(--line); }
-        .chat-avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 0.9rem; color: #fff; background: var(--purple); box-shadow: 0 0 15px rgba(145,70,255,0.4); }
+        .chat-head { display: flex; align-items: center; gap: 0.8rem; padding: 1.1rem 1.3rem; background: #0a0f1a; border-bottom: 1px solid var(--line); }
+        .chat-avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 0.9rem; color: #fff; background: var(--purple); }
         .chat-head-info { flex: 1; }
         .chat-head-info h4 { font-size: 0.9rem; font-weight: 700; }
         .chat-head-info span { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--muted); }
         .chat-close { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid var(--line); cursor: pointer; font-size: 1rem; }
         .chat-messages { flex: 1; overflow-y: auto; padding: 1.1rem; display: flex; flex-direction: column; gap: 0.8rem; }
-        .msg { max-width: 88%; padding: 0.7rem 0.9rem; border-radius: 12px; font-size: 0.85rem; line-height: 1.45; animation: rise 0.4s var(--ease) both; }
+        .msg { max-width: 88%; padding: 0.7rem 0.9rem; border-radius: 12px; font-size: 0.85rem; line-height: 1.45; animation: rise 0.4s var(--ease) backwards; }
         .msg.bot { align-self: flex-start; background: rgba(255,255,255,0.05); border: 1px solid var(--line); border-bottom-left-radius: 3px; }
         .msg.user { align-self: flex-end; background: var(--purple); color: #fff; font-weight: 500; border-bottom-right-radius: 3px; }
         .msg a { color: #c4a1ff; font-weight: 700; }
         .typing { display: inline-flex; gap: 4px; padding: 0.9rem 1rem; }
         .typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); animation: tdot 1s ease-in-out infinite; animation-delay: calc(var(--i) * 0.15s); }
-        @keyframes tdot { 0%,100% { opacity: 0.3; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-4px); } }
+        @keyframes tdot { 0%, 100% { opacity: 0.3; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-4px); } }
         .quick { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0 1.1rem 0.7rem; }
-        .quick button { padding: 0.4rem 0.8rem; border-radius: var(--pill); font-size: 0.72rem; font-weight: 600; cursor: pointer; color: #d8b4fe; background: rgba(145,70,255,0.1); border: 1px solid rgba(145,70,255,0.3); transition: background 0.2s, translate 0.2s; }
-        .quick button:hover { background: rgba(145,70,255,0.2); translate: 0 -2px; }
-        .chat-input-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.1rem; background: rgba(8,11,17,0.5); border-top: 1px solid var(--line); }
+        .quick button { padding: 0.4rem 0.8rem; border-radius: var(--pill); font-size: 0.72rem; font-weight: 600; cursor: pointer; color: #d8b4fe; background: rgba(145,70,255,0.1); border: 1px solid rgba(145,70,255,0.3); transition: background-color 0.2s, transform 0.2s; }
+        .quick button:hover { background: rgba(145,70,255,0.2); transform: translateY(-2px); }
+        .chat-input-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.1rem; background: rgba(8,11,17,0.6); border-top: 1px solid var(--line); }
         .chat-input { flex: 1; padding: 0.7rem 0.9rem; border-radius: var(--pill); font-size: 0.82rem; outline: none; background: rgba(255,255,255,0.04); border: 1px solid var(--line); transition: border-color 0.2s; }
         .chat-input:focus { border-color: var(--purple); }
         .chat-send { width: 38px; height: 38px; border-radius: 50%; border: 0; cursor: pointer; display: grid; place-items: center; color: #fff; background: var(--purple); }
@@ -650,41 +519,32 @@
             .brand { width: 100%; justify-content: center; }
             .nav-center { width: 100%; overflow-x: auto; justify-content: flex-start; scrollbar-width: none; }
             .nav-center::-webkit-scrollbar { display: none; }
-            .lang { margin-left: auto; margin-right: auto; }
-            .contact-grid { grid-template-columns: 1fr; }
-            .info-stack { order: -1; }
         }
         @media (max-width: 700px) {
-            .bob { scale: 0.62; }
-            .cubes { opacity: 0.5; }
             .section, .cta { padding-top: 4.5rem; }
             .socials { grid-template-columns: 1fr; }
             .lb-row { grid-template-columns: 28px 36px 1fr auto; gap: 0.6rem; }
             .server-main, .server-live { padding: 1.6rem; }
+            .online-card, .lb-card { padding: 1.4rem 1.2rem; }
             .chat-prompt { right: 1rem; }
             .chat-toggle { right: 1rem; bottom: 1rem; }
             .chat-window { right: 1rem; bottom: 4.5rem; }
-            .form-row { grid-template-columns: 1fr; }
-            .contact-form { padding: 1.6rem; }
         }
 
         @media (prefers-reduced-motion: reduce) {
             html { scroll-behavior: auto; }
             *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-            .bob, .grad, .mq-track { animation: none !important; }
         }
     </style>
 </head>
 <body>
 
     <div class="progress" id="progress"></div>
-    <div class="cursor-glow" id="glow"></div>
 
     <div class="loader" id="loader">
         <div class="loader-logo">Floris<span>_N</span></div>
         <div class="loader-bar"><i></i></div>
     </div>
-
     <div class="wipe" id="wipe"><div class="loader-logo">Floris<span>_N</span></div></div>
 
     <!-- ================= NAVIGATIE ================= -->
@@ -702,15 +562,17 @@
                 <span class="nav-ind" id="nav-ind"></span>
                 <a class="nav-link" href="#stream" data-spy="stream"><i class="fa-brands fa-twitch"></i><span data-i18n="nav_stream">Live Stream</span></a>
                 <a class="nav-link" href="#minecraft" data-spy="minecraft"><i class="fa-solid fa-cube"></i><span data-i18n="nav_mc">Minecraft SMP</span></a>
+                <a class="nav-link nav-page" href="smp.html" data-page><i class="fa-solid fa-chart-line"></i><span data-i18n="nav_stats">Statistieken</span></a>
                 <a class="nav-link" href="#community" data-spy="community"><i class="fa-solid fa-users"></i><span data-i18n="nav_comm">Community</span></a>
                 <a class="nav-link" href="#faq" data-spy="faq"><i class="fa-solid fa-circle-question"></i><span data-i18n="nav_faq">FAQ</span></a>
-                <a class="nav-link nav-page" href="alerts.html" data-page><i class="fa-solid fa-bell"></i><span data-i18n="nav_alerts">Stream Alerts</span></a>
-                <a class="nav-link" href="#contact" data-spy="contact"><i class="fa-solid fa-envelope"></i><span data-i18n="nav_contact">Contact</span></a>
             </div>
 
-            <div class="lang" role="group" aria-label="Language">
-                <button class="lang-btn active" data-lang="nl" aria-pressed="true">NL</button>
-                <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+            <div class="nav-end">
+                <a class="online-pill" href="#online" id="nav-online"><span class="dot dot--gray" id="nav-dot"></span><span id="nav-online-text">…</span></a>
+                <div class="lang" role="group" aria-label="Language">
+                    <button class="lang-btn active" data-lang="nl" aria-pressed="true">NL</button>
+                    <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+                </div>
             </div>
         </nav>
     </div>
@@ -718,85 +580,69 @@
     <main>
         <!-- ================= HERO ================= -->
         <header class="hero" id="home">
-            <div class="cubes" aria-hidden="true">
-                <div class="fc" data-depth="46" style="--s:78px; left:7%; top:20%;">
-                    <div class="bob" style="--bd:6s"><div class="cube grass"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
-                </div>
-                <div class="fc" data-depth="30" style="--s:56px; right:9%; top:14%;">
-                    <div class="bob" style="--bd:7.5s"><div class="cube amethyst"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
-                </div>
-                <div class="fc" data-depth="62" style="--s:42px; right:16%; bottom:20%;">
-                    <div class="bob" style="--bd:5s"><div class="cube ice"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
-                </div>
-                <div class="fc" data-depth="22" style="--s:34px; left:17%; bottom:16%;">
-                    <div class="bob" style="--bd:8s"><div class="cube amethyst"><i class="f ft"></i><i class="f fb"></i><i class="f f1"></i><i class="f f2"></i><i class="f f3"></i><i class="f f4"></i></div></div>
-                </div>
+            <div class="badges rise" style="--d:0">
+                <div class="badge"><span class="dot dot--purple" id="tw-dot"></span><span id="tw-text">Twitch: <strong>Floris_N</strong></span></div>
+                <div class="badge"><span class="dot dot--gray" id="mc-dot"></span><span id="mc-text" data-i18n="mc_loading">MC laden…</span><span class="stack" id="hero-stack"></span></div>
             </div>
 
-            <div class="hero-inner">
-                <div class="badges rise" style="--d:0">
-                    <div class="badge"><span class="dot dot--purple" id="tw-dot"></span><span id="tw-text">Twitch: <strong>Floris_N</strong></span></div>
-                    <div class="badge"><span class="dot dot--gray" id="mc-dot"></span><span id="mc-text" data-i18n="mc_loading">MC laden…</span></div>
-                </div>
+            <h1 class="rise" style="--d:1"><span class="h1-a">Floris_N</span> <span class="grad">Community Hub</span></h1>
 
-                <h1 class="rise" style="--d:1"><span class="h1-a">Floris_N</span> <span class="grad">Community Hub</span></h1>
+            <p class="lead rise" style="--d:2"><span data-i18n="hero_prefix">Alles over</span> <span class="typed" id="typed"></span><span class="caret"></span></p>
 
-                <p class="lead rise" style="--d:2"><span data-i18n="hero_prefix">Alles over</span> <span class="typed" id="typed"></span><span class="caret"></span></p>
+            <p class="hero-desc rise" style="--d:3" data-i18n="hero_desc">De centrale plek voor de livestream, de hechte SMP-community en al je in-game statistieken.</p>
 
-                <p class="hero-desc rise" style="--d:3" data-i18n="hero_desc">De centrale plek voor de livestream, de hechte SMP-community en al je in-game statistieken.</p>
-
-                <div class="actions rise" style="--d:4">
-                    <a href="https://twitch.tv/Floris_N" target="_blank" rel="noopener" class="btn btn-purple" data-magnet><i class="fa-brands fa-twitch"></i><span data-i18n="btn_channel">Bekijk Kanaal</span></a>
-                    <button class="btn btn-green" data-copy data-magnet type="button"><i class="fa-solid fa-server"></i><span data-i18n="btn_copy_ip">Kopieer IP: play.florisn.nl</span></button>
-                    <a href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener" class="btn btn-ghost" data-magnet><i class="fa-brands fa-discord"></i><span>Discord</span></a>
-                </div>
-
-                <a class="scroll-cue rise" style="--d:5" href="#stream" data-i18n-aria="aria_scroll" aria-label="Scroll"></a>
+            <div class="actions rise" style="--d:4">
+                <a href="https://twitch.tv/Floris_N" target="_blank" rel="noopener" class="btn btn-purple"><i class="fa-brands fa-twitch"></i><span data-i18n="btn_channel">Bekijk Kanaal</span></a>
+                <button class="btn btn-green" data-copy type="button"><i class="fa-solid fa-server"></i><span data-i18n="btn_copy_ip">Kopieer IP: play.florisn.nl</span></button>
+                <a href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener" class="btn btn-ghost"><i class="fa-brands fa-discord"></i><span>Discord</span></a>
             </div>
         </header>
-
-        <div class="marquee" aria-hidden="true">
-            <div class="mq-track" id="mq-track">
-                <div class="mq-group"><span>Livestream</span><span>Minecraft SMP</span><span>Voice Chat</span><span>Community</span><span>Statistieken</span><span>play.florisn.nl</span></div>
-                <div class="mq-group"><span>Livestream</span><span>Minecraft SMP</span><span>Voice Chat</span><span>Community</span><span>Statistieken</span><span>play.florisn.nl</span></div>
-            </div>
-        </div>
 
         <div class="container">
 
             <!-- ================= 01 STREAM ================= -->
             <section class="section" id="stream" style="--sec: var(--purple)">
                 <div class="section-head reveal">
-                    <span class="eyebrow"><span class="num">01</span><i class="fa-brands fa-twitch"></i><span data-i18n="eb_stream">Livestream</span></span>
+                    <span class="eyebrow"><span class="num">01</span><span data-i18n="eb_stream">Livestream</span></span>
                     <h2 data-i18n="head_stream">Live Stream</h2>
                     <p data-i18n="stream_sub">Volg de livestream live met interactieve chat en unieke content!</p>
                 </div>
 
                 <div class="surface stream-grid reveal">
-                    <div class="stream-player"><iframe id="tw-player" title="Twitch livestream" allowfullscreen loading="lazy"></iframe></div>
-                    <div class="stream-chat"><iframe id="tw-chat" title="Twitch chat" loading="lazy"></iframe></div>
+                    <div class="stream-player" id="stream-player">
+                        <button class="facade" id="stream-facade" type="button">
+                            <span class="facade-play"><i class="fa-solid fa-play"></i></span>
+                            <span class="facade-title" data-i18n="facade_title">Start de stream</span>
+                            <span class="facade-sub" data-i18n="facade_sub">Laadt de Twitch-speler en chat</span>
+                        </button>
+                        <iframe id="tw-player" title="Twitch livestream" allowfullscreen></iframe>
+                    </div>
+                    <div class="stream-chat" id="stream-chat">
+                        <span><i class="fa-solid fa-comments"></i><span data-i18n="chat_ph">Chat</span></span>
+                        <iframe id="tw-chat" title="Twitch chat"></iframe>
+                    </div>
                 </div>
 
                 <div class="stream-actions reveal">
                     <a class="chip" href="https://twitch.tv/Floris_N" target="_blank" rel="noopener"><i class="fa-brands fa-twitch"></i><span data-i18n="act_follow">Volg op Twitch</span></a>
                     <a class="chip" href="https://streamelements.com/floris_n/tip" target="_blank" rel="noopener"><i class="fa-solid fa-heart"></i><span data-i18n="act_tip">Steun met een tip</span></a>
-                    <a class="chip" href="https://www.twitch.tv/popout/floris_n/chat?popout=" target="_blank" rel="noopener"><i class="fa-solid fa-comments"></i><span data-i18n="act_chat">Open chat</span></a>
+                    <a class="chip" href="https://www.twitch.tv/popout/floris_n/chat?popout=" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square"></i><span data-i18n="act_chat">Open chat</span></a>
                 </div>
             </section>
 
             <!-- ================= 02 MINECRAFT ================= -->
             <section class="section" id="minecraft" style="--sec: var(--green)">
                 <div class="section-head reveal">
-                    <span class="eyebrow"><span class="num">02</span><i class="fa-solid fa-cube"></i><span data-i18n="eb_mc">Minecraft</span></span>
+                    <span class="eyebrow"><span class="num">02</span><span data-i18n="eb_mc">Minecraft</span></span>
                     <h2 data-i18n="head_smp">Minecraft Community SMP</h2>
                     <p data-i18n="smp_sub">Stap in de wereld, bouw mee met de community en volg je prestaties op de voet.</p>
                 </div>
 
                 <div class="surface server-card reveal">
                     <div class="server-main">
-                        <span class="eyebrow"><i class="fa-solid fa-server"></i><span data-i18n="srv_label">Server IP</span></span>
+                        <span class="eyebrow" style="--sec: var(--green)"><span data-i18n="srv_label">Server IP</span></span>
                         <h3 data-i18n="srv_title">Spring in de wereld</h3>
-                        <div class="ip-text">play.florisn.nl</div>
+                        <div class="ip-text" data-copy role="button" tabindex="0">play.florisn.nl</div>
                         <p data-i18n="srv_help">Open Minecraft Java Edition → Multiplayer → Server toevoegen → plak het IP-adres.</p>
                         <div class="actions" style="justify-content:flex-start; margin-top:0.2rem;">
                             <button class="btn btn-green" data-copy type="button"><i class="fa-solid fa-copy"></i><span data-i18n="btn_copy">Kopieer IP</span></button>
@@ -814,18 +660,29 @@
                     </div>
                 </div>
 
+                <div class="surface online-card reveal" id="online">
+                    <div class="online-head">
+                        <div>
+                            <h3><span class="dot dot--green" id="online-dot"></span><span data-i18n="online_title">Nu online</span></h3>
+                            <p data-i18n="online_sub">Klik op een speler om zijn statistieken te bekijken.</p>
+                        </div>
+                        <span class="count-pill" id="online-count">–</span>
+                    </div>
+                    <div id="online-body"><div class="players"><div class="player sk"></div><div class="player sk"></div><div class="player sk"></div></div></div>
+                </div>
+
                 <div class="cards" data-stagger>
-                    <div class="surface card spot" data-tilt>
+                    <div class="surface card hoverable">
                         <div class="card-icon"><i class="fa-solid fa-users"></i></div>
                         <h3 data-i18n="card1_title">Gezellige Survival</h3>
                         <p data-i18n="card1_desc">Een unieke SMP server waar bouwen, avontuur en samenwerken met de stream-community centraal staan.</p>
                     </div>
-                    <div class="surface card spot" data-tilt>
+                    <div class="surface card hoverable">
                         <div class="card-icon"><i class="fa-solid fa-headset"></i></div>
                         <h3 data-i18n="card2_title">Simple Voice Chat</h3>
                         <p data-i18n="card2_desc">Proximity voice-chat geïntegreerd. Praat direct in-game met spelers die om je heen staan.</p>
                     </div>
-                    <div class="surface card spot" data-tilt>
+                    <div class="surface card hoverable">
                         <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
                         <h3 data-i18n="card3_title">Speler Statistieken</h3>
                         <p data-i18n="card3_desc">Houd je speeltijd, kills, deaths en ranglijsten bij op ons uitgebreide speler-dashboard.</p>
@@ -850,28 +707,28 @@
             <!-- ================= 03 COMMUNITY ================= -->
             <section class="section" id="community" style="--sec: var(--cyan)">
                 <div class="section-head reveal">
-                    <span class="eyebrow"><span class="num">03</span><i class="fa-solid fa-share-nodes"></i><span data-i18n="eb_comm">Community</span></span>
+                    <span class="eyebrow"><span class="num">03</span><span data-i18n="eb_comm">Community</span></span>
                     <h2 data-i18n="head_socials">Officiële Socials</h2>
                     <p data-i18n="socials_sub">Blijf op de hoogte via al onze kanalen!</p>
                 </div>
 
                 <div class="socials" data-stagger>
-                    <a class="surface social spot" style="--sec: var(--discord)" href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener">
+                    <a class="surface social hoverable" style="--sec: var(--discord)" href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener">
                         <span class="social-icon"><i class="fa-brands fa-discord"></i></span>
-                        <div><h3>Discord</h3><p data-i18n="soc_discord">Praat mee met de community</p></div>
+                        <div><h3>Discord</h3><p data-i18n="soc_discord">Praat mee met de community</p><p class="dc-live" id="dc-live" hidden></p></div>
                         <i class="fa-solid fa-arrow-right arrow"></i>
                     </a>
-                    <a class="surface social spot" style="--sec: var(--purple)" href="https://twitch.tv/Floris_N" target="_blank" rel="noopener">
+                    <a class="surface social hoverable" style="--sec: var(--purple)" href="https://twitch.tv/Floris_N" target="_blank" rel="noopener">
                         <span class="social-icon"><i class="fa-brands fa-twitch"></i></span>
                         <div><h3>Twitch</h3><p data-i18n="soc_twitch">Volg de livestreams</p></div>
                         <i class="fa-solid fa-arrow-right arrow"></i>
                     </a>
-                    <a class="surface social spot" style="--sec: var(--youtube)" href="https://youtube.com/@Floris_N" target="_blank" rel="noopener">
+                    <a class="surface social hoverable" style="--sec: var(--youtube)" href="https://youtube.com/@Floris_N" target="_blank" rel="noopener">
                         <span class="social-icon"><i class="fa-brands fa-youtube"></i></span>
                         <div><h3>YouTube</h3><p data-i18n="soc_youtube">Clips &amp; highlights</p></div>
                         <i class="fa-solid fa-arrow-right arrow"></i>
                     </a>
-                    <a class="surface social spot" style="--sec: var(--cyan)" href="https://solo.to/floris_n" target="_blank" rel="noopener">
+                    <a class="surface social hoverable" style="--sec: var(--cyan)" href="https://solo.to/floris_n" target="_blank" rel="noopener">
                         <span class="social-icon"><i class="fa-solid fa-link"></i></span>
                         <div><h3>Solo.to</h3><p data-i18n="soc_solo">Alle links op één plek</p></div>
                         <i class="fa-solid fa-arrow-right arrow"></i>
@@ -882,7 +739,7 @@
             <!-- ================= 04 FAQ ================= -->
             <section class="section" id="faq" style="--sec: var(--amber)">
                 <div class="section-head reveal">
-                    <span class="eyebrow"><span class="num">04</span><i class="fa-solid fa-circle-question"></i><span data-i18n="eb_faq">Support</span></span>
+                    <span class="eyebrow"><span class="num">04</span><span data-i18n="eb_faq">Support</span></span>
                     <h2 data-i18n="head_faq">Veelgestelde Vragen</h2>
                     <p data-i18n="faq_sub">Direct antwoord op vragen over de Minecraft server &amp; livestream.</p>
                 </div>
@@ -911,88 +768,14 @@
                 </div>
             </section>
 
-            <!-- ================= 05 CONTACT ================= -->
-            <section class="section" id="contact" style="--sec: var(--amber)">
-                <div class="section-head reveal">
-                    <span class="eyebrow"><span class="num">05</span><i class="fa-solid fa-envelope"></i><span data-i18n="eb_contact">Contact</span></span>
-                    <h2 data-i18n="head_contact">Neem Contact Op</h2>
-                    <p data-i18n="contact_sub">Vragen over de SMP, een samenwerking, of gewoon een hallo? Stuur een bericht!</p>
-                </div>
-
-                <div class="contact-grid">
-                    <!-- Formulier -->
-                    <form class="surface contact-form reveal" id="contact-form" novalidate>
-                        <div class="form-head">
-                            <i class="fa-solid fa-envelope-open-text"></i>
-                            <h3 data-i18n="form_title">Stuur een bericht</h3>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="field">
-                                <label for="cf-name" data-i18n="form_name">Naam <span>*</span></label>
-                                <input type="text" id="cf-name" name="name" placeholder="Jouw naam" required autocomplete="name">
-                            </div>
-                            <div class="field">
-                                <label for="cf-email" data-i18n="form_email">E-mailadres <span>*</span></label>
-                                <input type="email" id="cf-email" name="email" placeholder="jij@voorbeeld.nl" required autocomplete="email">
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label for="cf-subject" data-i18n="form_subject">Onderwerp</label>
-                            <input type="text" id="cf-subject" name="subject" placeholder="Waar gaat je bericht over?">
-                        </div>
-
-                        <div class="field">
-                            <label for="cf-message" data-i18n="form_message">Bericht <span>*</span></label>
-                            <textarea id="cf-message" name="message" placeholder="Typ hier je bericht..." required></textarea>
-                        </div>
-
-                        <button type="submit" class="btn btn-amber" style="width:100%;">
-                            <i class="fa-solid fa-paper-plane"></i> <span data-i18n="form_send">Verstuur bericht</span>
-                        </button>
-
-                        <p class="form-note"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="form_privacy">Je gegevens worden alleen gebruikt om je bericht te beantwoorden.</span></p>
-                    </form>
-
-                    <!-- Info kaarten -->
-                    <div class="info-stack">
-                        <div class="surface info-card spot reveal" style="--d:1; --sec: var(--amber);">
-                            <span class="info-icon"><i class="fa-solid fa-envelope"></i></span>
-                            <h3 data-i18n="info_email_title">E-mail</h3>
-                            <span class="value">JustFlorisscontact@gmail.com</span>
-                            <span class="hint" data-i18n="info_email_hint">Voor samenwerkingen, support &amp; vragen</span>
-                            <button type="button" class="copy-email" id="copy-email-btn">
-                                <i class="fa-solid fa-copy"></i> <span data-i18n="info_copy_email">Kopieer e-mail</span>
-                            </button>
-                        </div>
-
-                        <a class="surface info-card spot reveal" style="--d:2; --sec: var(--discord);" href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener">
-                            <span class="info-icon"><i class="fa-brands fa-discord"></i></span>
-                            <h3>Discord</h3>
-                            <span class="value" data-i18n="info_discord_value">Join de community</span>
-                            <span class="hint" data-i18n="info_discord_hint">Snelste manier om contact te krijgen</span>
-                            <i class="fa-solid fa-arrow-right" style="margin-top:auto; color:var(--discord);"></i>
-                        </a>
-
-                        <div class="surface info-card spot reveal" style="--d:3; --sec: var(--cyan);">
-                            <span class="info-icon"><i class="fa-solid fa-clock"></i></span>
-                            <h3 data-i18n="info_time_title">Reactietijd</h3>
-                            <span class="value" data-i18n="info_time_value">Meestal binnen 24–48 uur</span>
-                            <span class="hint" data-i18n="info_time_hint">Soms iets langer tijdens streams</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <!-- ================= CTA ================= -->
             <section class="cta">
                 <div class="cta-box reveal">
                     <h2 data-i18n="cta_title">Klaar om mee te doen?</h2>
                     <p data-i18n="cta_desc">Pak het server-IP, hop in de Discord en bouw mee aan de SMP.</p>
                     <div class="actions">
-                        <button class="btn btn-green" data-copy data-magnet type="button"><i class="fa-solid fa-copy"></i><span data-i18n="btn_copy_ip">Kopieer IP: play.florisn.nl</span></button>
-                        <a class="btn btn-discord" href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener" data-magnet><i class="fa-brands fa-discord"></i><span data-i18n="btn_discord">Join de Discord</span></a>
+                        <button class="btn btn-green" data-copy type="button"><i class="fa-solid fa-copy"></i><span data-i18n="btn_copy_ip">Kopieer IP: play.florisn.nl</span></button>
+                        <a class="btn btn-discord" href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener"><i class="fa-brands fa-discord"></i><span data-i18n="btn_discord">Join de Discord</span></a>
                     </div>
                 </div>
             </section>
@@ -1011,10 +794,9 @@
                 <ul>
                     <li><a href="#stream" data-i18n="nav_stream">Live Stream</a></li>
                     <li><a href="#minecraft" data-i18n="nav_mc">Minecraft SMP</a></li>
-                    <li><a href="smp.html" data-page data-i18n="footer_stats">Statistieken</a></li>
-                    <li><a href="alerts.html" data-page data-i18n="nav_alerts">Stream Alerts</a></li>
+                    <li><a href="smp.html" data-page data-i18n="nav_stats">Statistieken</a></li>
+                    <li><a href="alerts.html" data-page data-i18n="footer_alerts">Stream Alerts</a></li>
                     <li><a href="#faq" data-i18n="nav_faq">FAQ</a></li>
-                    <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -1071,7 +853,7 @@
     <script>
         window.I18N = {
             nl: {
-                nav_stream: 'Live Stream', nav_mc: 'Minecraft SMP', nav_comm: 'Community', nav_faq: 'FAQ', nav_alerts: 'Stream Alerts', nav_contact: 'Contact',
+                nav_stream: 'Live Stream', nav_mc: 'Minecraft SMP', nav_stats: 'Statistieken', nav_comm: 'Community', nav_faq: 'FAQ',
                 hero_prefix: 'Alles over',
                 typed: ['de livestream', 'de Minecraft SMP', 'speler-statistieken', 'de community'],
                 hero_desc: 'De centrale plek voor de livestream, de hechte SMP-community en al je in-game statistieken.',
@@ -1079,15 +861,25 @@
                 ip_copied: 'IP gekopieerd!', btn_discord: 'Join de Discord', btn_stats: 'Bekijk statistieken',
                 tw_live: 'Nu live', tw_off: 'Offline', mc_players: 'MC Spelers', mc_loading: 'MC laden…',
                 status_online: 'Online', status_offline: 'Offline', status_unknown: 'Onbekend',
-                eb_stream: 'Livestream', eb_mc: 'Minecraft', eb_comm: 'Community', eb_faq: 'Support', eb_contact: 'Contact',
+                nav_online: 'online', nav_offline: 'Offline',
+                eb_stream: 'Livestream', eb_mc: 'Minecraft', eb_comm: 'Community', eb_faq: 'Support',
                 head_stream: 'Live Stream',
                 stream_sub: 'Volg de livestream live met interactieve chat en unieke content!',
+                facade_title: 'Start de stream', facade_sub: 'Laadt de Twitch-speler en chat', chat_ph: 'Chat',
                 act_follow: 'Volg op Twitch', act_tip: 'Steun met een tip', act_chat: 'Open chat',
+                goal_title: 'Live Stream Sub Goal', activity_title: 'Latest Activity',
                 head_smp: 'Minecraft Community SMP',
                 smp_sub: 'Stap in de wereld, bouw mee met de community en volg je prestaties op de voet.',
                 srv_label: 'Server IP', srv_title: 'Spring in de wereld',
                 srv_help: 'Open Minecraft Java Edition → Multiplayer → Server toevoegen → plak het IP-adres.',
                 srv_status: 'Status', srv_players: 'Spelers online', srv_version: 'Versie',
+                online_title: 'Nu online', online_sub: 'Klik op een speler om zijn statistieken te bekijken.',
+                online_stats: 'Bekijk statistieken',
+                online_none: 'Er is nu niemand online. Spring erin en wees de eerste!',
+                online_offline: 'De server is op dit moment offline.',
+                online_unknown: 'De serverstatus kon niet worden opgehaald.',
+                online_hidden: 'online, maar de server geeft hun namen niet door.',
+                online_more: 'meer',
                 card1_title: 'Gezellige Survival',
                 card1_desc: 'Een unieke SMP server waar bouwen, avontuur en samenwerken met de stream-community centraal staan.',
                 card2_title: 'Simple Voice Chat',
@@ -1100,6 +892,7 @@
                 head_socials: 'Officiële Socials', socials_sub: 'Blijf op de hoogte via al onze kanalen!',
                 soc_discord: 'Praat mee met de community', soc_twitch: 'Volg de livestreams',
                 soc_youtube: 'Clips & highlights', soc_solo: 'Alle links op één plek',
+                dc_online: 'online', dc_members: 'leden',
                 head_faq: 'Veelgestelde Vragen',
                 faq_sub: 'Direct antwoord op vragen over de Minecraft server & livestream.',
                 faq1_q: 'Hoe kan ik meedoen op de Minecraft server?',
@@ -1112,42 +905,21 @@
                 faq4_a: 'Alle officiële links en de Discord-community vind je via onze verzamelpagina op <a class="link" href="https://solo.to/floris_n" target="_blank" rel="noopener">solo.to/floris_n</a>!',
                 faq5_q: 'Waar vind ik de speler-statistieken?',
                 faq5_a: 'Op de <a class="link" href="smp.html">statistiekenpagina</a>. Die worden handmatig bijgewerkt, standaard 1x per dag.',
-                head_contact: 'Neem Contact Op',
-                contact_sub: 'Vragen over de SMP, een samenwerking, of gewoon een hallo? Stuur een bericht!',
-                form_title: 'Stuur een bericht',
-                form_name: 'Naam <span>*</span>',
-                form_email: 'E-mailadres <span>*</span>',
-                form_subject: 'Onderwerp',
-                form_message: 'Bericht <span>*</span>',
-                form_send: 'Verstuur bericht',
-                form_privacy: 'Je gegevens worden alleen gebruikt om je bericht te beantwoorden.',
-                info_email_title: 'E-mail',
-                info_email_hint: 'Voor samenwerkingen, support & vragen',
-                info_copy_email: 'Kopieer e-mail',
-                info_discord_value: 'Join de community',
-                info_discord_hint: 'Snelste manier om contact te krijgen',
-                info_time_title: 'Reactietijd',
-                info_time_value: 'Meestal binnen 24–48 uur',
-                info_time_hint: 'Soms iets langer tijdens streams',
-                contact_toast: 'E-mailadres gekopieerd!',
-                contact_fill: 'Vul naam, e-mail en bericht in.',
-                contact_invalid: 'Vul een geldig e-mailadres in.',
-                contact_opening: 'Je e-mailapp wordt geopend…',
                 cta_title: 'Klaar om mee te doen?',
                 cta_desc: 'Pak het server-IP, hop in de Discord en bouw mee aan de SMP.',
                 footer_desc: 'De officiële ontmoetingsplek voor de Floris_N livestream, de gezellige Minecraft SMP community en al onze custom projecten.',
-                footer_nav: 'Navigatie', footer_community: 'Community', footer_stats: 'Statistieken', footer_tip: 'Doneren (Tip)',
+                footer_nav: 'Navigatie', footer_community: 'Community', footer_alerts: 'Stream Alerts', footer_tip: 'Doneren (Tip)',
                 footer_rights: 'Alle rechten voorbehouden.', footer_top: 'Naar boven',
                 footer_srv_online: 'Server online', footer_srv_offline: 'Server offline', footer_srv_unknown: 'Serverstatus onbekend',
                 chat_prompt: 'Vragen? Stel ze direct aan de assistent!', chat_placeholder: 'Typ je vraag...',
                 chat_status: 'Online — reageert direct',
-                chat_welcome: 'Hoi! 👋 Ik ben de Floris_N assistent. Vraag me gerust alles over de stream, het schema, de Minecraft SMP of de socials!',
-                chat_not_found: 'Daar heb ik zo direct geen specifiek antwoord op, maar stel je vraag gerust in de Twitch chat of op onze Discord!',
+                chat_welcome: 'Hoi! Ik ben de Floris_N assistent. Vraag me gerust alles over de stream, het schema, de Minecraft SMP of de socials.',
+                chat_not_found: 'Daar heb ik zo direct geen specifiek antwoord op, maar stel je vraag gerust in de Twitch chat of op onze Discord.',
                 chat_quick: ['Stream schema?', 'Socials & Discord?', 'Minecraft IP?', 'Statistieken?'],
-                aria_chat_open: 'Open chat', aria_chat_close: 'Sluit chat', aria_chat_send: 'Verstuur', aria_scroll: 'Scroll naar beneden'
+                aria_chat_open: 'Open chat', aria_chat_close: 'Sluit chat', aria_chat_send: 'Verstuur'
             },
             en: {
-                nav_stream: 'Live Stream', nav_mc: 'Minecraft SMP', nav_comm: 'Community', nav_faq: 'FAQ', nav_alerts: 'Stream Alerts', nav_contact: 'Contact',
+                nav_stream: 'Live Stream', nav_mc: 'Minecraft SMP', nav_stats: 'Statistics', nav_comm: 'Community', nav_faq: 'FAQ',
                 hero_prefix: 'Everything about',
                 typed: ['the livestream', 'the Minecraft SMP', 'player statistics', 'the community'],
                 hero_desc: 'The central hub for the livestream, the tight-knit SMP community, and all your in-game statistics.',
@@ -1155,15 +927,25 @@
                 ip_copied: 'IP copied!', btn_discord: 'Join the Discord', btn_stats: 'View statistics',
                 tw_live: 'Live now', tw_off: 'Offline', mc_players: 'MC Players', mc_loading: 'Loading MC…',
                 status_online: 'Online', status_offline: 'Offline', status_unknown: 'Unknown',
-                eb_stream: 'Livestream', eb_mc: 'Minecraft', eb_comm: 'Community', eb_faq: 'Support', eb_contact: 'Contact',
+                nav_online: 'online', nav_offline: 'Offline',
+                eb_stream: 'Livestream', eb_mc: 'Minecraft', eb_comm: 'Community', eb_faq: 'Support',
                 head_stream: 'Live Stream',
                 stream_sub: 'Watch the stream live with interactive chat and unique content!',
+                facade_title: 'Start the stream', facade_sub: 'Loads the Twitch player and chat', chat_ph: 'Chat',
                 act_follow: 'Follow on Twitch', act_tip: 'Support with a tip', act_chat: 'Open chat',
+                goal_title: 'Live Stream Sub Goal', activity_title: 'Latest Activity',
                 head_smp: 'Minecraft Community SMP',
                 smp_sub: 'Jump into the world, build with the community, and track your stats.',
                 srv_label: 'Server IP', srv_title: 'Jump into the world',
                 srv_help: 'Open Minecraft Java Edition → Multiplayer → Add Server → paste the IP address.',
                 srv_status: 'Status', srv_players: 'Players online', srv_version: 'Version',
+                online_title: 'Online now', online_sub: 'Click a player to view their statistics.',
+                online_stats: 'View statistics',
+                online_none: 'Nobody is online right now. Jump in and be the first!',
+                online_offline: 'The server is currently offline.',
+                online_unknown: 'The server status could not be fetched.',
+                online_hidden: 'online, but the server does not share their names.',
+                online_more: 'more',
                 card1_title: 'Cozy Survival',
                 card1_desc: 'A unique SMP server centered around building, adventure, and collaborating with the stream community.',
                 card2_title: 'Simple Voice Chat',
@@ -1176,6 +958,7 @@
                 head_socials: 'Official Socials', socials_sub: 'Stay updated through all our channels!',
                 soc_discord: 'Chat with the community', soc_twitch: 'Follow the livestreams',
                 soc_youtube: 'Clips & highlights', soc_solo: 'All links in one place',
+                dc_online: 'online', dc_members: 'members',
                 head_faq: 'Frequently Asked Questions',
                 faq_sub: 'Direct answers to questions regarding the Minecraft server & livestream.',
                 faq1_q: 'How can I join the Minecraft server?',
@@ -1188,72 +971,64 @@
                 faq4_a: 'All official links and the Discord community can be found via our page at <a class="link" href="https://solo.to/floris_n" target="_blank" rel="noopener">solo.to/floris_n</a>!',
                 faq5_q: 'Where can I find the player statistics?',
                 faq5_a: 'On the <a class="link" href="smp.html">statistics page</a>. They are updated manually, by default once a day.',
-                head_contact: 'Get in Touch',
-                contact_sub: 'Questions about the SMP, a collaboration, or just saying hi? Send a message!',
-                form_title: 'Send a message',
-                form_name: 'Name <span>*</span>',
-                form_email: 'Email address <span>*</span>',
-                form_subject: 'Subject',
-                form_message: 'Message <span>*</span>',
-                form_send: 'Send message',
-                form_privacy: 'Your data is only used to respond to your message.',
-                info_email_title: 'Email',
-                info_email_hint: 'For collaborations, support & questions',
-                info_copy_email: 'Copy email',
-                info_discord_value: 'Join the community',
-                info_discord_hint: 'Fastest way to get in touch',
-                info_time_title: 'Response time',
-                info_time_value: 'Usually within 24–48 hours',
-                info_time_hint: 'Sometimes longer during streams',
-                contact_toast: 'Email address copied!',
-                contact_fill: 'Please fill in name, email and message.',
-                contact_invalid: 'Please enter a valid email address.',
-                contact_opening: 'Opening your email app…',
                 cta_title: 'Ready to join?',
                 cta_desc: 'Grab the server IP, hop into the Discord and help build the SMP.',
                 footer_desc: 'The official hub for the Floris_N livestream, the cozy Minecraft SMP community, and all our custom projects.',
-                footer_nav: 'Navigation', footer_community: 'Community', footer_stats: 'Statistics', footer_tip: 'Donate (Tip)',
+                footer_nav: 'Navigation', footer_community: 'Community', footer_alerts: 'Stream Alerts', footer_tip: 'Donate (Tip)',
                 footer_rights: 'All rights reserved.', footer_top: 'Back to top',
                 footer_srv_online: 'Server online', footer_srv_offline: 'Server offline', footer_srv_unknown: 'Server status unknown',
                 chat_prompt: 'Questions? Ask our assistant right here!', chat_placeholder: 'Type your question...',
                 chat_status: 'Online — replies instantly',
-                chat_welcome: "Hi! 👋 I'm the Floris_N assistant. Feel free to ask me anything about the stream, schedule, Minecraft SMP, or socials!",
-                chat_not_found: "I don't have a specific answer for that yet, but feel free to ask in the Twitch chat or on our Discord!",
+                chat_welcome: "Hi! I'm the Floris_N assistant. Feel free to ask me anything about the stream, schedule, Minecraft SMP, or socials.",
+                chat_not_found: "I don't have a specific answer for that yet, but feel free to ask in the Twitch chat or on our Discord.",
                 chat_quick: ['Stream schedule?', 'Socials & Discord?', 'Minecraft IP?', 'Statistics?'],
-                aria_chat_open: 'Open chat', aria_chat_close: 'Close chat', aria_chat_send: 'Send', aria_scroll: 'Scroll down'
+                aria_chat_open: 'Open chat', aria_chat_close: 'Close chat', aria_chat_send: 'Send'
             }
         };
 
-        // Chatbot-kennis. Korte trefwoorden (≤3 letters) moeten een heel woord zijn.
+        // Chatbot-kennis. Korte trefwoorden (3 letters of minder) moeten een heel woord zijn.
         window.CHAT_KB = [
             { k: ['schema', 'rooster', 'tijden', 'wanneer live', 'streamtijd', 'schedule', 'when live', 'time'],
-              nl: 'Het stream-schema staat in de Discord, maar Floris gaat vooral live **wanneer hij er zin in heeft**! 🔔 Zorg dus dat je notificaties op Twitch aanstaan.',
-              en: 'The exact stream schedule is posted in Discord, but Floris mostly goes live **whenever he feels like it**! 🔔 Make sure your Twitch notifications are turned on.' },
+              nl: 'Het stream-schema staat in de Discord, maar Floris gaat vooral live **wanneer hij er zin in heeft**. Zorg dus dat je notificaties op Twitch aanstaan.',
+              en: 'The exact stream schedule is posted in Discord, but Floris mostly goes live **whenever he feels like it**. Make sure your Twitch notifications are turned on.' },
             { k: ['statistiek', 'statistic', 'stats', 'speeltijd', 'playtime', 'ranglijst', 'leaderboard'],
-              nl: 'Alle speler-statistieken staan op de <a href="smp.html">statistiekenpagina</a> 📊 Die worden handmatig bijgewerkt, standaard 1x per dag.',
-              en: 'All player statistics are on the <a href="smp.html">statistics page</a> 📊 They are updated manually, by default once a day.' },
+              nl: 'Alle speler-statistieken staan op de <a href="smp.html">statistiekenpagina</a>. Die worden handmatig bijgewerkt, standaard 1x per dag.',
+              en: 'All player statistics are on the <a href="smp.html">statistics page</a>. They are updated manually, by default once a day.' },
             { k: ['voice', 'spraak', 'praten', 'proximity', 'mod'],
-              nl: 'De server gebruikt **Simple Voice Chat**. Installeer de mod in je client en praat in-game met spelers die dichtbij je staan 🎧',
-              en: 'The server uses **Simple Voice Chat**. Install the mod in your client and talk in-game with nearby players 🎧' },
+              nl: 'De server gebruikt **Simple Voice Chat**. Installeer de mod in je client en praat in-game met spelers die dichtbij je staan.',
+              en: 'The server uses **Simple Voice Chat**. Install the mod in your client and talk in-game with nearby players.' },
             { k: ['doneer', 'donatie', 'donate', 'tip', 'steun', 'support'],
-              nl: 'Wil je de stream steunen? Dat kan via **https://streamelements.com/floris_n/tip** 💜 Bedankt!',
-              en: 'Want to support the stream? You can do that via **https://streamelements.com/floris_n/tip** 💜 Thank you!' },
+              nl: 'Wil je de stream steunen? Dat kan via **https://streamelements.com/floris_n/tip**. Bedankt!',
+              en: 'Want to support the stream? You can do that via **https://streamelements.com/floris_n/tip**. Thank you!' },
             { k: ['socials', 'social', 'links', 'discord', 'instagram', 'tiktok'],
-              nl: 'Alle officiële links en de Discord vind je overzichtelijk bij elkaar op: **https://solo.to/floris_n** 🔗',
-              en: 'All official links and the Discord community can be found directly at: **https://solo.to/floris_n** 🔗' },
+              nl: 'Alle officiële links en de Discord vind je overzichtelijk bij elkaar op: **https://solo.to/floris_n**',
+              en: 'All official links and the Discord community can be found directly at: **https://solo.to/floris_n**' },
             { k: ['ip', 'server', 'meedoen', 'join', 'adres', 'spelen'],
-              nl: 'Je kunt meedoen op de Minecraft SMP via Java Edition met het IP-adres: **play.florisn.nl**! 🎮',
-              en: 'You can join the Minecraft SMP via Java Edition using the server IP: **play.florisn.nl**! 🎮' },
+              nl: 'Je kunt meedoen op de Minecraft SMP via Java Edition met het IP-adres: **play.florisn.nl**',
+              en: 'You can join the Minecraft SMP via Java Edition using the server IP: **play.florisn.nl**' },
             { k: ['twitch', 'kanaal', 'stream', 'kijken', 'channel', 'watch'],
-              nl: 'De livestreams kun je bekijken op het officiële Twitch kanaal: **https://twitch.tv/floris_n** 💜',
-              en: 'You can watch the livestreams on the official Twitch channel: **https://twitch.tv/floris_n** 💜' },
-            { k: ['contact', 'email', 'mail', 'bericht', 'message'],
-              nl: 'Je kunt me bereiken via e-mail: **JustFlorisscontact@gmail.com** 📬 Of gebruik het contactformulier op deze pagina!',
-              en: 'You can reach me via email: **JustFlorisscontact@gmail.com** 📬 Or use the contact form on this page!' },
+              nl: 'De livestreams kun je bekijken op het officiële Twitch kanaal: **https://twitch.tv/floris_n**',
+              en: 'You can watch the livestreams on the official Twitch channel: **https://twitch.tv/floris_n**' },
             { k: ['hoi', 'hey', 'hallo', 'hi', 'hello'],
-              nl: 'Hey! 👋 Vraag me gerust alles over de livestreams, het schema, het Minecraft IP of onze socials!',
-              en: 'Hello! 👋 Feel free to ask me anything about the streams, schedule, Minecraft IP, or socials!' }
+              nl: 'Hey! Vraag me gerust alles over de livestreams, het schema, het Minecraft IP of onze socials.',
+              en: 'Hello! Feel free to ask me anything about the streams, schedule, Minecraft IP, or socials.' }
         ];
+    </script>
+
+    <!-- Loader verbergen: staat los van de rest, zodat de pagina nooit blijft hangen -->
+    <script>
+        (function () {
+            var start = Date.now(), d = document.documentElement, gone = false;
+            function go() {
+                if (gone) return; gone = true;
+                var l = document.getElementById('loader');
+                if (l) l.classList.add('hidden');
+                d.classList.add('ready');
+            }
+            function done() { setTimeout(go, Math.max(0, 600 - (Date.now() - start))); }
+            if (document.readyState === 'complete') done(); else addEventListener('load', done);
+            setTimeout(go, 2500);
+        })();
     </script>
 
     <!-- ================= LOGICA ================= -->
@@ -1264,7 +1039,6 @@
         const $  = (s, r = document) => r.querySelector(s);
         const $$ = (s, r = document) => [...r.querySelectorAll(s)];
         const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
         const store = {
             get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
             set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -1276,13 +1050,15 @@
         const TWITCH = 'floris_n';
         const MC_HOST = 'node1.herculhosting.nl';
         const MC_PORT = 30312;
-        const CONTACT_EMAIL = 'JustFlorisscontact@gmail.com';
+        const DISCORD_CODE = 'snQDpNyd6D';
+        const AUTOLOAD_STREAM = false;   // true = Twitch laadt automatisch zodra je naar de stream scrollt
 
         const L = window.I18N;
         const KB = window.CHAT_KB;
         let lang = store.get('lang') === 'en' ? 'en' : 'nl';
         const t = k => (L[lang] && L[lang][k] !== undefined) ? L[lang][k] : k;
-        const state = { mc: undefined, tw: null, top: null };
+        const state = { mc: undefined, tw: null, top: null, dc: null };
+        const head = id => 'https://mc-heads.net/avatar/' + encodeURIComponent(id) + '/48';
 
         /* ------------------------------------------------------------
            Taal
@@ -1301,27 +1077,24 @@
             });
             startTyped();
             renderStatus();
+            renderOnline(true);
             renderTop();
+            renderDiscord();
             if (chatReady) renderQuick();
             requestAnimationFrame(moveIndicator);
         }
         $$('.lang-btn').forEach(b => b.addEventListener('click', () => applyLang(b.dataset.lang)));
 
         /* ------------------------------------------------------------
-           Loader, scrollvoortgang, slimme navigatie, scrollspy
+           Scrollvoortgang, slimme navigatie, scrollspy
            ------------------------------------------------------------ */
-        setTimeout(() => {
-            $('#loader').classList.add('hidden');
-            document.documentElement.classList.add('ready');
-        }, 1100);
-
         const progress = $('#progress');
         const navWrap = $('#nav-wrap');
         let lastY = 0, ticking = false;
         function onScroll() {
             const y = window.pageYOffset || document.documentElement.scrollTop;
             const max = document.documentElement.scrollHeight - innerHeight;
-            progress.style.setProperty('--p', max > 0 ? (y / max).toFixed(4) : 0);
+            progress.style.transform = 'scaleX(' + (max > 0 ? (y / max).toFixed(4) : 0) + ')';
             navWrap.classList.toggle('hide', y > lastY && y > 120);
             lastY = Math.max(0, y);
         }
@@ -1350,12 +1123,12 @@
         const spy = new IntersectionObserver(entries => {
             entries.forEach(en => { if (en.isIntersecting) setActive(en.target.id === 'home' ? '' : en.target.id); });
         }, { rootMargin: '-45% 0px -50% 0px' });
-        ['home', 'stream', 'minecraft', 'community', 'faq', 'contact'].forEach(id => { const el = document.getElementById(id); if (el) spy.observe(el); });
+        ['home', 'stream', 'minecraft', 'community', 'faq'].forEach(id => { const el = document.getElementById(id); if (el) spy.observe(el); });
         addEventListener('resize', moveIndicator);
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(moveIndicator);
 
         /* ------------------------------------------------------------
-           Reveal-animaties (met trapsgewijze vertraging)
+           Reveal-animaties (trapsgewijs)
            ------------------------------------------------------------ */
         const reveal = new IntersectionObserver(entries => {
             entries.forEach(en => {
@@ -1369,7 +1142,7 @@
         $$('.reveal').forEach(el => reveal.observe(el));
 
         /* ------------------------------------------------------------
-           Typmachine in de hero
+           Typmachine
            ------------------------------------------------------------ */
         let typedTimer;
         function startTyped() {
@@ -1390,114 +1163,7 @@
         }
 
         /* ------------------------------------------------------------
-           Beweging: parallax-blokken, cursor-gloed, spotlight, tilt, magnetische knoppen
-           ------------------------------------------------------------ */
-        if (!reduce && finePointer) {
-            // Hero-parallax: geen oneindige rAF meer
-            const hero = $('#home');
-            const cubes = $$('.fc');
-            let tx = 0, ty = 0, cx = 0, cy = 0, rafId = null;
-
-            function heroTick() {
-                cx += (tx - cx) * 0.08;
-                cy += (ty - cy) * 0.08;
-                cubes.forEach(c => {
-                    const d = +c.dataset.depth || 20;
-                    c.style.transform = 'translate3d(' + (cx * d).toFixed(1) + 'px,' + (cy * d).toFixed(1) + 'px,0)';
-                });
-                if (Math.abs(tx - cx) < 0.001 && Math.abs(ty - cy) < 0.001 && tx === 0 && ty === 0) {
-                    rafId = null;
-                    return;
-                }
-                rafId = requestAnimationFrame(heroTick);
-            }
-            function heroKick() { if (rafId === null) rafId = requestAnimationFrame(heroTick); }
-
-            hero.addEventListener('mousemove', e => {
-                const r = hero.getBoundingClientRect();
-                tx = (e.clientX - r.left) / r.width - 0.5;
-                ty = (e.clientY - r.top) / r.height - 0.5;
-                heroKick();
-            });
-            hero.addEventListener('mouseleave', () => { tx = 0; ty = 0; heroKick(); });
-            new IntersectionObserver(([e]) => {
-                if (!e.isIntersecting && rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
-            }).observe(hero);
-
-            // Cursor-gloed: rAF-throttle
-            const glow = $('#glow');
-            let gx = 0, gy = 0, gRaf = null;
-            addEventListener('pointermove', e => {
-                gx = e.clientX; gy = e.clientY;
-                if (gRaf !== null) return;
-                gRaf = requestAnimationFrame(() => {
-                    glow.style.transform = 'translate3d(' + gx + 'px,' + gy + 'px,0)';
-                    gRaf = null;
-                });
-            }, { passive: true });
-
-            // Spotlight + tilt: alleen op .spot, met rAF-throttle
-            $$('.spot').forEach(el => {
-                let pending = false, px = 0, py = 0;
-                el.addEventListener('pointermove', e => {
-                    px = e.clientX; py = e.clientY;
-                    if (pending) return;
-                    pending = true;
-                    requestAnimationFrame(() => {
-                        pending = false;
-                        const r = el.getBoundingClientRect();
-                        const x = px - r.left, y = py - r.top;
-                        el.style.setProperty('--mx', x + 'px');
-                        el.style.setProperty('--my', y + 'px');
-                        if (el.hasAttribute('data-tilt')) {
-                            el.style.setProperty('--ry', ((x / r.width - 0.5) * 8).toFixed(2) + 'deg');
-                            el.style.setProperty('--rx', ((0.5 - y / r.height) * 8).toFixed(2) + 'deg');
-                        }
-                    });
-                });
-                el.addEventListener('pointerleave', () => {
-                    if (el.hasAttribute('data-tilt')) {
-                        el.style.setProperty('--rx', '0deg');
-                        el.style.setProperty('--ry', '0deg');
-                    }
-                });
-            });
-
-            // Magnetische knoppen: rAF-throttle
-            $$('[data-magnet]').forEach(b => {
-                let mPending = false, mx = 0, my = 0;
-                b.addEventListener('pointermove', e => {
-                    mx = e.clientX; my = e.clientY;
-                    if (mPending) return;
-                    mPending = true;
-                    requestAnimationFrame(() => {
-                        mPending = false;
-                        const r = b.getBoundingClientRect();
-                        b.style.setProperty('--tx', ((mx - r.left - r.width / 2) * 0.18).toFixed(1) + 'px');
-                        b.style.setProperty('--ty', ((my - r.top - r.height / 2) * 0.28).toFixed(1) + 'px');
-                    });
-                });
-                b.addEventListener('pointerleave', () => {
-                    b.style.setProperty('--tx', '0px');
-                    b.style.setProperty('--ty', '0px');
-                });
-            });
-        }
-
-        /* ------------------------------------------------------------
-           Paginawissel naar andere pagina's
-           ------------------------------------------------------------ */
-        $$('a[data-page]').forEach(a => a.addEventListener('click', e => {
-            if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-            e.preventDefault();
-            const href = a.href;
-            $('#wipe').classList.add('in');
-            setTimeout(() => { location.href = href; }, reduce ? 0 : 450);
-        }));
-        addEventListener('pageshow', e => { if (e.persisted) $('#wipe').classList.remove('in'); });
-
-        /* ------------------------------------------------------------
-           Toast + confetti + IP kopiëren
+           Klikken: paginawissel, IP kopiëren (met event delegation)
            ------------------------------------------------------------ */
         let toastTimer;
         function toast(msg) {
@@ -1505,26 +1171,6 @@
             $('#toast').classList.add('show');
             clearTimeout(toastTimer);
             toastTimer = setTimeout(() => $('#toast').classList.remove('show'), 2200);
-        }
-        function burst(x, y) {
-            if (reduce) return;
-            const colors = ['#9146ff', '#22c55e', '#06b6d4', '#f59e0b', '#ffffff'];
-            for (let i = 0; i < 20; i++) {
-                const p = document.createElement('span');
-                p.className = 'px';
-                p.style.left = x + 'px';
-                p.style.top = y + 'px';
-                p.style.background = colors[i % colors.length];
-                document.body.appendChild(p);
-                const a = Math.random() * Math.PI * 2;
-                const d = 50 + Math.random() * 90;
-                const dx = Math.cos(a) * d, dy = Math.sin(a) * d + 30;
-                const anim = p.animate([
-                    { transform: 'translate(-50%,-50%) scale(1) rotate(0deg)', opacity: 1 },
-                    { transform: 'translate(calc(-50% + ' + dx + 'px), calc(-50% + ' + dy + 'px)) scale(0.2) rotate(' + (Math.random() * 540) + 'deg)', opacity: 0 }
-                ], { duration: 700 + Math.random() * 400, easing: 'cubic-bezier(0.2,0.8,0.3,1)' });
-                anim.onfinish = () => p.remove();
-            }
         }
         async function copyIP(btn) {
             try { await navigator.clipboard.writeText(IP); }
@@ -1536,16 +1182,30 @@
                 ta.remove();
             }
             toast(t('ip_copied'));
-            const r = btn.getBoundingClientRect();
-            burst(r.left + r.width / 2, r.top + r.height / 2);
-            const lab = $('[data-i18n]', btn);
+            const lab = btn.querySelector('[data-i18n]');
             if (lab) {
                 const key = lab.dataset.i18n;
                 lab.textContent = t('ip_copied');
-                setTimeout(() => { lab.innerHTML = t(key); }, 2000);
+                setTimeout(() => { lab.innerHTML = t(key); }, 1800);
             }
         }
-        $$('[data-copy]').forEach(b => b.addEventListener('click', () => copyIP(b)));
+        document.addEventListener('click', e => {
+            const c = e.target.closest('[data-copy]');
+            if (c) { copyIP(c); return; }
+            const a = e.target.closest('a[data-page]');
+            if (a && !(e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0)) {
+                e.preventDefault();
+                const href = a.href;
+                $('#wipe').classList.add('in');
+                setTimeout(() => { location.href = href; }, reduce ? 0 : 350);
+            }
+        });
+        document.addEventListener('keydown', e => {
+            if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.ip-text[data-copy]')) {
+                e.preventDefault(); copyIP(e.target);
+            }
+        });
+        addEventListener('pageshow', e => { if (e.persisted) $('#wipe').classList.remove('in'); });
 
         /* ------------------------------------------------------------
            FAQ
@@ -1562,58 +1222,25 @@
         (() => { const first = $('.faq-item'); if (first) { first.classList.add('open'); $('.faq-q', first).setAttribute('aria-expanded', 'true'); } })();
 
         /* ------------------------------------------------------------
-           Contact
+           Zware embeds: pas laden als ze nodig zijn
+           - Twitch: na klik (of automatisch als AUTOLOAD_STREAM = true)
            ------------------------------------------------------------ */
-        const copyEmailBtn = $('#copy-email-btn');
-        if (copyEmailBtn) {
-            copyEmailBtn.addEventListener('click', async () => {
-                try { await navigator.clipboard.writeText(CONTACT_EMAIL); }
-                catch (e) {
-                    const ta = document.createElement('textarea');
-                    ta.value = CONTACT_EMAIL; ta.style.position = 'fixed'; ta.style.opacity = '0';
-                    document.body.appendChild(ta); ta.select();
-                    try { document.execCommand('copy'); } catch (_) {}
-                    ta.remove();
-                }
-                toast(t('contact_toast'));
-            });
-        }
-        const contactForm = $('#contact-form');
-        if (contactForm) {
-            contactForm.addEventListener('submit', e => {
-                e.preventDefault();
-                const name = $('#cf-name').value.trim();
-                const email = $('#cf-email').value.trim();
-                const subject = $('#cf-subject').value.trim();
-                const message = $('#cf-message').value.trim();
-
-                if (!name || !email || !message) { toast(t('contact_fill')); return; }
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast(t('contact_invalid')); return; }
-
-                const mailSubject = subject || ('Contact via website — ' + name);
-                const body = 'Naam: ' + name + '\nE-mail: ' + email + '\n\n' + message;
-                window.location.href = 'mailto:' + CONTACT_EMAIL +
-                    '?subject=' + encodeURIComponent(mailSubject) +
-                    '&body=' + encodeURIComponent(body);
-                toast(t('contact_opening'));
-            });
-        }
-
-        /* ------------------------------------------------------------
-           Twitch embed (lazy)
-           ------------------------------------------------------------ */
-        (() => {
+        let streamMounted = false;
+        function mountStream() {
+            if (streamMounted) return;
+            streamMounted = true;
             const hosts = [...new Set([location.hostname, 'florisn.nl', 'www.florisn.nl', 'localhost'].filter(Boolean))];
             const parents = hosts.map(h => 'parent=' + encodeURIComponent(h)).join('&');
-            let done = false;
-            const mount = () => {
-                if (done) return; done = true;
-                $('#tw-player').src = 'https://player.twitch.tv/?channel=' + TWITCH + '&' + parents;
-                $('#tw-chat').src = 'https://www.twitch.tv/embed/' + TWITCH + '/chat?' + parents + '&darkpopout';
-            };
-            const io = new IntersectionObserver(e => { if (e[0].isIntersecting) { mount(); io.disconnect(); } }, { rootMargin: '400px 0px' });
+            $('#tw-player').src = 'https://player.twitch.tv/?channel=' + TWITCH + '&' + parents;
+            $('#tw-chat').src = 'https://www.twitch.tv/embed/' + TWITCH + '/chat?' + parents + '&darkpopout';
+            $('#stream-player').classList.add('on');
+            $('#stream-chat').classList.add('on');
+        }
+        $('#stream-facade').addEventListener('click', mountStream);
+        if (AUTOLOAD_STREAM) {
+            const io = new IntersectionObserver(e => { if (e[0].isIntersecting) { mountStream(); io.disconnect(); } }, { rootMargin: '300px 0px' });
             io.observe($('#stream'));
-        })();
+        }
 
         /* ------------------------------------------------------------
            Live status: Twitch + Minecraft
@@ -1624,7 +1251,7 @@
             el._v = to;
             if (reduce) { el.textContent = to; return; }
             cancelAnimationFrame(el._raf);
-            const start = performance.now(), dur = 900;
+            const start = performance.now(), dur = 700;
             (function step(now) {
                 const p = Math.min(1, (now - start) / dur);
                 const e = 1 - Math.pow(1 - p, 3);
@@ -1640,27 +1267,36 @@
             if (m) out.push(m[1] + t('unit_m'));
             return out.join(' ');
         }
+        let stackKey = '';
         function renderStatus() {
             const mc = state.mc, tw = state.tw;
 
             $('#tw-dot').className = 'dot ' + (tw ? (tw.live ? 'dot--red' : 'dot--gray') : 'dot--purple');
             let twHtml = 'Twitch: <strong>Floris_N</strong>';
-            if (tw) {
-                twHtml += ' · ' + (tw.live ? t('tw_live') + (fmtUptime(tw.uptime || '') ? ' (' + fmtUptime(tw.uptime) + ')' : '') : t('tw_off'));
-            }
+            if (tw) twHtml += ' · ' + (tw.live ? t('tw_live') + (fmtUptime(tw.uptime || '') ? ' (' + fmtUptime(tw.uptime) + ')' : '') : t('tw_off'));
             $('#tw-text').innerHTML = twHtml;
 
             const mcDot = $('#mc-dot'), mcText = $('#mc-text');
-            if (mc === undefined) {
-                mcDot.className = 'dot dot--gray'; mcText.textContent = t('mc_loading');
-            } else if (mc === null) {
-                mcDot.className = 'dot dot--gray'; mcText.textContent = IP;
-            } else if (mc.online) {
-                mcDot.className = 'dot dot--green'; mcText.textContent = mc.now + ' / ' + mc.max + ' ' + t('mc_players');
-            } else {
-                mcDot.className = 'dot dot--red'; mcText.textContent = 'MC ' + t('status_offline');
+            if (mc === undefined) { mcDot.className = 'dot dot--gray'; mcText.textContent = t('mc_loading'); }
+            else if (mc === null) { mcDot.className = 'dot dot--gray'; mcText.textContent = IP; }
+            else if (mc.online) { mcDot.className = 'dot dot--green'; mcText.textContent = mc.now + ' / ' + mc.max + ' ' + t('mc_players'); }
+            else { mcDot.className = 'dot dot--red'; mcText.textContent = 'MC ' + t('status_offline'); }
+
+            // Hoofdjes van wie er online is, naast de badge
+            const heads = (mc && mc.online && mc.players ? mc.players : []).slice(0, 4);
+            const key = heads.map(p => p.id).join(',');
+            if (key !== stackKey) {
+                stackKey = key;
+                $('#hero-stack').innerHTML = heads.map(p => '<img src="' + esc(head(p.id)) + '" alt="" width="22" height="22">').join('');
             }
 
+            // Nav-pil
+            const nd = $('#nav-dot'), nt = $('#nav-online-text');
+            if (mc && mc.online) { nd.className = 'dot dot--green'; nt.textContent = mc.now + ' ' + t('nav_online'); }
+            else if (mc) { nd.className = 'dot dot--red'; nt.textContent = t('nav_offline'); }
+            else { nd.className = 'dot dot--gray'; nt.textContent = mc === undefined ? '…' : IP; }
+
+            // Serverkaart
             const pill = $('#srv-status');
             if (mc === undefined) { pill.textContent = '…'; pill.className = 'status-pill unk'; }
             else if (mc === null) { pill.textContent = t('status_unknown'); pill.className = 'status-pill unk'; }
@@ -1669,65 +1305,94 @@
             countUp($('#srv-now'), online ? mc.now : 0);
             $('#srv-max').textContent = online ? mc.max : '–';
             $('#srv-version').textContent = (mc && mc.version) ? mc.version : '–';
-            $('#srv-meter').style.width = (online && mc.max) ? Math.min(100, mc.now / mc.max * 100) + '%' : '0%';
+            $('#srv-meter').style.transform = 'scaleX(' + ((online && mc.max) ? Math.min(1, mc.now / mc.max) : 0) + ')';
 
+            // Footer
             const fd = $('#foot-dot'), ft = $('#foot-text');
             if (mc && mc.online) { fd.className = 'dot dot--green'; ft.textContent = t('footer_srv_online'); }
             else if (mc) { fd.className = 'dot dot--red'; ft.textContent = t('footer_srv_offline'); }
             else { fd.className = 'dot dot--gray'; ft.textContent = mc === undefined ? '…' : t('footer_srv_unknown'); }
+
+            renderOnline(false);
         }
 
-        // Fetch met timeout, zodat een hangende API de UI niet blokkeert
-        function fetchJSON(url, ms = 6000) {
-            const ctrl = new AbortController();
-            const timer = setTimeout(() => ctrl.abort(), ms);
-            return fetch(url, { cache: 'no-store', signal: ctrl.signal })
-                .then(r => r.json())
-                .finally(() => clearTimeout(timer));
+        /* Nu online: namen + hoofdjes. Alleen opnieuw tekenen als de lijst echt verandert,
+           zodat de intro-animatie niet bij elke poll opnieuw afspeelt. */
+        let onlineKey = '';
+        function renderOnline(force) {
+            const mc = state.mc;
+            const players = (mc && mc.online && mc.players) || [];
+            const key = lang + '|' + (mc === undefined ? 'l' : mc === null ? 'n' : mc.online ? 'on' : 'off') + '|' + (mc && mc.now) + '|' + players.map(p => p.name).join(',');
+            if (!force && key === onlineKey) return;
+            onlineKey = key;
+
+            const body = $('#online-body');
+            $('#online-count').textContent = (mc && mc.online) ? mc.now + ' / ' + mc.max : '–';
+            $('#online-dot').className = 'dot ' + (mc && mc.online ? 'dot--green' : 'dot--gray');
+
+            if (mc === undefined) {
+                body.innerHTML = '<div class="players"><div class="player sk"></div><div class="player sk"></div><div class="player sk"></div></div>';
+            } else if (mc === null) {
+                body.innerHTML = '<div class="online-empty">' + esc(t('online_unknown')) + '</div>';
+            } else if (!mc.online) {
+                body.innerHTML = '<div class="online-empty">' + esc(t('online_offline')) + '</div>';
+            } else if (mc.now === 0) {
+                body.innerHTML = '<div class="online-empty"><span>' + esc(t('online_none')) + '</span>' +
+                    '<button class="chip" type="button" data-copy style="--sec:var(--green)"><i class="fa-solid fa-copy"></i><span data-i18n="btn_copy">' + esc(t('btn_copy')) + '</span></button></div>';
+            } else if (!players.length) {
+                body.innerHTML = '<div class="online-empty"><strong style="color:var(--text)">' + mc.now + '</strong> ' + esc(t('online_hidden')) + '</div>';
+            } else {
+                const extra = mc.now - players.length;
+                body.innerHTML = '<div class="players">' + players.map((p, i) =>
+                    '<a class="player" data-page href="smp.html?q=' + encodeURIComponent(p.name) + '" style="--i:' + i + '">' +
+                        '<span class="p-head"><img src="' + esc(head(p.id)) + '" alt="" width="40" height="40"><span class="p-dot"></span></span>' +
+                        '<span class="p-text"><span class="p-name">' + esc(p.name) + '</span><span class="p-sub">' + esc(t('online_stats')) + '</span></span>' +
+                    '</a>').join('') +
+                    (extra > 0 ? '<div class="player more" style="--i:' + players.length + '">+' + extra + ' ' + esc(t('online_more')) + '</div>' : '') +
+                    '</div>';
+            }
         }
 
         async function fetchMC() {
-            // Primair: mcsrvstat.us (snel & betrouwbaar)
+            let res = null;
+            // 1) mcsrvstat geeft namen + uuid's mee
             try {
-                const d = await fetchJSON('https://api.mcsrvstat.us/3/' + MC_HOST + ':' + MC_PORT, 6000);
+                const r = await fetch('https://api.mcsrvstat.us/3/' + MC_HOST + ':' + MC_PORT);
+                const d = await r.json();
                 if (d && typeof d.online === 'boolean') {
-                    state.mc = {
+                    const list = (d.players && d.players.list) || [];
+                    res = {
                         online: d.online,
                         now: (d.players && d.players.online) || 0,
                         max: (d.players && d.players.max) || 0,
-                        version: d.version || ''
+                        version: d.version || '',
+                        players: list.filter(p => p && p.name).map(p => ({ name: p.name, id: p.uuid || p.name }))
                     };
-                    renderStatus();
-                    return;
                 }
             } catch (e) {}
-
-            // Fallback: mcapi.us
-            try {
-                const d = await fetchJSON('https://mcapi.us/server/status?ip=' + MC_HOST + '&port=' + MC_PORT, 6000);
-                if (d && typeof d.online === 'boolean') {
-                    state.mc = {
-                        online: d.online,
-                        now: (d.players && d.players.now) || 0,
-                        max: (d.players && d.players.max) || 0,
-                        version: (d.server && d.server.name) || ''
-                    };
-                    renderStatus();
-                    return;
-                }
-            } catch (e) {}
-
-            // Beide mislukt: onbekend
-            state.mc = null;
+            // 2) reserve: mcapi.us
+            if (!res) {
+                try {
+                    const r = await fetch('https://mcapi.us/server/status?ip=' + MC_HOST + '&port=' + MC_PORT);
+                    const d = await r.json();
+                    if (d && typeof d.online === 'boolean') {
+                        const sample = (d.players && d.players.sample) || [];
+                        res = {
+                            online: d.online,
+                            now: (d.players && d.players.now) || 0,
+                            max: (d.players && d.players.max) || 0,
+                            version: (d.server && d.server.name) || '',
+                            players: sample.filter(p => p && p.name).map(p => ({ name: p.name, id: p.id || p.name }))
+                        };
+                    }
+                } catch (e) {}
+            }
+            state.mc = res;
             renderStatus();
         }
-
         async function fetchTwitch() {
             try {
-                const ctrl = new AbortController();
-                const timer = setTimeout(() => ctrl.abort(), 5000);
-                const r = await fetch('https://decapi.me/twitch/uptime/' + TWITCH, { cache: 'no-store', signal: ctrl.signal });
-                clearTimeout(timer);
+                const r = await fetch('https://decapi.me/twitch/uptime/' + TWITCH, { cache: 'no-store' });
                 const txt = (await r.text()).trim();
                 if (/offline/i.test(txt)) state.tw = { live: false };
                 else if (/\d+\s*(second|minute|hour|day)/i.test(txt)) state.tw = { live: true, uptime: txt };
@@ -1735,17 +1400,28 @@
             } catch (e) { state.tw = null; }
             renderStatus();
         }
+        async function fetchDiscord() {
+            try {
+                const r = await fetch('https://discord.com/api/v10/invites/' + DISCORD_CODE + '?with_counts=true');
+                if (!r.ok) return;
+                const d = await r.json();
+                if (d && d.approximate_member_count) {
+                    state.dc = { on: d.approximate_presence_count || 0, all: d.approximate_member_count };
+                    renderDiscord();
+                }
+            } catch (e) {}
+        }
+        function renderDiscord() {
+            const el = $('#dc-live');
+            if (!el || !state.dc) return;
+            const loc = lang === 'nl' ? 'nl-NL' : 'en-GB';
+            el.innerHTML = '<span class="dot dot--green"></span>' + state.dc.on.toLocaleString(loc) + ' ' + esc(t('dc_online')) + ' · ' + state.dc.all.toLocaleString(loc) + ' ' + esc(t('dc_members'));
+            el.hidden = false;
+        }
 
         /* ------------------------------------------------------------
-           Top 5 speeltijd (met gepoolde requests)
+           Top 5 speeltijd (uit data/usercache.json + stats-bestanden)
            ------------------------------------------------------------ */
-        async function pool(items, fn, limit = 5) {
-            const out = []; let i = 0;
-            await Promise.all(Array.from({ length: Math.min(limit, items.length) }, async () => {
-                while (i < items.length) { const idx = i++; out[idx] = await fn(items[idx]); }
-            }));
-            return out;
-        }
         async function loadTop() {
             const card = $('#lb-card');
             try {
@@ -1754,8 +1430,7 @@
                 const cache = await r.json();
                 const uniq = new Map();
                 cache.forEach(p => uniq.set(p.uuid, p.name));
-                const entries = [...uniq];
-                const rows = (await pool(entries, async ([uuid, name]) => {
+                const rows = (await Promise.all([...uniq].map(async ([uuid, name]) => {
                     try {
                         const x = await fetch('data/' + uuid + '.json', { cache: 'no-cache' });
                         if (!x.ok) return null;
@@ -1764,7 +1439,7 @@
                         const ticks = c['minecraft:play_time'] !== undefined ? c['minecraft:play_time'] : (c['minecraft:play_one_minute'] || 0);
                         return { uuid, name, ticks };
                     } catch (e) { return null; }
-                }, 5)).filter(p => p && p.ticks > 0).sort((a, b) => b.ticks - a.ticks).slice(0, 5);
+                }))).filter(p => p && p.ticks > 0).sort((a, b) => b.ticks - a.ticks).slice(0, 5);
                 if (!rows.length) throw new Error('geen data');
                 state.top = rows;
                 renderTop();
@@ -1779,25 +1454,13 @@
             list.innerHTML = state.top.map((p, i) => {
                 const mins = Math.floor(p.ticks / 1200), h = Math.floor(mins / 60), m = mins % 60;
                 const val = (h ? h.toLocaleString(lang === 'nl' ? 'nl-NL' : 'en-GB') + t('unit_h') + ' ' : '') + m + t('unit_m');
-                return '<li class="lb-row" style="--w:' + (p.ticks / max * 100).toFixed(1) + '%;--i:' + i + '">' +
+                return '<li class="lb-row" style="--w:' + (p.ticks / max).toFixed(3) + ';--i:' + i + '">' +
                     '<span class="lb-rank r' + (i + 1) + '">' + (i + 1) + '</span>' +
-                    '<img class="lb-avatar" src="https://mc-heads.net/avatar/' + esc(p.uuid) + '/40" alt="" width="40" height="40" loading="lazy">' +
+                    '<img class="lb-avatar" src="' + esc(head(p.uuid)) + '" alt="" width="40" height="40" loading="lazy">' +
                     '<div class="lb-info"><div class="lb-name">' + esc(p.name) + '</div><div class="lb-bar"><i></i></div></div>' +
                     '<span class="lb-val">' + esc(val) + '</span></li>';
             }).join('');
         }
-
-        /* ------------------------------------------------------------
-           Marquee pauzeren buiten beeld
-           ------------------------------------------------------------ */
-        (() => {
-            const mq = $('#mq-track');
-            const box = $('.marquee');
-            if (!mq || !box) return;
-            new IntersectionObserver(([e]) => {
-                mq.style.animationPlayState = e.isIntersecting ? 'running' : 'paused';
-            }).observe(box);
-        })();
 
         /* ------------------------------------------------------------
            Chatbot
@@ -1857,7 +1520,7 @@
                 typing.remove();
                 addMsg(botReply(text), 'bot');
                 renderQuick();
-            }, 750);
+            }, 700);
         }
         function setChat(open) {
             chatWindow.classList.toggle('open', open);
@@ -1882,9 +1545,9 @@
         setTimeout(() => {
             if (!chatWindow.classList.contains('open')) {
                 $('#chat-prompt').classList.add('visible');
-                promptTimer = setTimeout(closePrompt, 12000);
+                promptTimer = setTimeout(closePrompt, 10000);
             }
-        }, 5000);
+        }, 6000);
 
         /* ------------------------------------------------------------
            Start
@@ -1894,9 +1557,12 @@
         onScroll();
         fetchMC();
         fetchTwitch();
+        fetchDiscord();
         loadTop();
-        setInterval(fetchMC, 30000);
-        setInterval(fetchTwitch, 60000);
+        // Alleen verversen als het tabblad zichtbaar is
+        setInterval(() => { if (!document.hidden) fetchMC(); }, 30000);
+        setInterval(() => { if (!document.hidden) fetchTwitch(); }, 60000);
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) fetchMC(); });
     })();
     </script>
 </body>
