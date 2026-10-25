@@ -158,6 +158,7 @@
         .nav-link i { font-size: 0.78rem; }
         .nav-link:hover, .nav-link.active { color: #fff; }
         .nav-link.nav-page i { color: var(--green); }
+        .nav-link.nav-alerts i { color: var(--purple); }
 
         .nav-end { display: flex; align-items: center; gap: 8px; }
         .online-pill {
@@ -565,6 +566,7 @@
                 <a class="nav-link nav-page" href="smp.html" data-page><i class="fa-solid fa-chart-line"></i><span data-i18n="nav_stats">Statistieken</span></a>
                 <a class="nav-link" href="#community" data-spy="community"><i class="fa-solid fa-users"></i><span data-i18n="nav_comm">Community</span></a>
                 <a class="nav-link" href="#faq" data-spy="faq"><i class="fa-solid fa-circle-question"></i><span data-i18n="nav_faq">FAQ</span></a>
+                <a class="nav-link nav-alerts" href="alerts.html" data-page><i class="fa-solid fa-bell"></i><span data-i18n="nav_alerts">Stream Alerts</span></a>
             </div>
 
             <div class="nav-end">
@@ -853,7 +855,7 @@
     <script>
         window.I18N = {
             nl: {
-                nav_stream: 'Live Stream', nav_mc: 'Minecraft SMP', nav_stats: 'Statistieken', nav_comm: 'Community', nav_faq: 'FAQ',
+                nav_stream: 'Live Stream', nav_mc: 'Minecraft SMP', nav_stats: 'Statistieken', nav_comm: 'Community', nav_faq: 'FAQ', nav_alerts: 'Stream Alerts',
                 hero_prefix: 'Alles over',
                 typed: ['de livestream', 'de Minecraft SMP', 'speler-statistieken', 'de community'],
                 hero_desc: 'De centrale plek voor de livestream, de hechte SMP-community en al je in-game statistieken.',
@@ -919,7 +921,7 @@
                 aria_chat_open: 'Open chat', aria_chat_close: 'Sluit chat', aria_chat_send: 'Verstuur'
             },
             en: {
-                nav_stream: 'Live Stream', nav_mc: 'Minecraft SMP', nav_stats: 'Statistics', nav_comm: 'Community', nav_faq: 'FAQ',
+                nav_stream: 'Live Stream', nav_mc: 'Minecraft SMP', nav_stats: 'Statistics', nav_comm: 'Community', nav_faq: 'FAQ', nav_alerts: 'Stream Alerts',
                 hero_prefix: 'Everything about',
                 typed: ['the livestream', 'the Minecraft SMP', 'player statistics', 'the community'],
                 hero_desc: 'The central hub for the livestream, the tight-knit SMP community, and all your in-game statistics.',
