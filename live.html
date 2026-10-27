@@ -92,9 +92,10 @@
 
         /* Status-kaart: kleur wisselt per toestand via --sec */
         .state-yes   { --sec: var(--green); }
-        .state-live  { --sec: var(--red); }
+        .state-live  { --sec: var(--green); }
         .state-maybe { --sec: var(--amber); }
-        .state-no    { --sec: #64748b; }
+        .state-no    { --sec: var(--red); }
+        .state-err   { --sec: #64748b; }
         .state-load  { --sec: var(--purple); }
 
         .status-card {
@@ -319,7 +320,7 @@
             live:  { cls: 'state-live',  icon: 'fa-tower-broadcast', pulse: true },
             maybe: { cls: 'state-maybe', icon: 'fa-circle-question', pulse: false },
             no:    { cls: 'state-no',    icon: 'fa-moon', pulse: false },
-            error: { cls: 'state-no',    icon: 'fa-triangle-exclamation', pulse: false }
+            error: { cls: 'state-err',   icon: 'fa-triangle-exclamation', pulse: false }
         };
 
         let data = null;       // { status, start, message_nl, message_en, updated }
@@ -465,7 +466,7 @@
                 $('#meta-upd-text').textContent = t('updated') + ' ' + hhmm(updated) + ' (' + dayWord(updated) + ')' + (stale ? ' · ' + t('stale') : '');
             } else $('#meta-upd').hidden = true;
 
-            document.title = (key === 'live' ? '🔴 ' : key === 'yes' ? '🟢 ' : '') + 'Gaat Floris_N nog live?';
+            document.title = (key === 'live' || key === 'yes' ? '🟢 ' : key === 'maybe' ? '🟠 ' : key === 'no' ? '🔴 ' : '') + 'Gaat Floris_N nog live?';
         }
 
         /* ---------- Taal, toast, refresh ---------- */
