@@ -68,7 +68,7 @@
         /* Layout */
         main { flex: 1; width: 100%; max-width: 860px; margin: 0 auto; padding: clamp(3rem, 8vh, 5rem) 1.5rem 0; display: flex; flex-direction: column; gap: 1.25rem; }
         @keyframes rise { from { opacity: 0; translate: 0 24px; } }
-        .js .rise { opacity: 0; animation: rise 0.8s var(--ease) forwards; animation-delay: calc(var(--d, 0) * 90ms + 0.05s); }
+        .js .rise { animation: rise 0.8s var(--ease) backwards; animation-delay: calc(var(--d, 0) * 90ms + 0.05s); }
 
         .surface { position: relative; overflow: hidden; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); transition: border-color .25s, background-color .25s, transform .25s var(--ease); }
         .hoverable:hover { border-color: color-mix(in srgb, var(--sec) 50%, transparent); background: var(--surface-2); transform: translateY(-3px); }
@@ -362,6 +362,8 @@
             v = v.trim();
             let m = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{1,2}):(\d{2})/.exec(v);
             if (m) return new Date(+m[1], m[2] - 1, +m[3], +m[4], +m[5]);
+            m = /^(\d{1,2})-(\d{1,2})-(\d{4})(?:[ T](\d{1,2}):(\d{2}))?/.exec(v);
+            if (m) return new Date(+m[3], m[2] - 1, +m[1], +(m[4] || 0), +(m[5] || 0));
             m = /^(\d{1,2})[:.](\d{2})$/.exec(v);
             if (m) { const d = new Date(); d.setHours(+m[1], +m[2], 0, 0); return d; }
             return null;
