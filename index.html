@@ -169,6 +169,30 @@
             transition: border-color 0.25s, background-color 0.25s;
         }
         .online-pill:hover { border-color: rgba(34,197,94,0.5); background: rgba(34,197,94,0.08); }
+        /* Live-status (uit Google Sheet / Twitch): kleur via --lc */
+        .s-live  { --lc: #ef4444; }
+        .s-yes   { --lc: var(--green); }
+        .s-maybe { --lc: var(--amber); }
+        .s-no    { --lc: #64748b; }
+        .live-pill {
+            --lc: #64748b;
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 0.45rem 0.85rem; border-radius: var(--pill);
+            font-size: 0.78rem; font-weight: 700; text-decoration: none; white-space: nowrap;
+            background: color-mix(in srgb, var(--lc) 12%, transparent);
+            border: 1px solid color-mix(in srgb, var(--lc) 42%, transparent);
+            transition: border-color 0.25s, background-color 0.25s;
+        }
+        .live-pill:hover { background: color-mix(in srgb, var(--lc) 24%, transparent); border-color: var(--lc); }
+        .live-pill[hidden], .badge[hidden] { display: none; }
+        .live-pill .dot, .badge.lb .dot { background: var(--lc); }
+        .live-pill.s-live .dot, .badge.lb.s-live .dot { animation: pulse 1.4s ease-in-out infinite; }
+        .badge.lb { --lc: #64748b; text-decoration: none; transition: border-color 0.25s, background-color 0.25s; }
+        .badge.lb:hover { border-color: var(--lc); background: color-mix(in srgb, var(--lc) 14%, var(--surface)); }
+        @media (max-width: 1240px) and (min-width: 901px) {
+            .nav-link i { display: none; }
+            .nav-link { padding: 0.5rem 0.75rem; }
+        }
         .lang { display: flex; gap: 2px; padding: 3px; background: rgba(255,255,255,0.04); border: 1px solid var(--line); border-radius: var(--pill); }
         .lang-btn {
             background: transparent; border: 0; padding: 0.35rem 0.75rem; border-radius: var(--pill);
@@ -637,6 +661,7 @@
             </div>
 
             <div class="nav-end">
+                <a class="live-pill" href="live.html" data-page id="nav-live" hidden><span class="dot"></span><span id="nav-live-text">…</span></a>
                 <a class="online-pill" href="#online" id="nav-online"><span class="dot dot--gray" id="nav-dot"></span><span id="nav-online-text">…</span></a>
                 <div class="lang" role="group" aria-label="Language">
                     <button class="lang-btn active" data-lang="nl" aria-pressed="true">NL</button>
@@ -650,6 +675,7 @@
         <!-- ================= HERO ================= -->
         <header class="hero" id="home">
             <div class="badges rise" style="--d:0">
+                <a class="badge lb" href="live.html" data-page id="hero-live" hidden><span class="dot"></span><span id="hl-text"></span></a>
                 <div class="badge"><span class="dot dot--purple" id="tw-dot"></span><span id="tw-text">Twitch: <strong>Floris_N</strong></span></div>
                 <div class="badge"><span class="dot dot--gray" id="mc-dot"></span><span id="mc-text" data-i18n="mc_loading">MC laden…</span><span class="stack" id="hero-stack"></span></div>
             </div>
@@ -696,6 +722,7 @@
                     <a class="chip" href="https://twitch.tv/Floris_N" target="_blank" rel="noopener"><i class="fa-brands fa-twitch"></i><span data-i18n="act_follow">Volg op Twitch</span></a>
                     <a class="chip" href="https://streamelements.com/floris_n/tip" target="_blank" rel="noopener"><i class="fa-solid fa-heart"></i><span data-i18n="act_tip">Steun met een tip</span></a>
                     <a class="chip" href="https://www.twitch.tv/popout/floris_n/chat?popout=" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square"></i><span data-i18n="act_chat">Open chat</span></a>
+                    <a class="chip" href="live.html" data-page><i class="fa-solid fa-tower-broadcast"></i><span data-i18n="act_live">Gaat hij nog live?</span></a>
                 </div>
             </section>
 
@@ -939,6 +966,7 @@
                     <li><a href="#minecraft" data-i18n="nav_mc">Minecraft SMP</a></li>
                     <li><a href="smp.html" data-page data-i18n="nav_stats">Statistieken</a></li>
                     <li><a href="alerts.html" data-page data-i18n="footer_alerts">Stream Alerts</a></li>
+                    <li><a href="live.html" data-page data-i18n="footer_live">Gaat Floris live?</a></li>
                     <li><a href="#faq" data-i18n="nav_faq">FAQ</a></li>
                     <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
                 </ul>
@@ -1006,6 +1034,8 @@
                 tw_live: 'Nu live', tw_off: 'Offline', mc_players: 'MC Spelers', mc_loading: 'MC laden…',
                 status_online: 'Online', status_offline: 'Offline', status_unknown: 'Onbekend',
                 nav_online: 'online', nav_offline: 'Offline',
+                lv_live: 'Nu live', lv_yes: 'Gaat live', lv_yes_at: 'Live om', lv_maybe: 'Misschien live', lv_no: 'Niet live',
+                act_live: 'Gaat hij nog live?', footer_live: 'Gaat Floris live?',
                 eb_stream: 'Livestream', eb_mc: 'Minecraft', eb_comm: 'Community', eb_faq: 'Support', eb_contact: 'Contact',
                 head_stream: 'Live Stream',
                 stream_sub: 'Volg de livestream live met interactieve chat en unieke content!',
@@ -1042,7 +1072,7 @@
                 faq1_q: 'Hoe kan ik meedoen op de Minecraft server?',
                 faq1_a: 'Start Minecraft Java Edition en voeg het serveradres <strong>play.florisn.nl</strong> toe in je serverlijst!',
                 faq2_q: 'Wanneer is Floris_N meestal live?',
-                faq2_a: 'Het exacte schema staat in de Discord, maar Floris gaat vooral live zodra hij er zin in heeft! Zorg dat je notificaties op Twitch aanstaan.',
+                faq2_a: 'Het exacte schema staat in de Discord, maar Floris gaat vooral live zodra hij er zin in heeft! Zorg dat je notificaties op Twitch aanstaan. Op de <a class="link" href="live.html">live-statuspagina</a> zie je of hij vandaag nog live gaat.',
                 faq3_q: 'Hoe werkt de Simple Voice Chat mod?',
                 faq3_a: 'Download en installeer de Simple Voice Chat mod in je Minecraft client om in-game direct te praten met spelers die dichtbij je staan.',
                 faq4_q: 'Waar vind ik alle Socials & Discord?',
@@ -1093,6 +1123,8 @@
                 tw_live: 'Live now', tw_off: 'Offline', mc_players: 'MC Players', mc_loading: 'Loading MC…',
                 status_online: 'Online', status_offline: 'Offline', status_unknown: 'Unknown',
                 nav_online: 'online', nav_offline: 'Offline',
+                lv_live: 'Live now', lv_yes: 'Going live', lv_yes_at: 'Live at', lv_maybe: 'Maybe live', lv_no: 'Not live',
+                act_live: 'Is he going live?', footer_live: 'Is Floris going live?',
                 eb_stream: 'Livestream', eb_mc: 'Minecraft', eb_comm: 'Community', eb_faq: 'Support', eb_contact: 'Contact',
                 head_stream: 'Live Stream',
                 stream_sub: 'Watch the stream live with interactive chat and unique content!',
@@ -1129,7 +1161,7 @@
                 faq1_q: 'How can I join the Minecraft server?',
                 faq1_a: 'Launch Minecraft Java Edition and add the server address <strong>play.florisn.nl</strong> to your server list!',
                 faq2_q: 'When is Floris_N usually streaming?',
-                faq2_a: 'The exact schedule is posted in Discord, but Floris goes live whenever he feels like it! Make sure your Twitch notifications are enabled.',
+                faq2_a: 'The exact schedule is posted in Discord, but Floris goes live whenever he feels like it! Make sure your Twitch notifications are enabled. On the <a class="link" href="live.html">live status page</a> you can see if he is still going live today.',
                 faq3_q: 'How does the Simple Voice Chat mod work?',
                 faq3_a: 'Download and install the Simple Voice Chat mod in your Minecraft client to speak directly in-game with nearby players.',
                 faq4_q: 'Where can I find all Socials & Discord?',
@@ -1174,9 +1206,9 @@
 
         // Chatbot-kennis. Korte trefwoorden (3 letters of minder) moeten een heel woord zijn.
         window.CHAT_KB = [
-            { k: ['schema', 'rooster', 'tijden', 'wanneer live', 'streamtijd', 'schedule', 'when live', 'time'],
-              nl: 'Het stream-schema staat in de Discord, maar Floris gaat vooral live **wanneer hij er zin in heeft**. Zorg dus dat je notificaties op Twitch aanstaan.',
-              en: 'The exact stream schedule is posted in Discord, but Floris mostly goes live **whenever he feels like it**. Make sure your Twitch notifications are turned on.' },
+            { k: ['schema', 'rooster', 'tijden', 'wanneer live', 'streamtijd', 'schedule', 'when live', 'time', 'vandaag', 'vanavond', 'nog live', 'gaat hij live', 'going live', 'tonight'],
+              nl: 'Het stream-schema staat in de Discord, maar Floris gaat vooral live **wanneer hij er zin in heeft**. Zorg dus dat je notificaties op Twitch aanstaan. Of check de <a href="live.html">live-statuspagina</a>: daar zie je of hij vandaag nog live gaat.',
+              en: 'The exact stream schedule is posted in Discord, but Floris mostly goes live **whenever he feels like it**. Make sure your Twitch notifications are turned on. Or check the <a href="live.html">live status page</a> to see if he is going live today.' },
             { k: ['statistiek', 'statistic', 'stats', 'speeltijd', 'playtime', 'ranglijst', 'leaderboard'],
               nl: 'Alle speler-statistieken staan op de <a href="smp.html">statistiekenpagina</a>. Die worden handmatig bijgewerkt, standaard 1x per dag.',
               en: 'All player statistics are on the <a href="smp.html">statistics page</a>. They are updated manually, by default once a day.' },
@@ -1241,13 +1273,15 @@
         const MC_PORT = 30312;
         const DISCORD_CODE = 'snQDpNyd6D';
         const CONTACT_EMAIL = 'JustFlorisscontact@gmail.com';
+        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRF1O6_fH8OBtEAC7n1QVt3-UtdmA6DfhZvjmxPrtIKHCgpdosRHXeJdkYuLJ6P9fH5wO3UvTeLJ9vf/pub?output=csv';   // zelfde Google Sheet als live.html
+        const LIVE_JSON = 'data/live.json';
         const AUTOLOAD_STREAM = false;   // true = Twitch laadt automatisch zodra je naar de stream scrollt
 
         const L = window.I18N;
         const KB = window.CHAT_KB;
         let lang = store.get('lang') === 'en' ? 'en' : 'nl';
         const t = k => (L[lang] && L[lang][k] !== undefined) ? L[lang][k] : k;
-        const state = { mc: undefined, tw: null, top: null, dc: null };
+        const state = { mc: undefined, tw: null, top: null, dc: null, live: null };
         const head = id => 'https://mc-heads.net/avatar/' + encodeURIComponent(id) + '/48';
 
         /* ------------------------------------------------------------
@@ -1542,6 +1576,7 @@
             else { fd.className = 'dot dot--gray'; ft.textContent = mc === undefined ? '…' : t('footer_srv_unknown'); }
 
             renderOnline(false);
+            renderLive();
         }
 
         /* Nu online: namen + hoofdjes. Alleen opnieuw tekenen als de lijst echt verandert,
@@ -1645,6 +1680,85 @@
             const loc = lang === 'nl' ? 'nl-NL' : 'en-GB';
             el.innerHTML = '<span class="dot dot--green"></span>' + state.dc.on.toLocaleString(loc) + ' ' + esc(t('dc_online')) + ' · ' + state.dc.all.toLocaleString(loc) + ' ' + esc(t('dc_members'));
             el.hidden = false;
+        }
+
+
+        /* ------------------------------------------------------------
+           Live-status (Google Sheet) voor nav-pil en hero-badge
+           ------------------------------------------------------------ */
+        function parseCSV(text) {
+            const rows = []; let row = [], cell = '', q = false;
+            for (let i = 0; i < text.length; i++) {
+                const c = text[i];
+                if (q) {
+                    if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+                    else if (c === '"') q = false;
+                    else cell += c;
+                } else if (c === '"') q = true;
+                else if (c === ',') { row.push(cell); cell = ''; }
+                else if (c === '\n' || c === '\r') {
+                    if (c === '\r' && text[i + 1] === '\n') i++;
+                    row.push(cell); rows.push(row); row = []; cell = '';
+                } else cell += c;
+            }
+            if (cell || row.length) { row.push(cell); rows.push(row); }
+            return rows;
+        }
+        function parseWhen(v) {
+            if (!v) return null;
+            v = String(v).trim();
+            let m = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{1,2}):(\d{2})/.exec(v);
+            if (m) return new Date(+m[1], m[2] - 1, +m[3], +m[4], +m[5]);
+            m = /^(\d{1,2})-(\d{1,2})-(\d{4})(?:[ T](\d{1,2}):(\d{2}))?/.exec(v);
+            if (m) return new Date(+m[3], m[2] - 1, +m[1], +(m[4] || 0), +(m[5] || 0));
+            m = /^(\d{1,2})[:.](\d{2})$/.exec(v);
+            if (m) { const d = new Date(); d.setHours(+m[1], +m[2], 0, 0); return d; }
+            return null;
+        }
+        const hhmm = d => String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+
+        async function fetchLive() {
+            let d = null;
+            try {
+                const r = await fetch(SHEET_CSV_URL + '&_=' + Date.now(), { cache: 'no-store' });
+                if (r.ok) {
+                    d = {};
+                    parseCSV(await r.text()).forEach(row => {
+                        const k = (row[0] || '').trim().toLowerCase();
+                        if (k && k !== 'key' && k !== 'sleutel') d[k] = (row[1] || '').trim();
+                    });
+                }
+            } catch (e) {}
+            if (!d || !d.status) {
+                try {
+                    const r = await fetch(LIVE_JSON + '?_=' + Date.now(), { cache: 'no-store' });
+                    if (r.ok) d = await r.json();
+                } catch (e) {}
+            }
+            if (d && d.status) state.live = d;
+            renderLive();
+        }
+        function renderLive() {
+            const pill = $('#nav-live'), hero = $('#hero-live');
+            if (!pill || !hero) return;
+            let cls, label;
+            if (state.tw && state.tw.live) {
+                cls = 's-live'; label = t('lv_live');
+            } else if (state.live) {
+                let s = (state.live.status || '').toLowerCase().trim();
+                const upd = parseWhen(state.live.updated), start = parseWhen(state.live.start);
+                // Verouderde "ja/misschien" (meer dan 24 uur oud) tonen we als "niet live"
+                if (upd && (Date.now() - upd) / 36e5 > 24) s = 'no';
+                if (['yes', 'ja', 'live'].includes(s)) { cls = 's-yes'; label = start ? t('lv_yes_at') + ' ' + hhmm(start) : t('lv_yes'); }
+                else if (['maybe', 'misschien'].includes(s)) { cls = 's-maybe'; label = t('lv_maybe'); }
+                else { cls = 's-no'; label = t('lv_no'); }
+            } else { pill.hidden = true; hero.hidden = true; return; }
+            pill.hidden = false; hero.hidden = false;
+            pill.className = 'live-pill ' + cls;
+            hero.className = 'badge lb ' + cls;
+            $('#nav-live-text').textContent = label;
+            $('#hl-text').textContent = label;
+            pill.title = label;
         }
 
         /* ------------------------------------------------------------
@@ -1786,11 +1900,13 @@
         fetchMC();
         fetchTwitch();
         fetchDiscord();
+        fetchLive();
         loadTop();
         // Alleen verversen als het tabblad zichtbaar is
         setInterval(() => { if (!document.hidden) fetchMC(); }, 30000);
         setInterval(() => { if (!document.hidden) fetchTwitch(); }, 60000);
-        document.addEventListener('visibilitychange', () => { if (!document.hidden) fetchMC(); });
+        setInterval(() => { if (!document.hidden) fetchLive(); }, 60000);
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) { fetchMC(); fetchLive(); } });
     })();
     </script>
 </body>
