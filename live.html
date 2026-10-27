@@ -65,6 +65,16 @@
         .lang-btn { background: transparent; border: 0; padding: 0.35rem 0.75rem; border-radius: var(--pill); font-size: 0.74rem; font-weight: 800; color: var(--muted); cursor: pointer; transition: background-color .25s, color .25s; }
         .lang-btn.active { background: var(--purple); color: #fff; }
 
+        .nav-center { display: flex; gap: 2px; padding: 4px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04); border-radius: var(--pill); }
+        .nav-link { display: inline-flex; align-items: center; gap: 7px; padding: 0.5rem 0.95rem; border-radius: var(--pill); font-size: 0.82rem; font-weight: 700; color: var(--muted); text-decoration: none; white-space: nowrap; transition: color .2s, background-color .25s; }
+        .nav-link i { font-size: 0.78rem; }
+        .nav-link:hover { color: #fff; }
+        .nav-link.active { color: #fff; background: rgba(255,255,255,0.1); }
+        .nav-link.nav-live i { color: var(--red); }
+        .nav-link.nav-page i { color: var(--green); }
+        .nav-link.nav-alerts i { color: var(--purple); }
+        .nav-link.nav-contact i { color: var(--amber); }
+
         /* Layout */
         main { flex: 1; width: 100%; max-width: 860px; margin: 0 auto; padding: clamp(3rem, 8vh, 5rem) 1.5rem 0; display: flex; flex-direction: column; gap: 1.25rem; }
         @keyframes rise { from { opacity: 0; translate: 0 24px; } }
@@ -135,6 +145,16 @@
         .footer-bottom a { color: var(--muted); text-decoration: none; font-weight: 700; }
         .footer-bottom a:hover { color: #fff; }
 
+        @media (max-width: 1240px) and (min-width: 901px) {
+            .nav-link i { display: none; }
+            .nav-link { padding: 0.5rem 0.75rem; }
+        }
+        @media (max-width: 900px) {
+            nav { flex-wrap: wrap; justify-content: center; gap: 8px; padding: 0.6rem 0.8rem; border-radius: var(--r-md); }
+            .brand { width: 100%; justify-content: center; }
+            .nav-center { width: 100%; overflow-x: auto; justify-content: flex-start; scrollbar-width: none; }
+            .nav-center::-webkit-scrollbar { display: none; }
+        }
         @media (max-width: 800px) { .tiles { grid-template-columns: 1fr; } }
         @media (max-width: 700px) {
             .nav-wrap { padding: 0 1rem; }
@@ -160,8 +180,15 @@
                     <span class="brand-sub">Live Status</span>
                 </span>
             </a>
+            <div class="nav-center">
+                <a class="nav-link" href="index.html"><i class="fa-solid fa-house"></i><span data-i18n="nav_home">Home</span></a>
+                <a class="nav-link nav-live active" href="live.html" aria-current="page"><i class="fa-solid fa-tower-broadcast"></i><span data-i18n="nav_live">Live</span></a>
+                <a class="nav-link nav-page" href="smp.html"><i class="fa-solid fa-chart-line"></i><span data-i18n="nav_stats">Statistieken</span></a>
+                <a class="nav-link nav-alerts" href="alerts.html"><i class="fa-solid fa-bell"></i><span data-i18n="nav_alerts">Stream Alerts</span></a>
+                <a class="nav-link nav-contact" href="index.html#contact"><i class="fa-solid fa-envelope"></i><span data-i18n="nav_contact">Contact</span></a>
+            </div>
+
             <div class="nav-end">
-                <a class="back-pill" href="index.html"><i class="fa-solid fa-arrow-left"></i><span data-i18n="back">Terug naar hub</span></a>
                 <div class="lang" role="group" aria-label="Language">
                     <button class="lang-btn active" data-lang="nl" aria-pressed="true">NL</button>
                     <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
@@ -252,7 +279,7 @@
 
         const I18N = {
             nl: {
-                back: 'Terug naar hub', eyebrow: 'Live status',
+                back: 'Terug naar hub', nav_home: 'Home', nav_live: 'Live', nav_stats: 'Statistieken', nav_alerts: 'Stream Alerts', nav_contact: 'Contact', eyebrow: 'Live status',
                 btn_twitch: 'Naar Twitch', btn_watch: 'Kijk nu live',
                 cd_h: 'uur', cd_m: 'min', cd_s: 'sec',
                 t1_title: 'Mis nooit een stream', t1_desc: 'Volg op Twitch en zet de notificaties aan, dan krijg je direct een seintje.',
@@ -268,7 +295,7 @@
                 refreshed: 'Status ververst', uptime: 'Live sinds'
             },
             en: {
-                back: 'Back to hub', eyebrow: 'Live status',
+                back: 'Back to hub', nav_home: 'Home', nav_live: 'Live', nav_stats: 'Statistics', nav_alerts: 'Stream Alerts', nav_contact: 'Contact', eyebrow: 'Live status',
                 btn_twitch: 'Go to Twitch', btn_watch: 'Watch live now',
                 cd_h: 'hrs', cd_m: 'min', cd_s: 'sec',
                 t1_title: 'Never miss a stream', t1_desc: 'Follow on Twitch and enable notifications to get pinged right away.',
