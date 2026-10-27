@@ -170,10 +170,12 @@
         }
         .online-pill:hover { border-color: rgba(34,197,94,0.5); background: rgba(34,197,94,0.08); }
         /* Live-status (uit Google Sheet / Twitch): kleur via --lc */
-        .s-live  { --lc: #ef4444; }
+        /* Stoplicht: groen = live / gaat live, oranje = misschien, rood = niet live */
+        .s-live  { --lc: var(--green); }
         .s-yes   { --lc: var(--green); }
         .s-maybe { --lc: var(--amber); }
-        .s-no    { --lc: #64748b; }
+        .s-no    { --lc: #ef4444; }
+        .s-off   { --lc: #64748b; }
         .live-pill {
             --lc: #64748b;
             display: inline-flex; align-items: center; gap: 8px;
@@ -187,7 +189,7 @@
         .live-pill[hidden], .badge[hidden] { display: none; }
         .live-pill .dot, .badge.lb .dot { background: var(--lc); }
         .live-pill.s-live .dot, .badge.lb.s-live .dot { animation: pulse 1.4s ease-in-out infinite; }
-        .badge.lb { --lc: #64748b; text-decoration: none; transition: border-color 0.25s, background-color 0.25s; }
+        .badge.lb { --lc: var(--purple); text-decoration: none; transition: border-color 0.25s, background-color 0.25s; }
         .badge.lb:hover { border-color: var(--lc); background: color-mix(in srgb, var(--lc) 14%, var(--surface)); }
         @media (max-width: 1240px) and (min-width: 901px) {
             .nav-link i { display: none; }
@@ -675,8 +677,7 @@
         <!-- ================= HERO ================= -->
         <header class="hero" id="home">
             <div class="badges rise" style="--d:0">
-                <a class="badge lb" href="live.html" data-page id="hero-live" hidden><span class="dot"></span><span id="hl-text"></span></a>
-                <div class="badge"><span class="dot dot--purple" id="tw-dot"></span><span id="tw-text">Twitch: <strong>Floris_N</strong></span></div>
+                <a class="badge lb" href="live.html" data-page id="hero-live"><span class="dot" id="tw-dot"></span><span id="tw-text">Twitch: <strong>Floris_N</strong></span></a>
                 <div class="badge"><span class="dot dot--gray" id="mc-dot"></span><span id="mc-text" data-i18n="mc_loading">MC laden…</span><span class="stack" id="hero-stack"></span></div>
             </div>
 
@@ -1533,11 +1534,6 @@
         function renderStatus() {
             const mc = state.mc, tw = state.tw;
 
-            $('#tw-dot').className = 'dot ' + (tw ? (tw.live ? 'dot--red' : 'dot--gray') : 'dot--purple');
-            let twHtml = 'Twitch: <strong>Floris_N</strong>';
-            if (tw) twHtml += ' · ' + (tw.live ? t('tw_live') + (fmtUptime(tw.uptime || '') ? ' (' + fmtUptime(tw.uptime) + ')' : '') : t('tw_off'));
-            $('#tw-text').innerHTML = twHtml;
-
             const mcDot = $('#mc-dot'), mcText = $('#mc-text');
             if (mc === undefined) { mcDot.className = 'dot dot--gray'; mcText.textContent = t('mc_loading'); }
             else if (mc === null) { mcDot.className = 'dot dot--gray'; mcText.textContent = IP; }
@@ -1741,9 +1737,10 @@
         function renderLive() {
             const pill = $('#nav-live'), hero = $('#hero-live');
             if (!pill || !hero) return;
-            let cls, label;
+            let cls, label, heroLabel;
             if (state.tw && state.tw.live) {
                 cls = 's-live'; label = t('lv_live');
+                heroLabel = label + (fmtUptime(state.tw.uptime || '') ? ' (' + fmtUptime(state.tw.uptime) + ')' : '');
             } else if (state.live) {
                 let s = (state.live.status || '').toLowerCase().trim();
                 const upd = parseWhen(state.live.updated), start = parseWhen(state.live.start);
@@ -1752,12 +1749,18 @@
                 if (['yes', 'ja', 'live'].includes(s)) { cls = 's-yes'; label = start ? t('lv_yes_at') + ' ' + hhmm(start) : t('lv_yes'); }
                 else if (['maybe', 'misschien'].includes(s)) { cls = 's-maybe'; label = t('lv_maybe'); }
                 else { cls = 's-no'; label = t('lv_no'); }
-            } else { pill.hidden = true; hero.hidden = true; return; }
-            pill.hidden = false; hero.hidden = false;
+            } else {
+                // Geen sheet-data: nav-pil verbergen, Twitch-badge toont alleen live/offline
+                pill.hidden = true;
+                hero.className = 'badge lb' + (state.tw ? ' s-off' : '');
+                $('#tw-text').innerHTML = 'Twitch: <strong>Floris_N</strong>' + (state.tw ? ' · ' + esc(t('tw_off')) : '');
+                return;
+            }
+            pill.hidden = false;
             pill.className = 'live-pill ' + cls;
             hero.className = 'badge lb ' + cls;
             $('#nav-live-text').textContent = label;
-            $('#hl-text').textContent = label;
+            $('#tw-text').innerHTML = 'Twitch: <strong>Floris_N</strong> · ' + esc(heroLabel || label);
             pill.title = label;
         }
 
