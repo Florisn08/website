@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaat Floris_N nog live?</title>
+    <meta name="description" content="Check direct of Floris_N vandaag nog live gaat.">
+    <meta name="theme-color" content="#05070c">
+    <meta property="og:title" content="Gaat Floris_N nog live?">
+    <meta property="og:description" content="Check direct of Floris_N vandaag nog live gaat.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧊</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>document.documentElement.classList.add('js');</script>
+
+    <style>
+        :root {
+            --bg: #05070c; --bg-solid: #0a0e18;
+            --surface: rgba(13, 19, 32, 0.86); --surface-2: #141c2f;
+            --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.16);
+            --text: #f8fafc; --muted: #94a3b8;
+            --purple: #9146ff; --green: #22c55e; --cyan: #06b6d4; --amber: #f59e0b; --red: #ef4444; --discord: #5865f2;
+            --sec: var(--purple);
+            --r-lg: 24px; --r-md: 18px; --r-sm: 14px; --pill: 999px;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.5; overflow-x: hidden; display: flex; flex-direction: column; }
+        a { color: inherit; }
+        button { font-family: inherit; color: inherit; }
+        :focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; border-radius: 6px; }
+
+        body::before {
+            content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            background:
+                radial-gradient(640px 420px at 30% -4%, rgba(145,70,255,0.26), transparent 70%),
+                radial-gradient(520px 520px at 100% 78%, rgba(6,182,212,0.16), transparent 70%),
+                radial-gradient(520px 520px at -6% 46%, rgba(34,197,94,0.14), transparent 70%),
+                radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px) 0 0 / 32px 32px;
+            transform: translateZ(0);
+        }
+
+        /* Nav */
+        .nav-wrap { position: sticky; top: 1rem; z-index: 1000; display: flex; justify-content: center; padding: 0 1.5rem; }
+        nav {
+            width: 100%; max-width: 1150px; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            padding: 0.5rem 0.55rem 0.5rem 1rem; background: rgba(10,14,24,0.94);
+            border: 1px solid var(--line); border-radius: var(--pill);
+            box-shadow: 0 16px 36px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .brand-mark { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; font-size: 0.95rem; color: #fff; background: linear-gradient(135deg, var(--purple), var(--cyan)); }
+        .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+        .brand-title { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; }
+        .brand-title span { color: var(--purple); }
+        .brand-sub { font-size: 0.64rem; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+        .nav-end { display: flex; align-items: center; gap: 8px; }
+        .back-pill { display: inline-flex; align-items: center; gap: 8px; padding: 0.5rem 0.95rem; border-radius: var(--pill); font-size: 0.82rem; font-weight: 700; text-decoration: none; color: var(--muted); background: rgba(255,255,255,0.04); border: 1px solid var(--line); transition: color .2s, border-color .25s; }
+        .back-pill:hover { color: #fff; border-color: var(--line-strong); }
+        .lang { display: flex; gap: 2px; padding: 3px; background: rgba(255,255,255,0.04); border: 1px solid var(--line); border-radius: var(--pill); }
+        .lang-btn { background: transparent; border: 0; padding: 0.35rem 0.75rem; border-radius: var(--pill); font-size: 0.74rem; font-weight: 800; color: var(--muted); cursor: pointer; transition: background-color .25s, color .25s; }
+        .lang-btn.active { background: var(--purple); color: #fff; }
+
+        /* Layout */
+        main { flex: 1; width: 100%; max-width: 860px; margin: 0 auto; padding: clamp(3rem, 8vh, 5rem) 1.5rem 0; display: flex; flex-direction: column; gap: 1.25rem; }
+        @keyframes rise { from { opacity: 0; translate: 0 24px; } }
+        .js .rise { opacity: 0; animation: rise 0.8s var(--ease) forwards; animation-delay: calc(var(--d, 0) * 90ms + 0.05s); }
+
+        .surface { position: relative; overflow: hidden; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); transition: border-color .25s, background-color .25s, transform .25s var(--ease); }
+        .hoverable:hover { border-color: color-mix(in srgb, var(--sec) 50%, transparent); background: var(--surface-2); transform: translateY(-3px); }
+
+        .eyebrow { display: inline-flex; align-items: center; gap: 0.7rem; font-size: 0.74rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sec); }
+        .eyebrow::before, .eyebrow::after { content: ''; width: 22px; height: 1px; background: currentColor; opacity: .55; }
+
+        .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: inline-block; background: currentColor; }
+        .dot.pulse { animation: pulse 1.6s ease-in-out infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+        /* Status-kaart: kleur wisselt per toestand via --sec */
+        .state-yes   { --sec: var(--green); }
+        .state-live  { --sec: var(--red); }
+        .state-maybe { --sec: var(--amber); }
+        .state-no    { --sec: #64748b; }
+        .state-load  { --sec: var(--purple); }
+
+        .status-card {
+            text-align: center; padding: clamp(2.2rem, 6vw, 3.6rem) 1.6rem;
+            border-color: color-mix(in srgb, var(--sec) 35%, transparent);
+            background: linear-gradient(160deg, color-mix(in srgb, var(--sec) 14%, transparent), transparent 60%), var(--surface);
+            display: flex; flex-direction: column; align-items: center; gap: 1.1rem;
+        }
+        .status-badge { display: inline-flex; align-items: center; gap: 9px; padding: 0.45rem 1rem; border-radius: var(--pill); font-size: 0.8rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--sec); background: color-mix(in srgb, var(--sec) 14%, transparent); border: 1px solid color-mix(in srgb, var(--sec) 35%, transparent); }
+        .status-icon { width: 84px; height: 84px; border-radius: 26px; display: grid; place-items: center; font-size: 2.2rem; color: var(--sec); background: color-mix(in srgb, var(--sec) 14%, transparent); }
+        .status-title { font-size: clamp(2.2rem, 7vw, 3.8rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; }
+        .status-title .grad { background: linear-gradient(100deg, var(--sec), color-mix(in srgb, var(--sec) 50%, #fff)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .status-msg { color: #cbd5e1; font-size: 1.05rem; max-width: 560px; }
+        .status-msg:empty { display: none; }
+
+        .countdown { display: none; gap: 10px; margin-top: .4rem; }
+        .countdown.on { display: flex; }
+        .cd-box { min-width: 74px; padding: .7rem .5rem; border-radius: var(--r-sm); background: rgba(0,0,0,0.32); border: 1px solid var(--line); }
+        .cd-box strong { display: block; font-size: 1.7rem; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+        .cd-box span { font-size: .68rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        .meta { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem 1.4rem; font-size: .82rem; color: var(--muted); font-weight: 600; }
+        .meta i { color: var(--sec); margin-right: 6px; }
+        .meta span:empty, .meta [hidden] { display: none; }
+
+        .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: .3rem; }
+        .btn { cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: .6rem; padding: .85rem 1.5rem; border-radius: var(--r-sm); font-weight: 800; font-size: .92rem; text-decoration: none; border: 1px solid transparent; transition: transform .25s var(--ease), background-color .25s, border-color .25s, box-shadow .25s; }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:active { transform: scale(.98); }
+        .btn-purple { background: var(--purple); color: #fff; box-shadow: 0 6px 20px rgba(145,70,255,.35); }
+        .btn-purple:hover { box-shadow: 0 10px 26px rgba(145,70,255,.5); }
+        .btn-discord { background: var(--discord); color: #fff; box-shadow: 0 6px 20px rgba(88,101,242,.35); }
+        .btn-ghost { background: rgba(255,255,255,.04); border-color: var(--line-strong); }
+        .btn-ghost:hover { background: rgba(255,255,255,.09); }
+
+        /* Info-kaarten */
+        .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+        .tile { padding: 1.5rem; display: flex; flex-direction: column; gap: .5rem; text-decoration: none; }
+        .tile-icon { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; font-size: 1.15rem; color: var(--sec); background: color-mix(in srgb, var(--sec) 14%, transparent); margin-bottom: .4rem; }
+        .tile h3 { font-size: 1rem; font-weight: 800; }
+        .tile p { color: var(--muted); font-size: .86rem; }
+
+        .toast { position: fixed; left: 50%; bottom: 2rem; z-index: 9999; display: inline-flex; align-items: center; gap: 8px; padding: .75rem 1.3rem; border-radius: var(--pill); background: #0f1624; border: 1px solid rgba(34,197,94,.5); box-shadow: 0 10px 30px rgba(0,0,0,.5); font-size: .88rem; font-weight: 700; transform: translate(-50%, 30px); opacity: 0; pointer-events: none; transition: transform .4s var(--ease), opacity .3s; }
+        .toast.show { transform: translate(-50%, 0); opacity: 1; }
+
+        footer { margin-top: 5rem; padding: 2rem 1.5rem; background: rgba(5,7,12,.98); border-top: 1px solid var(--line); }
+        .footer-bottom { max-width: 860px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; font-size: .82rem; color: var(--muted); }
+        .footer-bottom a { color: var(--muted); text-decoration: none; font-weight: 700; }
+        .footer-bottom a:hover { color: #fff; }
+
+        @media (max-width: 800px) { .tiles { grid-template-columns: 1fr; } }
+        @media (max-width: 700px) {
+            .nav-wrap { padding: 0 1rem; }
+            .brand-sub { display: none; }
+            .back-pill span { display: none; }
+            .back-pill { padding: .5rem .75rem; }
+            .cd-box { min-width: 64px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-wrap">
+        <nav>
+            <a class="brand" href="index.html">
+                <span class="brand-mark"><i class="fa-solid fa-cubes"></i></span>
+                <span class="brand-text">
+                    <span class="brand-title">Floris<span>_N</span></span>
+                    <span class="brand-sub">Live Status</span>
+                </span>
+            </a>
+            <div class="nav-end">
+                <a class="back-pill" href="index.html"><i class="fa-solid fa-arrow-left"></i><span data-i18n="back">Terug naar hub</span></a>
+                <div class="lang" role="group" aria-label="Language">
+                    <button class="lang-btn active" data-lang="nl" aria-pressed="true">NL</button>
+                    <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <main>
+        <div class="rise" style="--d:0; text-align:center;">
+            <span class="eyebrow" style="--sec: var(--purple)"><span data-i18n="eyebrow">Live status</span></span>
+        </div>
+
+        <section class="surface status-card state-load rise" id="card" style="--d:1" aria-live="polite">
+            <span class="status-badge"><span class="dot" id="badge-dot"></span><span id="badge-text">…</span></span>
+            <div class="status-icon"><i class="fa-solid fa-circle-notch fa-spin" id="icon"></i></div>
+            <h1 class="status-title"><span class="grad" id="title">…</span></h1>
+            <p class="status-msg" id="msg"></p>
+
+            <div class="countdown" id="countdown">
+                <div class="cd-box"><strong id="cd-h">00</strong><span data-i18n="cd_h">uur</span></div>
+                <div class="cd-box"><strong id="cd-m">00</strong><span data-i18n="cd_m">min</span></div>
+                <div class="cd-box"><strong id="cd-s">00</strong><span data-i18n="cd_s">sec</span></div>
+            </div>
+
+            <div class="meta">
+                <span id="meta-start" hidden><i class="fa-solid fa-clock"></i><span id="meta-start-text"></span></span>
+                <span id="meta-upd" hidden><i class="fa-solid fa-rotate"></i><span id="meta-upd-text"></span></span>
+            </div>
+
+            <div class="actions">
+                <a class="btn btn-purple" href="https://twitch.tv/Floris_N" target="_blank" rel="noopener"><i class="fa-brands fa-twitch"></i><span id="btn-twitch" data-i18n="btn_twitch">Naar Twitch</span></a>
+                <a class="btn btn-discord" href="https://discord.com/invite/snQDpNyd6D" target="_blank" rel="noopener"><i class="fa-brands fa-discord"></i><span>Discord</span></a>
+            </div>
+        </section>
+
+        <div class="tiles">
+            <a class="surface tile hoverable rise" style="--d:2; --sec: var(--purple)" href="https://twitch.tv/Floris_N" target="_blank" rel="noopener">
+                <span class="tile-icon"><i class="fa-solid fa-bell"></i></span>
+                <h3 data-i18n="t1_title">Mis nooit een stream</h3>
+                <p data-i18n="t1_desc">Volg op Twitch en zet de notificaties aan, dan krijg je direct een seintje.</p>
+            </a>
+            <a class="surface tile hoverable rise" style="--d:3; --sec: var(--green)" href="index.html#minecraft">
+                <span class="tile-icon"><i class="fa-solid fa-cube"></i></span>
+                <h3 data-i18n="t2_title">Speel op de SMP</h3>
+                <p data-i18n="t2_desc">Ook zonder stream is de server open. Kijk wie er nu online is.</p>
+            </a>
+            <button class="surface tile hoverable rise" style="--d:4; --sec: var(--cyan); text-align:left; cursor:pointer;" type="button" id="refresh">
+                <span class="tile-icon"><i class="fa-solid fa-rotate" id="refresh-icon"></i></span>
+                <h3 data-i18n="t3_title">Ververs status</h3>
+                <p data-i18n="t3_desc">De pagina ververst zichzelf elke minuut. Of klik hier.</p>
+            </button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-bottom">
+            <div>&copy; <span id="year">2026</span> Floris_N. <span data-i18n="rights">Alle rechten voorbehouden.</span></div>
+            <a href="index.html"><i class="fa-solid fa-house"></i> <span data-i18n="home">Naar de hub</span></a>
+        </div>
+    </footer>
+
+    <div class="toast" id="toast" role="status"><i class="fa-solid fa-circle-check" style="color:var(--green)"></i><span id="toast-text"></span></div>
+
+    <script>
+    (() => {
+        'use strict';
+
+        /* =====================================================
+           INSTELLINGEN
+           -----------------------------------------------------
+           SHEET_CSV_URL: plak hier de "Publiceren op het web"-link (CSV)
+           van je Google Sheet. Zie de uitleg in het bericht / README.
+           Laat leeg om alleen data/live.json te gebruiken.
+           ===================================================== */
+        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRF1O6_fH8OBtEAC7n1QVt3-UtdmA6DfhZvjmxPrtIKHCgpdosRHXeJdkYuLJ6P9fH5wO3UvTeLJ9vf/pub?output=csv';
+        const JSON_FALLBACK = 'data/live.json';
+        const TWITCH = 'floris_n';
+        const REFRESH_MS = 60000;
+        const STALE_HOURS = 20;   // status ouder dan dit? Dan tonen we een "mogelijk verouderd"-hint
+
+        const $ = s => document.querySelector(s);
+        const $$ = s => [...document.querySelectorAll(s)];
+        const store = {
+            get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+            set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+        };
+
+        const I18N = {
+            nl: {
+                back: 'Terug naar hub', eyebrow: 'Live status',
+                btn_twitch: 'Naar Twitch', btn_watch: 'Kijk nu live',
+                cd_h: 'uur', cd_m: 'min', cd_s: 'sec',
+                t1_title: 'Mis nooit een stream', t1_desc: 'Volg op Twitch en zet de notificaties aan, dan krijg je direct een seintje.',
+                t2_title: 'Speel op de SMP', t2_desc: 'Ook zonder stream is de server open. Kijk wie er nu online is.',
+                t3_title: 'Ververs status', t3_desc: 'De pagina ververst zichzelf elke minuut. Of klik hier.',
+                rights: 'Alle rechten voorbehouden.', home: 'Naar de hub',
+                yes: 'Ja!', yes_b: 'Gaat live', yes_d: 'Floris gaat nog live.',
+                live: 'Hij is live!', live_b: 'Nu live', live_d: 'De stream is bezig. Kom gezellig meekijken!',
+                maybe: 'Misschien', maybe_b: 'Nog onzeker', maybe_d: 'Het is nog niet zeker of Floris live gaat.',
+                no: 'Nee', no_b: 'Niet vandaag', no_d: 'Floris gaat vandaag niet meer live.',
+                start_at: 'Start om', start_in: 'Start over', updated: 'Bijgewerkt', stale: 'Mogelijk verouderd',
+                today: 'vandaag', tomorrow: 'morgen', error: 'Status kon niet worden geladen', error_d: 'Check de Twitch of Discord voor het laatste nieuws.',
+                refreshed: 'Status ververst', uptime: 'Live sinds'
+            },
+            en: {
+                back: 'Back to hub', eyebrow: 'Live status',
+                btn_twitch: 'Go to Twitch', btn_watch: 'Watch live now',
+                cd_h: 'hrs', cd_m: 'min', cd_s: 'sec',
+                t1_title: 'Never miss a stream', t1_desc: 'Follow on Twitch and enable notifications to get pinged right away.',
+                t2_title: 'Play on the SMP', t2_desc: 'The server is open even without a stream. See who is online.',
+                t3_title: 'Refresh status', t3_desc: 'This page refreshes itself every minute. Or click here.',
+                rights: 'All rights reserved.', home: 'To the hub',
+                yes: 'Yes!', yes_b: 'Going live', yes_d: 'Floris is still going live.',
+                live: "He's live!", live_b: 'Live now', live_d: 'The stream is on. Come hang out!',
+                maybe: 'Maybe', maybe_b: 'Not sure yet', maybe_d: "It's not certain yet whether Floris will go live.",
+                no: 'No', no_b: 'Not today', no_d: 'Floris is not going live anymore today.',
+                start_at: 'Starts at', start_in: 'Starts in', updated: 'Updated', stale: 'Might be outdated',
+                today: 'today', tomorrow: 'tomorrow', error: 'Could not load the status', error_d: 'Check Twitch or Discord for the latest news.',
+                refreshed: 'Status refreshed', uptime: 'Live since'
+            }
+        };
+        let lang = store.get('lang') === 'en' ? 'en' : 'nl';
+        const t = k => I18N[lang][k] !== undefined ? I18N[lang][k] : k;
+
+        const STATES = {
+            yes:   { cls: 'state-yes',   icon: 'fa-circle-check', pulse: false },
+            live:  { cls: 'state-live',  icon: 'fa-tower-broadcast', pulse: true },
+            maybe: { cls: 'state-maybe', icon: 'fa-circle-question', pulse: false },
+            no:    { cls: 'state-no',    icon: 'fa-moon', pulse: false },
+            error: { cls: 'state-no',    icon: 'fa-triangle-exclamation', pulse: false }
+        };
+
+        let data = null;       // { status, start, message_nl, message_en, updated }
+        let twitch = null;     // { live, uptime } | null
+        let loadError = false;
+        let cdTimer = null;
+
+        /* ---------- Data ophalen ---------- */
+        function parseCSV(text) {
+            const rows = []; let row = [], cell = '', q = false;
+            for (let i = 0; i < text.length; i++) {
+                const c = text[i];
+                if (q) {
+                    if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+                    else if (c === '"') q = false;
+                    else cell += c;
+                } else if (c === '"') q = true;
+                else if (c === ',') { row.push(cell); cell = ''; }
+                else if (c === '\n' || c === '\r') {
+                    if (c === '\r' && text[i + 1] === '\n') i++;
+                    row.push(cell); rows.push(row); row = []; cell = '';
+                } else cell += c;
+            }
+            if (cell || row.length) { row.push(cell); rows.push(row); }
+            return rows;
+        }
+        function fromCSV(text) {
+            const out = {};
+            parseCSV(text).forEach(r => {
+                const k = (r[0] || '').trim().toLowerCase();
+                if (k && k !== 'key' && k !== 'sleutel') out[k] = (r[1] || '').trim();
+            });
+            return out;
+        }
+        async function loadStatus() {
+            let d = null;
+            if (SHEET_CSV_URL) {
+                try {
+                    const sep = SHEET_CSV_URL.includes('?') ? '&' : '?';
+                    const r = await fetch(SHEET_CSV_URL + sep + '_=' + Date.now(), { cache: 'no-store' });
+                    if (r.ok) d = fromCSV(await r.text());
+                } catch (e) {}
+            }
+            if (!d || !d.status) {
+                try {
+                    const r = await fetch(JSON_FALLBACK + '?_=' + Date.now(), { cache: 'no-store' });
+                    if (r.ok) d = await r.json();
+                } catch (e) {}
+            }
+            if (d && d.status) { data = d; loadError = false; }
+            else { loadError = !data; }
+        }
+        async function loadTwitch() {
+            try {
+                const r = await fetch('https://decapi.me/twitch/uptime/' + TWITCH, { cache: 'no-store' });
+                const txt = (await r.text()).trim();
+                if (/offline/i.test(txt)) twitch = { live: false };
+                else if (/\d+\s*(second|minute|hour|day)/i.test(txt)) twitch = { live: true, uptime: txt };
+                else twitch = null;
+            } catch (e) { twitch = null; }
+        }
+
+        /* ---------- Tijd-hulpjes ---------- */
+        // Accepteert "2026-10-27 20:00", "2026-10-27T20:00" of alleen "20:00" (= vandaag)
+        function parseStart(v) {
+            if (!v) return null;
+            v = v.trim();
+            let m = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{1,2}):(\d{2})/.exec(v);
+            if (m) return new Date(+m[1], m[2] - 1, +m[3], +m[4], +m[5]);
+            m = /^(\d{1,2})[:.](\d{2})$/.exec(v);
+            if (m) { const d = new Date(); d.setHours(+m[1], +m[2], 0, 0); return d; }
+            return null;
+        }
+        function pad(n) { return String(n).padStart(2, '0'); }
+        function hhmm(d) { return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+        function dayWord(d) {
+            const now = new Date(), a = new Date(now.getFullYear(), now.getMonth(), now.getDate()),
+                  b = new Date(d.getFullYear(), d.getMonth(), d.getDate()), diff = Math.round((b - a) / 864e5);
+            if (diff === 0) return t('today');
+            if (diff === 1) return t('tomorrow');
+            return d.toLocaleDateString(lang === 'nl' ? 'nl-NL' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'short' });
+        }
+
+        /* ---------- Tekenen ---------- */
+        function render() {
+            const card = $('#card');
+            let key, msg = '', start = null, updated = null;
+
+            if (twitch && twitch.live) {
+                key = 'live'; msg = t('live_d');
+            } else if (loadError || !data) {
+                key = loadError ? 'error' : null;
+            } else {
+                const s = (data.status || '').toLowerCase().trim();
+                key = ['yes', 'ja', 'live'].includes(s) ? 'yes' : ['maybe', 'misschien'].includes(s) ? 'maybe' : 'no';
+                msg = (lang === 'en' ? (data.message_en || data.message_nl) : (data.message_nl || data.message_en)) || '';
+                start = parseStart(data.start);
+                updated = parseStart(data.updated);
+            }
+            if (!key) return;
+
+            const st = STATES[key];
+            card.className = 'surface status-card rise ' + st.cls;
+            $('#icon').className = 'fa-solid ' + st.icon;
+            $('#badge-dot').className = 'dot' + (st.pulse ? ' pulse' : '');
+
+            let badge, title;
+            if (key === 'error') { badge = '!'; title = t('error'); msg = t('error_d'); }
+            else { badge = t(key + '_b'); title = t(key); }
+            if (!msg && key !== 'error') msg = t(key + '_d');
+            $('#badge-text').textContent = badge;
+            $('#title').textContent = title;
+            $('#msg').textContent = msg;
+            $('#btn-twitch').textContent = key === 'live' ? t('btn_watch') : t('btn_twitch');
+
+            // Start / countdown (alleen bij "ja" en een starttijd die nog moet komen)
+            clearInterval(cdTimer);
+            const cd = $('#countdown');
+            const showStart = key === 'yes' && start;
+            $('#meta-start').hidden = !showStart;
+            if (showStart) $('#meta-start-text').textContent = t('start_at') + ' ' + hhmm(start) + ' (' + dayWord(start) + ')';
+            if (showStart && start > new Date()) {
+                cd.classList.add('on');
+                const tick = () => {
+                    const diff = Math.max(0, start - new Date());
+                    $('#cd-h').textContent = pad(Math.floor(diff / 36e5));
+                    $('#cd-m').textContent = pad(Math.floor(diff % 36e5 / 6e4));
+                    $('#cd-s').textContent = pad(Math.floor(diff % 6e4 / 1e3));
+                    if (diff === 0) { clearInterval(cdTimer); refresh(true); }
+                };
+                tick(); cdTimer = setInterval(tick, 1000);
+            } else cd.classList.remove('on');
+
+            // Laatst bijgewerkt (+ verouderd-hint)
+            if (key === 'live' && twitch.uptime) {
+                $('#meta-upd').hidden = false;
+                $('#meta-upd-text').textContent = t('uptime') + ' ' + twitch.uptime;
+            } else if (updated) {
+                const stale = (new Date() - updated) / 36e5 > STALE_HOURS;
+                $('#meta-upd').hidden = false;
+                $('#meta-upd-text').textContent = t('updated') + ' ' + hhmm(updated) + ' (' + dayWord(updated) + ')' + (stale ? ' · ' + t('stale') : '');
+            } else $('#meta-upd').hidden = true;
+
+            document.title = (key === 'live' ? '🔴 ' : key === 'yes' ? '🟢 ' : '') + 'Gaat Floris_N nog live?';
+        }
+
+        /* ---------- Taal, toast, refresh ---------- */
+        function applyLang(next) {
+            lang = next; store.set('lang', lang);
+            document.documentElement.lang = lang;
+            $$('[data-i18n]').forEach(el => { const v = I18N[lang][el.dataset.i18n]; if (typeof v === 'string') el.textContent = v; });
+            $$('.lang-btn').forEach(b => {
+                const on = b.dataset.lang === lang;
+                b.classList.toggle('active', on); b.setAttribute('aria-pressed', on ? 'true' : 'false');
+            });
+            render();
+        }
+        $$('.lang-btn').forEach(b => b.addEventListener('click', () => applyLang(b.dataset.lang)));
+
+        let toastTimer;
+        function toast(m) {
+            $('#toast-text').textContent = m; $('#toast').classList.add('show');
+            clearTimeout(toastTimer); toastTimer = setTimeout(() => $('#toast').classList.remove('show'), 2000);
+        }
+        async function refresh(silent) {
+            const ic = $('#refresh-icon'); ic.classList.add('fa-spin');
+            await Promise.all([loadStatus(), loadTwitch()]);
+            render();
+            ic.classList.remove('fa-spin');
+            if (!silent) toast(t('refreshed'));
+        }
+        $('#refresh').addEventListener('click', () => refresh(false));
+
+        $('#year').textContent = new Date().getFullYear();
+        applyLang(lang);
+        refresh(true);
+        setInterval(() => { if (!document.hidden) refresh(true); }, REFRESH_MS);
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(true); });
+    })();
+    </script>
+</body>
+</html>
